@@ -1,19 +1,20 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function Home() {
-
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   if (session) {
-    console.log(session)
+    console.log(session);
     return (
       <>
-        Signed in as {session.user.email}<br />
+        Signed in as {session.user.email}
+        <br />
         <button onClick={() => signOut()}>Sign out.</button>
       </>
-    )
+    );
   }
 
   return (
@@ -33,17 +34,39 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="#" onClick={() => { signIn('azure-ad') }} className={styles.card}>
+          <a
+            href="#"
+            onClick={() => {
+              signIn("azure-ad");
+            }}
+            className={styles.card}
+          >
             <h2>Microsoft Login &rarr;</h2>
-            <p>Sign in with Azure Active Directory to continue to SDS application</p>
+            <p>
+              Sign in with Azure Active Directory to continue to SDS application
+            </p>
           </a>
 
-          <a href="#" onClick={() => { signIn('okta') }} className={styles.card}>
+          <a
+            href="#"
+            onClick={() => {
+              signIn("okta");
+            }}
+            className={styles.card}
+          >
             <h2>Okta Login &rarr;</h2>
-            <p>Sign in with Okta Identity Platform to continue to SDS application</p>
+            <p>
+              Sign in with Okta Identity Platform to continue to SDS application
+            </p>
           </a>
+
+          <div className={styles.card}>
+            <Link href="/admin-dashboard" className={styles.card}>
+              <p>Admin Dashboard</p>
+            </Link>
+          </div>
         </div>
       </main>
     </div>
-  )
+  );
 }

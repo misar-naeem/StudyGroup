@@ -10,4 +10,4 @@ cd /home/ec2-user/next-app
 #install node modules
 npm install
 npm run build
-npm start -- -p 443 > app.out.log 2> app.err.log < /dev/null & 
+npm start > app.out.log 2> app.err.log < /dev/null & 

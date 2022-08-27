@@ -6,18 +6,21 @@ Before you can run the project, you need to install Git and Node.js. You can dow
 - Install the latest LTS Version of Node.js at https://nodejs.org/en/download/
 ### 2. Clone the repository
 Once you have installed both Git and Node.js: 
-- Open the folder where you want to store the repository (e.g. D:\Repos)
+- Open where you want to store the repository
 - Open PowerShell in that folder (Shift + Right Click -> Open PowerShell window here)
 - Clone the repository by running the following command:
 ```
 git clone https://github.com/misar-naeem/StudyGroup.git
 ```
-### 3. Install dependencies and run the project
+### 3. Install dependencies
 Now that you have cloned the repository, you need to install the dependencies. To do so, open the `StudyGroup` folder in PowerShell (Shift + Right Click -> Open PowerShell window here) and run the following command:
 ```
 npm ci
 ```
-After the dependencies have been installed, you can run the project by running the following command:
+### 4. Retrieve secrets
+To login, you need to retrieve the secrets from the project owner. Once you have the secrets file, place it in the root of the project (the `StudyGroup` folder) and rename it to `.env.local`.
+### 5. Run the project
+After everything has been installed, you can run the project by running the following command:
 ```
 npm run dev
 ```

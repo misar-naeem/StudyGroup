@@ -82,14 +82,14 @@ const adminLogin = ({data}) => {
   );
 };
 
-export async function getServerSideProps(context) {
-  const res = await fetch("http://localhost:5000/staff");
-  const data = await res.json();
-  return {
-    props: {
-      data,
-    },
-  };
-}
+// export async function getServerSideProps(context) {
+//   const res = await fetch("http://localhost:5000/staff");
+//   const data = await res.json();
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
 
 export default adminLogin;

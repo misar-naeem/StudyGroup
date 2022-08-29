@@ -4,6 +4,7 @@
     height: 40px !important;
     border-radius: 5px !important;
     box-shadow: none !important;
+    color: #000000 !important;
   }
   
   .input.valid {

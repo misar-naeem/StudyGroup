@@ -46,26 +46,12 @@ export default function Home() {
               Sign in with Azure Active Directory to continue to SDS application
             </p>
           </a>
-
-          <a
-            href="#"
-            onClick={() => {
-              signIn("okta");
-            }}
-            className={styles.card}
-          >
-            <h2>Okta Login &rarr;</h2>
-            <p>
-              Sign in with Okta Identity Platform to continue to SDS application
-            </p>
-          </a>
-
-          <div className={styles.card}>
+        </div>
+        <div className={styles.card}>
             <Link href="/admin-dashboard" className={styles.card}>
               <p>Admin Dashboard</p>
             </Link>
           </div>
-        </div>
       </main>
     </div>
   );

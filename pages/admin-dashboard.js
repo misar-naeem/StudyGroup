@@ -1,12 +1,16 @@
-import styles from "./admin-dashboard.module.css";
-
+import Head from "next/head";
+import styles from "../styles/AdminDashboard.module.css";
+import AdminNav from "../components/AdminNav";
 function AdminDashboard() {
   return (
     <div>
-      <h1 className={styles["heading"]}>Admin Dashboard</h1>
+      <Head>
+        <title>Admin Dashboard</title>
+      </Head>
+      <AdminNav />
+      <h1 className={styles.heading}>Admin Dashboard</h1>
 
-      <div className={styles["sub-heading"]}>My Classes {`:)`}</div>
-
+      <div className={styles.subHeading}>My Classes {`:)`}</div>
     </div>
   );
 }

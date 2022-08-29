@@ -1,0 +1,12 @@
+{
+    "staff": [
+        {
+          "name": "admin",
+          "email": "admin@gmail.com",
+          "phone": "8787845",
+          "role": "admin",
+          "password": "admin123",
+          "id": "OmRDEe1"
+        }
+    ]
+}

@@ -36,7 +36,7 @@ export default function StudentDashboard() {
     if (session) { email = session.user.email }
     const {data, error} = useSWR(`/api/get-student/${email}`, fetcher);
 
-    if (error) return <div>failed to load</div>;
+    if (error || data?.error) return <div>Student Account not Registered, Contact Your Tutor to be Added to StudyGroup</div>;
     if (!data) return <div>loading...</div>; 
    
     const content = () => {

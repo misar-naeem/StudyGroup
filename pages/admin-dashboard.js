@@ -1,4 +1,5 @@
 import Head from "next/head";
+import StudentOverview from '../components/StudentOverview';
 import styles from "../styles/AdminDashboard.module.css";
 
 function AdminDashboard() {
@@ -10,6 +11,7 @@ function AdminDashboard() {
       <h1 className={styles.heading}>Admin Dashboard</h1>
 
       <div className={styles.subHeading}>My Classes {`:)`}</div>
+      <StudentOverview />
     </div>
   );
 }

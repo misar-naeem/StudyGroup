@@ -4,7 +4,7 @@ import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/AdminLogin.module.css";
 import {Form, Button} from "react-bootstrap";
 import { Formik } from "formik";
-import { BootstrapInput } from "../components/BootstrapInput/BootstrapInput";
+import { BootstrapInput } from "../components/BootstrapInput";
 import * as Yup from "yup";
 
 

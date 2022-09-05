@@ -37,7 +37,9 @@ export default function Home() {
           <a
             href="#"
             onClick={() => {
-              signIn("azure-ad");
+              signIn("azure-ad", {
+                callbackUrl: "/login-redirect",
+              });
             }}
             className={styles.card}
           >

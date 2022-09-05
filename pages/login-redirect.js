@@ -12,5 +12,5 @@ export default function LoginRedirect() {
       router.push("/student-dashboard");
     }
   }
-  return <div>Redirecting...</div>;
+  router.push("/");
 }

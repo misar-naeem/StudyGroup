@@ -12,5 +12,4 @@ export default function LoginRedirect() {
       router.push("/student-dashboard");
     }
   }
-  router.push("/");
 }

@@ -6,13 +6,15 @@ import Link from "next/link";
 
 export default function Home() {
   const { data: session } = useSession();
+
+
   if (session) {
     console.log(session);
     return (
       <>
         Signed in as {session.user.email}
         <br />
-        <button onClick={() => signOut()}>Sign out.</button>
+        <button onClick={() => signOut()}>Sign out</button>
       </>
     );
   }
@@ -34,35 +36,15 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a
-            href="#"
-            onClick={() => {
-              signIn("azure-ad");
-            }}
-            className={styles.card}
-          >
-            <h2>Microsoft Login &rarr;</h2>
-            <p>
-              Sign in with Azure Active Directory to continue to SDS application
-            </p>
-          </a>
-
-          <a
-            href="#"
-            onClick={() => {
-              signIn("okta");
-            }}
-            className={styles.card}
-          >
-            <h2>Okta Login &rarr;</h2>
-            <p>
-              Sign in with Okta Identity Platform to continue to SDS application
-            </p>
-          </a>
+          <div className={styles.card}>
+            <Link href="/student-login" className={styles.card}>
+              <p>Student Login</p>
+            </Link>
+          </div>
 
           <div className={styles.card}>
-            <Link href="/admin-dashboard" className={styles.card}>
-              <p>Admin Dashboard</p>
+            <Link href="/staff-login" className={styles.card}>
+              <p>Staff Login</p>
             </Link>
           </div>
         </div>

@@ -3,11 +3,9 @@ import { Schema, model, models } from 'mongoose';
 const preferenceSchema = new Schema({
   email: {type: String, required: true, unique: true},
   name: String,
-  degree: String,
-  year: Number,
-  tutorials: []
+  tutorial: String,
 });
 
-const Student = models.Student || model('Student', preferenceSchema);
+const Staff = models.Staff || model('Staff', preferenceSchema);
 
-export default Student;
+export default Staff;

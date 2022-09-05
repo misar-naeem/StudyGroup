@@ -1,0 +1,21 @@
+.input {
+    background: #E7E6E6 !important;
+    width: 300px !important;
+    height: 40px !important;
+    border-radius: 5px !important;
+    box-shadow: none !important;
+    color: #000000 !important;
+  }
+  
+  .input.valid {
+    border: solid #b7abc6 1px !important;
+  }
+  
+  .input.notvalid {
+    box-shadow: none !important;
+    border: solid #ff5555 2px !important;
+  }
+  
+  .textRed{
+    color: #ff5555  !important;
+  }

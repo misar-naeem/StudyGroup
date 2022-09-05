@@ -1,0 +1,26 @@
+
+.container{
+    width: 100%;
+    height: 100%;
+    font-family: "montserrat", sans-serif;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #343434;
+    background-image: linear-gradient(125deg, #6a89cc, #b8e994);
+
+}
+.link{
+    color: blue;
+    text-decoration: underline;
+}
+
+
+.container h1{
+    font-size: 160px;
+    margin: 0;
+    font-weight: 900;
+    letter-spacing: 28px;
+}

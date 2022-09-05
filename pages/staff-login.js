@@ -1,18 +1,19 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from 'next/router';
 import Link from "next/link";
 
-export default function Home() {
+export default function StaffLogin() {
   const { data: session } = useSession();
+  const router = useRouter()
 
   if (session) {
     console.log(session);
+    router.push('/staff-dashboard')
+
     return (
       <>
-        Signed in as {session.user.email}
-        <br />
-        <button onClick={() => signOut()}>Sign out</button>
       </>
     );
   }
@@ -26,12 +27,8 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a>Study Group</a>
+          Staff Login
         </h1>
-
-        <p className={styles.description}>
-          An SDS Project from University of Technology Sydney
-        </p>
 
         <div className={styles.grid}>
           <a
@@ -48,20 +45,9 @@ export default function Home() {
           </a>
         </div>
         <div className={styles.card}>
-          <Link href="/admin-dashboard" className={styles.card}>
-            <p>Admin Dashboard</p>
-          </Link>
-        </div>
-        <div className={styles.card}>
-          <Link href="/student-login" className={styles.card}>
-            <p>Student Login</p>
-          </Link>
-        </div>
-
-        <div className={styles.card}>
-          <Link href="/staff-login" className={styles.card}>
-            <p>Staff Login</p>
-          </Link>
+            <Link href="/" className={styles.card}>
+              <p>Home</p>
+            </Link>
         </div>
       </main>
     </div>

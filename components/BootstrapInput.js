@@ -1,5 +1,5 @@
 import { Form } from "react-bootstrap";
-import styles from "../../styles/BootstrapInput.module.css";
+import styles from "../styles/BootstrapInput.module.css";
 
 export const BootstrapInput = ({
   controlId,

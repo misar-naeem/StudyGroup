@@ -1,8 +1,25 @@
 import React from "react";
+import connectMongo from "../util/mongodb"
+import Tutorial from "../models/Tutorial";
 
-function AddTopics({}) {
+export async function getServerSideProps({ query }) {
 
-    const [topics, setTopics] = React.useState(new Set())
+    const tutorialId = query.tutorialId
+    console.log('CONNECTING TO MONGO');
+    await connectMongo();
+    console.log('CONNECTED TO MONGO');
+
+    const result = await Tutorial.find({tutorialId: tutorialId}).select('topics');
+    const topics = Array.from(JSON.parse(JSON.stringify(result))[0]["topics"])
+
+    return {
+        props: {current_topics: topics}
+    }
+}
+
+function AddTopics({current_topics}) {
+
+    const [topics, setTopics] = React.useState(new Set(current_topics))
     const [potentialTopic, setTopic] = React.useState("")
     const [errorMessage, setErrorMessage] = React.useState("")
 

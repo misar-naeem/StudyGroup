@@ -8,10 +8,10 @@ import { useRouter } from 'next/router'
 import { useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 
-const TutorialLink = ({tutorial}) => {
+const TutorialLink = ({tutorial, student}) => {
     return (
     <Button>
-        <Link href="/add-student-preferences">
+        <Link href={`/add-student-preferences?tutorial=${tutorial}&student=${student}`}>
           <p>{tutorial}</p>
         </Link>
     </Button>
@@ -44,7 +44,7 @@ export default function StudentDashboard() {
         if (data["result"].length == 0) return <div>Not found</div>
         return (
             <>
-            <div>{data["result"][0]["tutorials"].map((value, index)=>{return <TutorialLink tutorial={value}/>})}</div>
+            <div>{data["result"][0]["tutorials"].map((value, index)=>{return <TutorialLink tutorial={value} student={email}/>})}</div>
             </>
             
         )

@@ -2,12 +2,14 @@ import React from "react";
 import connectMongo from "../util/mongodb";
 import Tutorial from "../models/Tutorial";
 
-export async function getStaticProps() {
+export async function getServerSideProps({ query }) {
+
+    console.log(query)
 
     const degrees = ["Computer Science", "Software Engineering", "Bachelor of Science and IT", "Bachelor of IT"]
     const years = [1, 2, 3]
-    const tutorialId = "tut1"
-    const studentId = "123456789"
+    const tutorialId = query.tutorial;
+    const studentId = query.student;
 
     console.log('CONNECTING TO MONGO');
     await connectMongo();

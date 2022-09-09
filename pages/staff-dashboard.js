@@ -17,7 +17,7 @@ export default function StaffDashboard() {
         if (!session) {
             router.push('/staff-login')
         }
-    })
+    }, [])
 
     const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -32,8 +32,6 @@ export default function StaffDashboard() {
     const content = () => {
 
         if (data["result"].length == 0) return <div>Not found</div>
-        console.log("data")
-        console.log(data)
         return (
             <>
             <div>{data["result"][0]["tutorial"]}</div>

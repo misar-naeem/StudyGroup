@@ -9,9 +9,9 @@ function AdminDashboard() {
 
     <div>
       <Head>
-        <title>Admin Dashboard</title>
+        <title>Staff Dashboard</title>
       </Head>
-      <h1 className={styles.heading}>Admin Dashboard</h1>
+      <h1 className={styles.heading}>Staff Dashboard</h1>
 
       <div className={styles.subHeading}>My Classes {`:)`}</div>
       <StudentOverview />

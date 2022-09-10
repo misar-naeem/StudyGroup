@@ -1,29 +1,45 @@
 import React from "react";
 import connectMongo from "../util/mongodb"
 import Tutorial from "../models/Tutorial";
+import { useRouter } from 'next/router'
 
 export async function getServerSideProps({ query }) {
 
-    const tutorialId = query.tutorialId
-    console.log('CONNECTING TO MONGO');
-    await connectMongo();
-    console.log('CONNECTED TO MONGO');
+    console.log("QUERY")
+    console.log(query.tutorialId == undefined)
 
-    const result = await Tutorial.find({tutorialId: tutorialId}).select('topics');
-    const topics = Array.from(JSON.parse(JSON.stringify(result))[0]["topics"])
-
-    return {
-        props: {current_topics: topics}
+    if (query.tutorialId != undefined) {
+        const tutorialId = query.tutorialId
+        console.log('CONNECTING TO MONGO');
+        await connectMongo();
+        console.log('CONNECTED TO MONGO');
+    
+        const result = await Tutorial.find({tutorialId: tutorialId}).select('topics topicsReleased');
+        console.log(result)
+        const topics = Array.from(JSON.parse(JSON.stringify(result))[0]["topics"])
+        const topicsReleased = JSON.parse(JSON.stringify(result))[0]["topicsReleased"]
+        return {
+            props: {current_topics: topics, released: topicsReleased}
+        }
+    } else {
+        return {
+            redirect: {
+              permanent: false,
+              destination: "/staff-dashboard"
+            }
+          }
     }
 }
 
-function AddTopics({current_topics}) {
-
+function AddTopics({current_topics, released}) {
     const [topics, setTopics] = React.useState(new Set(current_topics))
+    const storedTopics = new Set(current_topics)
     const [potentialTopic, setTopic] = React.useState("")
     const [errorMessage, setErrorMessage] = React.useState("")
+    const router = useRouter()
 
-    const handleSubmit = async () => {
+    const handleSave = async (event) => {
+
 
         const JSONdata = JSON.stringify(
             {"tutorialId": "tut1", "topics": Array.from(topics)}
@@ -39,6 +55,26 @@ function AddTopics({current_topics}) {
         const response = await fetch(endpoint, options)
         const result = await response.json()
         console.log(result)
+        router.reload(window.location.pathname)
+    }
+
+    const handleRelease = async () => {
+
+        const JSONdata = JSON.stringify(
+            {"tutorialId": "tut1"}
+        )
+
+        const endpoint = 'api/release-topics'
+        const options = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSONdata
+        }
+
+        const response = await fetch(endpoint, options)
+        const result = await response.json()
+        console.log(result)
+        router.reload(window.location.pathname)
     }
 
     const handleOnKeyDown = (event) => {
@@ -70,7 +106,7 @@ function AddTopics({current_topics}) {
     const topicDisplay = (topic) => {
         return (
             <div>
-                <button onClick={event => removeTopic(event, topic)}> x </button>
+                <button disabled={released} onClick={event => removeTopic(event, topic)}> x </button>
                 <span>{topic}</span>
             </div>
             )
@@ -84,6 +120,19 @@ function AddTopics({current_topics}) {
         setTopics(temp);
     }
 
+    const compareTopics = () => {
+        if (storedTopics.size !== topics.size) {
+            return false;
+          }
+        
+          return Array.from(storedTopics).every(element => {
+            return topics.has(element);
+          });
+    }
+
+    console.log("released")
+    console.log(compareTopics())
+
     return (
     <div>
 
@@ -95,10 +144,14 @@ function AddTopics({current_topics}) {
             onChange={onChange} 
             onKeyDown={handleOnKeyDown}
         />
-        <button onClick={handleClick}>Add Topic</button>
+        <button disabled={released} onClick={handleClick}>Add Topic</button>
 
-        <form onSubmit={handleSubmit}>
-            <button disabled={topics.size == 0} type="submit"> Save Topics </button>
+        <form onSubmit={handleSave}>
+            <button disabled={topics.size == 0 || released} type="submit"> Save Topics </button>
+        </form>
+
+        <form onSubmit={handleRelease}>
+            <button disabled={topics.size == 0 || released || !compareTopics()} type="submit"> Release Topics </button>
         </form>
 
         <p>{errorMessage}</p>

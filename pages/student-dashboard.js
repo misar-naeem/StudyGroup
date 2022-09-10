@@ -18,6 +18,23 @@ const TutorialLink = ({tutorial, student}) => {
     )
 }
 
+// export async function getServerSideProps({ query }) {
+
+//     const tutorialId = query.email
+//     console.log('CONNECTING TO MONGO');
+//     await connectMongo();
+//     console.log('CONNECTED TO MONGO');
+
+//     const result = await Tutorial.find({tutorialId: tutorialId}).select('tutorials');
+//     console.log(result)
+//     const topics = Array.from(JSON.parse(JSON.stringify(result))[0]["topics"])
+//     const topicsReleased = JSON.parse(JSON.stringify(result))[0]["topicsReleased"]
+//     return {
+//         props: {current_topics: topics, released: topicsReleased}
+//     }
+
+// }
+
 export default function StudentDashboard() {
     const { data: session } = useSession();
     const router = useRouter()

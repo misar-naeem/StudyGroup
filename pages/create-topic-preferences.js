@@ -1,7 +1,9 @@
 import React from "react";
-import connectMongo from "../util/mongodb"
+import connectMongo from "../util/mongodb";
 import Tutorial from "../models/Tutorial";
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import Button from 'react-bootstrap/Button';
+import Link from "next/link";
 
 export async function getServerSideProps({ query }) {
 
@@ -130,8 +132,15 @@ function AddTopics({current_topics, released}) {
           });
     }
 
-    console.log("released")
-    console.log(compareTopics())
+    const backButton = () => {
+        return (
+        <Button>
+            <Link href="/staff-dashboard">
+              <p>Back to dashboard</p>
+            </Link>
+        </Button>
+        )
+    }
 
     return (
     <div>
@@ -163,6 +172,7 @@ function AddTopics({current_topics, released}) {
                 })
             }
         </div>
+        {backButton()}
     </div>
     )
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import connectMongo from "../util/mongodb";
 import Tutorial from "../models/Tutorial";
+import Button from 'react-bootstrap/Button';
+import Link from "next/link";
 
 export async function getServerSideProps({ query }) {
 
@@ -15,15 +17,16 @@ export async function getServerSideProps({ query }) {
     await connectMongo();
     console.log('CONNECTED TO MONGO');
 
-    const result = await Tutorial.find({tutorialId: tutorialId}).select('topics');
+    const result = await Tutorial.find({tutorialId: tutorialId}).select('topics topicsReleased');
     const topics = Array.from(JSON.parse(JSON.stringify(result))[0]["topics"])
+    const topicsReleased = JSON.parse(JSON.stringify(result))[0]["topicsReleased"]
 
     return {
-        props: {topics: topics, degrees: degrees, years: years, tutorialId: tutorialId, studentId: studentId}
+        props: {topics: topics, degrees: degrees, years: years, tutorialId: tutorialId, studentId: studentId, topicsReleased: topicsReleased}
     }
 }
 
-export default function AddStudentInformation({topics, degrees, years, tutorialId, studentId}) {
+export default function AddStudentInformation({topics, degrees, years, tutorialId, studentId, topicsReleased}) {
 
     const [topic, setTopic] = React.useState()
     const [degree, setDegree] = React.useState()
@@ -65,24 +68,48 @@ export default function AddStudentInformation({topics, degrees, years, tutorialI
             )
     }
 
-    return (
-        <form onSubmit={handleSubmit}>
-        <p/>
-        <label htmlFor="topic">Topic Preference</label>
-        {displayRadioGroup(topics, "topic", setTopic)}
-        <p/>
-        <label htmlFor="degree">Degree</label>
-        {displayRadioGroup(degrees, "degree", setDegree)}
-        <p/>
-        <label htmlFor="year">Year</label>
-        {displayRadioGroup(years, "year", setYear)}
-        <p/>
-        <button 
-            type="submit"
-            disabled={!topic || !degree || !year}
-        >
-            Submit
-        </button>
-      </form>
-    )
+    const backButton = () => {
+        return (
+        <Button>
+            <Link href="/student-dashboard">
+              <p>Back to dashboard</p>
+            </Link>
+        </Button>
+        )
+    }
+
+    if (topicsReleased) {
+        return (
+            <div>
+            <form onSubmit={handleSubmit}>
+            <p/>
+            <label htmlFor="topic">Topic Preference</label>
+            {displayRadioGroup(topics, "topic", setTopic)}
+            <p/>
+            <label htmlFor="degree">Degree</label>
+            {displayRadioGroup(degrees, "degree", setDegree)}
+            <p/>
+            <label htmlFor="year">Year</label>
+            {displayRadioGroup(years, "year", setYear)}
+            <p/>
+            <button 
+                type="submit"
+                disabled={!topic || !degree || !year}
+            >
+                Submit
+            </button>
+          </form>
+          {backButton()}
+          </div>
+        )
+    } else {
+        return(
+            <div>
+                <h2>Topics are not available for selection yet!</h2>
+                {backButton()}
+            </div>
+        )
+    }
+
+
 }

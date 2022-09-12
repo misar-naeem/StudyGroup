@@ -25,7 +25,7 @@ export default function Home() {
       </Head>
       <div className={styles.body}>
         <main className={`${styles.main} "d-flex flex-column"`}>
-          <img src="../images/darkStudyIcon.png" alt="logo icon" height="200" width="200" className={styles.logo}/>
+          <img src="../icons/darkStudyIcon.png" alt="logo icon" height="200" width="200" className={styles.logo}/>
           <h1 className={`${styles.title} `}>
             StudyGroup.
           </h1>

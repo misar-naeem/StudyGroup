@@ -1,6 +1,5 @@
 import Head from "next/head";
 import StudentOverview from '../components/StudentOverview';
-import styles from "../styles/AdminDashboard.module.css";
 
 function AdminDashboard() {
     

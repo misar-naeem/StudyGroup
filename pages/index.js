@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Study Group</title>
+        <title>StudyGroup Landing Page</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -71,6 +71,28 @@ export default function Home() {
           </Link>
         </div>
       </main>
+      <div className={styles.body}>
+        <main className={`${styles.main} "d-flex flex-column"`}>
+          <img src="../images/darkStudyIcon.png" alt="logo icon" height="200" width="200" className={styles.logo}/>
+          <h1 className={`${styles.title} `}>
+            StudyGroup.
+          </h1>
+          <div className={styles.grid}>
+            <a
+              href="#"
+              onClick={() => {
+                signIn("azure-ad");
+              }}
+              className={styles.card}
+            >
+              <h2>Continue with Microsoft Login &rarr;</h2>
+              <p>
+                Sign in with Azure Active Directory to continue.
+              </p>
+            </a>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

@@ -22,8 +22,7 @@ export async function getServerSideProps({ query }) {
 
     // Check if student already added in preference
     const res = await Preference.find({tutorialId: tutorialId, studentId: studentId}).select("topic");
-    console.log("")
-    console.log(JSON.parse(JSON.stringify(res)))
+    
     currentChoice = JSON.parse(JSON.stringify(res))
     if (currentChoice.length == 0) {
         const result = await Tutorial.find({tutorialId: tutorialId}).select('topics topicsReleased');
@@ -35,10 +34,6 @@ export async function getServerSideProps({ query }) {
         topics = []
         topicsReleased = []
     }
-
-    // const result = await Tutorial.find({tutorialId: tutorialId}).select('topics topicsReleased');
-    // const topics = Array.from(JSON.parse(JSON.stringify(result))[0]["topics"])
-    // const topicsReleased = JSON.parse(JSON.stringify(result))[0]["topicsReleased"]
 
     return {
         props: {currentChoice: currentChoice, topics: topics, degrees: degrees, years: years, tutorialId: tutorialId, studentId: studentId, topicsReleased: topicsReleased}

@@ -2,6 +2,7 @@ import Head from "next/head";
 import StudentOverview from '../components/StudentOverview';
 
 function AdminDashboard() {
+    
   return (
     <div>
       <Head>

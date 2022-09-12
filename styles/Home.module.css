@@ -1,5 +1,5 @@
 .body {
-   background-image: url("../assets/images/loginBackground.jpg"); 
+   background-image: url("../public/images/loginBackground.jpg"); 
    width: 100vw;
    height: 100vh;
    background-position: center;
@@ -77,35 +77,6 @@
   font-size: 1.25rem;
   line-height: 1.5;
 }
-
-/* .footer {
-  display: flex;
-  flex: 1;
-  padding: 2rem 0;
-  border-top: 1px solid #eaeaea;
-  justify-content: center;
-  align-items: center;
-}
-
-.h2 {
-  width: 100%; 
-  text-align: start; 
-  border-bottom: 1px solid #000; 
-  line-height: 0.1em;
-  margin: 30px 0;
-} 
-
-.span { 
-   background:#fff; 
-   padding:0 10px; 
-}
-
-.footer a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-} */
 
 @media (max-width: 600px) {
   .grid {

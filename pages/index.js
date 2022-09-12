@@ -25,10 +25,14 @@ export default function Home() {
       </Head>
       <div className={styles.body}>
         <main className={`${styles.main} "d-flex flex-column"`}>
-          <img src="../icons/darkStudyIcon.png" alt="logo icon" height="200" width="200" className={styles.logo}/>
-          <h1 className={`${styles.title} `}>
-            StudyGroup.
-          </h1>
+          <img
+            src="../icons/darkStudyIcon.png"
+            alt="logo icon"
+            height="200"
+            width="200"
+            className={styles.logo}
+          />
+          <h1 className={`${styles.title} `}>StudyGroup.</h1>
           <div className={styles.grid}>
             <a
               href="#"
@@ -38,10 +42,18 @@ export default function Home() {
               className={styles.card}
             >
               <h2>Continue with Microsoft Login &rarr;</h2>
-              <p>
-                Sign in with Azure Active Directory to continue.
-              </p>
+              <p>Sign in with Azure Active Directory to continue.</p>
             </a>
+          <div className={styles.card}>
+            <Link href="/admin-dashboard" className={styles.card}>
+              <p>Admin Dashboard</p>
+            </Link>
+          </div>
+          <div className={styles.card}>
+            <Link href="/student-dashboard" className={styles.card}>
+              <p>Student Dashboard</p>
+            </Link>
+          </div>
           </div>
         </main>
       </div>

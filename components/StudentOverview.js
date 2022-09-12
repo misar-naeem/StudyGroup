@@ -4,13 +4,30 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
 import styles from "../styles/StudentOverview.module.css";
+import { useEffect, useState } from "react";
 
 const StudentOverview = () => {
+  const [students, setStudents] = useState([]);
+
+  const getStudents = async () => {
+    
+    fetch("/api/get-all-student")
+    .then((res) => res.json())
+    .then((data) => {
+      setStudents(data["result"]);
+    });
+  };
+
+  useEffect(() => {
+    getStudents();
+  }, []);
+
   return (
     <Tabs
       defaultActiveKey="StudentsOverview"
       transition={false}
       className={`${styles.bootstrapTabContainer} mb-3`}
+      id="student-tabs"
     >
       <Tab
         eventKey="StudentsOverview"
@@ -27,33 +44,19 @@ const StudentOverview = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Student Name</td>
-                <td>Group 1</td>
-                <td>
-                  <Button className={styles.primCompbtn}>
-                    Allocation Complete
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>Student Name</td>
-                <td>Group 2</td>
-                <td>
-                  <Button className={styles.primInCompbtn}>
-                    Allocation Incomplete
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>Student Name</td>
-                <td>Group 3</td>
-                <td>
-                  <Button className={styles.primCompbtn}>
-                    Allocation Complete
-                  </Button>
-                </td>
-              </tr>
+              {students.map((student) => {
+                return (
+                  <tr key={student._id}>
+                    <td>{student.name}</td>
+                    <td>{student.group && student.group !== "" ? student.group : "Group not yet assigned" }</td>
+                    <td>
+                      <Button className={student.allocation ? styles.primCompbtn: styles.primInCompbtn}>
+                        {student.allocation ? "Allocation Complete" : "Allocation Incomplete"}
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
         </div>

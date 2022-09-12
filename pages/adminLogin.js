@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { emailSchema, passwordSchema } from "../models/ValidationSchemas.js";
+import { emailSchema, passwordSchema } from "./common/ValidationSchemas";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
-import styles from "../styles/AdminLogin.module.css";
-import { Form, Button } from "react-bootstrap";
+import styles from "../styles/BootstrapInput.module.css";
+import {Form, Button} from "react-bootstrap";
 import { Formik } from "formik";
 import { BootstrapInput } from "../components/BootstrapInput";
 import * as Yup from "yup";
@@ -13,20 +13,21 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object({
-  email: emailSchema,
+  email: emailSchema, 
   password: passwordSchema,
 });
 
-const adminLogin = ({ data }) => {
-  function handleSubmit(values) {
-    console.log(values, data);
-  }
+
+const adminLogin = ({data}) => {
+    function handleSubmit(values) {
+        console.log(values, data);
+    }
 
   return (
     <div className={styles.adminLogin}>
       <div className={`${styles.adminHeader}`}>
-        <FontAwesomeIcon icon={faUsers} className="fa-2x" />
-        <h1 className={styles.fs35}>StudyGroup</h1>
+             <FontAwesomeIcon icon={faUsers} className="fa-2x"/>
+             <h1 className={styles.fs35}>StudyGroup</h1>
       </div>
       <Formik
         initialValues={initialValues}
@@ -44,9 +45,7 @@ const adminLogin = ({ data }) => {
           handleSubmit,
         }) => (
           <Form onSubmit={handleSubmit} className={styles.form}>
-            <h2 className={`${styles.adminHeader} ${styles.fs20} mt-2`}>
-              Admin Login
-            </h2>
+            <h2 className={`${styles.adminHeader} ${styles.fs20} mt-2`}>Admin Login</h2>
             <BootstrapInput
               controlId="form-login-email"
               label="Email Address:"
@@ -81,15 +80,5 @@ const adminLogin = ({ data }) => {
     </div>
   );
 };
-
-// export async function getServerSideProps(context) {
-//   const res = await fetch("http://localhost:5000/staff");
-//   const data = await res.json();
-//   return {
-//     props: {
-//       data,
-//     },
-//   };
-// }
 
 export default adminLogin;

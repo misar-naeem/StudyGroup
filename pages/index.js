@@ -55,6 +55,11 @@ export default function Home() {
           </Link>
         </div>
         <div className={styles.card}>
+          <Link href="/student-dashboard" className={styles.card}>
+            <p>Student Dashboard</p>
+          </Link>
+        </div>
+        <div className={styles.card}>
           <Link href="/student-login" className={styles.card}>
             <p>Student Login</p>
           </Link>

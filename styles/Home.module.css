@@ -109,6 +109,19 @@
   margin-left: 0.5rem;
 }
 
+.h2 {
+  width: 100%; 
+  text-align: start; 
+  border-bottom: 1px solid #000; 
+  line-height: 0.1em;
+  margin: 30px 0;
+} 
+
+.span { 
+   background:#fff; 
+   padding:0 10px; 
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;

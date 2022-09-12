@@ -1,11 +1,13 @@
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import useSWR from "swr";
-import { signOut, useSession, getSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Button from "react-bootstrap/Button";
 import StudentStaticSubjectBox from "../components/StudentStaticSubjectBox";
-// import subjectIcon from "../images/subject-icon.jpg";
+import { Loading } from "../components/Loading";
+import { Col } from "react-bootstrap";
+
 
 
 const TutorialLink = ({ tutorial }) => {
@@ -21,13 +23,6 @@ const TutorialLink = ({ tutorial }) => {
 export default function StudentDashboard() {
   const { data: session } = useSession();
   const router = useRouter();
-
-  // Literal jank if someone knows auth and routing feel free to fix
-  // useEffect(() => {
-  //     if (!session) {
-  //         router.push('/student-login')
-  //     }
-  // })
 
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -45,7 +40,7 @@ export default function StudentDashboard() {
         StudyGroup
       </div>
     );
-  if (!data) return <div>loading...</div>;
+  if (!data) return <div><Loading /></div>;
 
   const content = () => {
     if (data["result"].length == 0) return <div>Not found</div>;
@@ -68,7 +63,7 @@ export default function StudentDashboard() {
       <h2 className={styles.h2}>
         <span className={styles.span}>Subjects</span>
       </h2>
-      <div className="d-flex justify-content-evenly">
+      <Col className="d-flex justify-content-evenly">
         <StudentStaticSubjectBox
           heading="Subject Title"
           subheading="Admin Contact Details"
@@ -84,7 +79,7 @@ export default function StudentDashboard() {
           subheading="Admin Contact Details"
           icon="/../public/images/subject-icon.jpg"
         />
-      </div>
+      </Col>
       <button onClick={() => signOut()}>Sign out.</button>
     </>
   );

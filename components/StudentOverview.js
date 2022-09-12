@@ -20,7 +20,7 @@ const StudentOverview = () => {
 
   useEffect(() => {
     getStudents();
-  }, [students]);
+  }, []);
 
   return (
     <Tabs

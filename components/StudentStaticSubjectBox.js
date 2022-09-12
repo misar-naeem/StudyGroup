@@ -5,7 +5,7 @@ import Image from 'next/image'
 const StudentStaticSubjectBox = ({ icon, heading, subheading }) => {
   return (
     <div className={styles.staticBox}>
-      <Image src={icon} alt="subject-icon" width={297} height={160} />
+      <Image src={icon} alt="subject-icon" width={360} height={170} />
       <div className="d-flex flex-column gap-1">
         <b>{heading}</b>
         <span>{subheading}</span>

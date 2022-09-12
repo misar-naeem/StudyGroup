@@ -1,6 +1,6 @@
-import '../styles/globals.css'
-import { SessionProvider } from "next-auth/react"
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "/styles/globals.css";
+import { SessionProvider } from "next-auth/react";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App({
   Component,
@@ -10,5 +10,5 @@ export default function App({
     <SessionProvider session={session}>
       <Component {...pageProps} />
     </SessionProvider>
-  )
+  );
 }

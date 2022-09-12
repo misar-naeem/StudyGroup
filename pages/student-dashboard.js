@@ -5,7 +5,7 @@ import { signOut, useSession, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Button from "react-bootstrap/Button";
 import StudentStaticSubjectBox from "../components/StudentStaticSubjectBox";
-import subjectIcon from "../images/subject-icon.jpg";
+// import subjectIcon from "../images/subject-icon.jpg";
 
 
 const TutorialLink = ({ tutorial }) => {
@@ -72,17 +72,17 @@ export default function StudentDashboard() {
         <StudentStaticSubjectBox
           heading="Subject Title"
           subheading="Admin Contact Details"
-          icon={subjectIcon}
+          icon="/../public/images/subject-icon.jpg"
         />
         <StudentStaticSubjectBox
           heading="Subject Title"
           subheading="Admin Contact Details"
-          icon={subjectIcon}
+          icon="/../public/images/subject-icon.jpg"
         />
         <StudentStaticSubjectBox
           heading="Subject Title"
           subheading="Admin Contact Details"
-          icon={subjectIcon}
+          icon="/../public/images/subject-icon.jpg"
         />
       </div>
       <button onClick={() => signOut()}>Sign out.</button>

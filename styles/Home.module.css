@@ -1,5 +1,5 @@
 .body {
-   background-image: url("../assets/images/loginBackground.jpg"); 
+   background-image: url("../public/images/loginBackground.jpg"); 
    width: 100vw;
    height: 100vh;
    background-position: center;

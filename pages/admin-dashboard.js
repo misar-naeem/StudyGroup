@@ -3,6 +3,7 @@ import StudentOverview from "/components/StudentOverview";
 import styles from "../styles/Home.module.css";
 
 function AdminDashboard() {
+    
   return (
     <div>
       <Head>

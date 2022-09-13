@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import StudentStaticSubjectBox from "../components/StudentStaticSubjectBox";
 import { Loading } from "../components/Loading";
 import { Col } from "react-bootstrap";
+import { useEffect } from "react";
 
 const TutorialLink = ({tutorial, student}) => {
     return (
@@ -27,7 +28,7 @@ export default function StudentDashboard() {
         if (!session) {
             router.push('/student-login')
         }
-    })
+    }, [])
 
     const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -46,38 +47,10 @@ export default function StudentDashboard() {
             <>
             <div>{data["result"][0]["tutorials"].map((value, index)=>{return <TutorialLink tutorial={value} student={email}/>})}</div>
             </>
-            
         )
     }
 
-  // Get student info from database
-  var email = "";
-  if (session) {
-    email = session.user.email;
-  }
-  const { data, error } = useSWR(`/api/get-student/${email}`, fetcher);
-
-  if (error || data?.error)
-    return (
-      <div>
-        Student Account not Registered, Contact Your Tutor to be Added to
-        StudyGroup
-      </div>
-    );
   if (!data) return <div><Loading /></div>;
-
-  const content = () => {
-    if (data["result"].length == 0) return <div>Not found</div>;
-    return (
-      <>
-        <div>
-          {data["result"][0]["tutorials"].map((value, index) => {
-            return <TutorialLink tutorial={value} />;
-          })}
-        </div>
-      </>
-    );
-  };
 
   return (
     <>

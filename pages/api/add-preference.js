@@ -18,9 +18,7 @@ export default async function handler(req, res) {
             const preference = await Preference.create({
                 tutorialId: req.body.tutorialId,
                 studentId: req.body.studentId,
-                topic: req.body.topic,
-                degree: req.body.degree,
-                year: req.body.year
+                topic: req.body.topic
             })
             console.log('CREATED PREFERENCE');
             res.json({ preference })

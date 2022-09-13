@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "Stopping application"
-pkill node || true
+kill -9 $(lsof -i:3000 -t) || true

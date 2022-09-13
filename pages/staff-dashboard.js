@@ -7,6 +7,7 @@ import { signOut, useSession, getSession } from "next-auth/react";
 import { useRouter } from 'next/router'
 import { useEffect } from "react";
 import Button from 'react-bootstrap/Button';
+import { Loading } from "../components/Loading";
 
 export default function StaffDashboard() {
     const { data: session } = useSession();
@@ -16,7 +17,7 @@ export default function StaffDashboard() {
         if (!session) {
             router.push('/staff-login')
         }
-    })
+    }, [])
 
     const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -26,7 +27,7 @@ export default function StaffDashboard() {
     const {data, error} = useSWR(`/api/get-staff/${email}`, fetcher);
 
     if (error) return <div>failed to load</div>;
-    if (!data) return <div>loading...</div>; 
+    if (!data) return <div><Loading /></div>; 
    
     const content = () => {
 
@@ -34,6 +35,7 @@ export default function StaffDashboard() {
         console.log("data")
         console.log(data)
         const tutorialId = data["result"][0]["tutorial"]
+
         return (
             <>
             <div>{tutorialId}</div>

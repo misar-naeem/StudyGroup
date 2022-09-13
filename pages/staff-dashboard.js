@@ -13,7 +13,6 @@ export default function StaffDashboard() {
     const { data: session } = useSession();
     const router = useRouter()
 
-    // Literal jank if someone knows auth and routing feel free to fix
     useEffect(() => {
         if (!session) {
             router.push('/staff-login')
@@ -33,12 +32,16 @@ export default function StaffDashboard() {
     const content = () => {
 
         if (data["result"].length == 0) return <div>Not found</div>
+        console.log("data")
+        console.log(data)
+        const tutorialId = data["result"][0]["tutorial"]
+
         return (
             <>
-            <div>{data["result"][0]["tutorial"]}</div>
+            <div>{tutorialId}</div>
             <div>
             <Button>
-              <Link href="/create-topic-preferences">
+              <Link href={`/create-topic-preferences?tutorialId=${tutorialId}`}>
                 <p>Create Topics</p>
               </Link>
             </Button>

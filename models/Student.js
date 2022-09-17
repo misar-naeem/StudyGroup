@@ -8,7 +8,6 @@ const preferenceSchema = new Schema({
   year: Number,
   allocation: Boolean,
   group: String,
-  studentID: String,
   tutorials: []
 });
 

@@ -1,5 +1,6 @@
 import { Schema, model, models } from 'mongoose';
 
+
 const preferenceSchema = new Schema({
   email: {type: String, required: true, unique: true},
   name: String,
@@ -7,6 +8,7 @@ const preferenceSchema = new Schema({
   year: Number,
   allocation: Boolean,
   group: String,
+  studentID: String,
   tutorials: []
 });
 

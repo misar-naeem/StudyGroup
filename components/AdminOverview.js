@@ -8,12 +8,16 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faClose, faEdit } from "@fortawesome/free-solid-svg-icons";
 import BootstrapPopup from "./BootStrapPopUp";
+import { Loading } from "./Loading";
+import StudentPopup from "./StudentPopup";
 
 const AdminOverview = () => {
   const [students, setStudents] = useState([]);
   const [showDeleteIcon, setshowDeleteIcon] = useState(false);
   const [showDeletePopup, setshowDeletePopup] = useState(false);
   const [studentName, setStudentName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showStudentPopup, setShowStudentPopup] = useState(false);
 
 
   const getStudents = async () => {
@@ -25,11 +29,14 @@ const AdminOverview = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     getStudents();
+    setLoading(false);
   }, []);
 
   return (
-    <div>
+    <>
+      {!loading ? (<div>
       <span className={`${styles.editIcon} d-flex gap-2 align-items-center`}>
         {!showDeleteIcon ? (
           <FontAwesomeIcon
@@ -39,7 +46,9 @@ const AdminOverview = () => {
           />
         ) : (
           <>
-            <Button className={styles.addStudentBtn}>Add Student</Button>
+            <Button className={styles.addStudentBtn}
+            onClick={() => setShowStudentPopup(!showStudentPopup)}
+            >Add Student</Button>
             <FontAwesomeIcon
               icon={faClose}
               className="fa-2x"
@@ -219,7 +228,13 @@ const AdminOverview = () => {
         proceedBtnName="Confirm"
         closeBtnName="Cancel"
        />
-    </div>
+       <StudentPopup
+       showPopup={showStudentPopup}
+       setShowPopup={setShowStudentPopup}
+       size={"md"}
+       />
+    </div>) : (<Loading />)}
+    </>
   );
 };
 

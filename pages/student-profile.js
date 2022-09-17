@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Link from "next/link";
-import useSWR from 'swr';
 import { signOut, useSession, getSession } from "next-auth/react";
 import { useRouter } from 'next/router'
 import { useState, useEffect } from "react";
@@ -11,6 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Image from 'react-bootstrap/Image'
 import ListGroup from 'react-bootstrap/ListGroup';
 import styles from "../styles/StudentProfile.module.css";
+import * as React from 'react';
 
 const TutorialLink = ({tutorial}) => {
     return (
@@ -48,9 +48,13 @@ export default function StudentProfile() {
         My Student Profile
       </h1>
   </div> 
-  <div>
-  <Image className={styles.photo} style={{ size:'50%', margin: '30px', marginLeft: 50}} src="https://thumbs.dreamstime.com/b/closeup-super-mario-character-nintendo-platform-game-video-red-background-photographed-site-screen-149088103.jpg" thumbnail />  
-<Form className={styles.form} style={{ width: '100%', marginLeft: 1000}}>
+ 
+  <div className="row">
+    <div className="col-3">
+    <Image className={styles.photo} style={{ size:'50%', margin: '30px', marginLeft: 50 }} src="https://thumbs.dreamstime.com/b/closeup-super-mario-character-nintendo-platform-game-video-red-background-photographed-site-screen-149088103.jpg" thumbnail />  
+    </div>
+  <div className="col-5">
+<Form className="mr-sm" style={{ width: '100%', marginTop: 50, marginLeft: 100}}>
         <Form.Group as={Row} className="mb-3" controlId="formPlaintextName">
           <Form.Label column sm="2">
             <span style={{ fontWeight: 'bold' }}> Student Name: </span>
@@ -92,6 +96,7 @@ export default function StudentProfile() {
           </Col>
         </Form.Group>
       </Form>
+        </div>
       </div>
       <h4 style={{ width: '100%', display: 'flex', marginLeft: 770 }}>
       Current Enrollments:

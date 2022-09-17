@@ -8,7 +8,10 @@
    justify-content: center;
    align-items: center;
 }
-
+.studentLayout{
+  position: relative;
+  left: 150px;
+}
 /* .container {
   padding: 0 2rem;
 } */

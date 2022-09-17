@@ -1,17 +1,17 @@
-import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-
+import styles from "../styles/Loading.module.css";
 export const Loading = () => {
   return (
-    <>
-      <Spinner
-        as="span"
-        animation="border"
-        size="lg"
-        role="status"
-        aria-hidden="true"
-      />
-      <span className="visually-hidden">Loading...</span>
-    </>
+    <div className={styles.body}>
+      <div class={styles.wrapper}>
+        <div class={styles.circle}></div>
+        <div class={styles.circle}></div>
+        <div class={styles.circle}></div>
+        <div class={styles.shadow}></div>
+        <div class={styles.shadow}></div>
+        <div class={styles.shadow}></div>
+        <span>Loading</span>
+    </div>
+    </div>
   );
 };

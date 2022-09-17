@@ -1,5 +1,5 @@
 import Head from "next/head";
-import StudentOverview from "/components/StudentOverview";
+import AdminOverview from "/components/AdminOverview";
 import styles from "../styles/Home.module.css";
 
 function AdminDashboard() {
@@ -9,8 +9,8 @@ function AdminDashboard() {
       <Head>
         <title>Staff Dashboard</title>
       </Head>
-      <h1 className={styles.heading}>Staff Dashboard</h1>
-      <StudentOverview />
+      <h1 className={`${styles.heading} ps-5 p-3`}>Subject Name</h1>
+      <AdminOverview />
     </div>
   );
 }

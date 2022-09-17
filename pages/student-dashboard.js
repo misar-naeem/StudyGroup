@@ -3,7 +3,6 @@ import Link from "next/link";
 import useSWR from "swr";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Button from "react-bootstrap/Button";
 import StudentStaticSubjectBox from "../components/StudentStaticSubjectBox";
 import { Loading } from "../components/Loading";
 import { Col } from "react-bootstrap";
@@ -11,11 +10,17 @@ import { useEffect } from "react";
 
 const TutorialLink = ({tutorial, student}) => {
     return (
-    <Button>
-        <Link href={`/add-student-preferences?tutorial=${tutorial}&student=${student}`}>
-          <p>{tutorial}</p>
-        </Link>
-    </Button>
+    <div>
+    <Link href={`/add-student-preferences?tutorial=${tutorial}&student=${student}`}>
+      <a>
+      <StudentStaticSubjectBox
+          heading={tutorial}
+          subheading="Admin Contact Details"
+          icon="/../public/images/subject-icon.jpg"
+      />
+      </a>
+    </Link>
+    </div>
   );
 };
 
@@ -26,7 +31,7 @@ export default function StudentDashboard() {
     // Literal jank if someone knows auth and routing feel free to fix
     useEffect(() => {
         if (!session) {
-            router.push('/student-login')
+          router.push('/')
         }
     }, [])
 
@@ -55,27 +60,11 @@ export default function StudentDashboard() {
   return (
     <>
       <h1>Student Dashboard</h1>
-      {/* {session ? session.user.name : ""}
-        {content()} */}
       <h2 className={styles.h2}>
         <span className={styles.span}>Subjects</span>
       </h2>
       <Col className="d-flex justify-content-evenly">
-        <StudentStaticSubjectBox
-          heading="Subject Title"
-          subheading="Admin Contact Details"
-          icon="/../public/images/subject-icon.jpg"
-        />
-        <StudentStaticSubjectBox
-          heading="Subject Title"
-          subheading="Admin Contact Details"
-          icon="/../public/images/subject-icon.jpg"
-        />
-        <StudentStaticSubjectBox
-          heading="Subject Title"
-          subheading="Admin Contact Details"
-          icon="/../public/images/subject-icon.jpg"
-        />
+        {content()}
       </Col>
       <button onClick={() => signOut()}>Sign out.</button>
     </>

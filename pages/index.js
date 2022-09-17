@@ -1,7 +1,8 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import LoginRedirect from "./login-redirect";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -9,11 +10,7 @@ export default function Home() {
   if (session) {
     console.log(session);
     return (
-      <>
-        Signed in as {session.user.email}
-        <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
+      <LoginRedirect/>
     );
   }
 
@@ -45,8 +42,8 @@ export default function Home() {
               <p>Sign in with Azure Active Directory to continue.</p>
             </a>
           <div className={styles.card}>
-            <Link href="/admin-dashboard" className={styles.card}>
-              <p>Admin Dashboard</p>
+            <Link href="/staff-dashboard" className={styles.card}>
+              <p>Staff Dashboard</p>
             </Link>
           </div>
           <div className={styles.card}>

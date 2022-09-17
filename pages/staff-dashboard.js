@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Image from "next/image";
+import StudentOverview from "/components/StudentOverview";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import useSWR from 'swr';
@@ -9,54 +9,60 @@ import { useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import { Loading } from "../components/Loading";
 
-export default function StaffDashboard() {
-    const { data: session } = useSession();
-    const router = useRouter()
+function StaffDashboard() {
+  const { data: session } = useSession();
+  const router = useRouter()
 
-    useEffect(() => {
-        if (!session) {
-            router.push('/staff-login')
-        }
-    }, [])
+  useEffect(() => {
+      if (!session) {
+          router.push('/')
+      }
+  }, [])
 
-    const fetcher = (url) => fetch(url).then((res) => res.json());
+  const fetcher = (url) => fetch(url).then((res) => res.json());
 
-    // Get student info from database
-    var email = "";
-    if (session) { email = session.user.email }
-    const {data, error} = useSWR(`/api/get-staff/${email}`, fetcher);
+  // Get staff info from database
+  var email = "";
+  if (session) { email = session.user.email }
+  const {data, error} = useSWR(`/api/get-staff/${email}`, fetcher);
 
-    if (error) return <div>failed to load</div>;
-    if (!data) return <div><Loading /></div>; 
-   
-    const content = () => {
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div><Loading /></div>; 
 
-        if (data["result"].length == 0) return <div>Not found</div>
-        console.log("data")
-        console.log(data)
-        const tutorialId = data["result"][0]["tutorial"]
+  if (data["result"].length == 0) return <div>Not found</div>
+  console.log("data")
+  console.log(data)
+  const tutorialId = data["result"][0]["tutorial"]
 
-        return (
-            <>
-            <div>{tutorialId}</div>
-            <div>
-            <Button>
-              <Link href={`/create-topic-preferences?tutorialId=${tutorialId}`}>
-                <p>Create Topics</p>
-              </Link>
-            </Button>
-            </div>
-            </>
-            
-        )
-    }
 
-    return (
-        <>
-        <h1>Staff Dashboard</h1>
-        {session ? session.user.name : ""}
-        {content()}
-        <button onClick={() => signOut()}>Sign out.</button>
-        </>
-    )    
+  return (
+    <div display="block">
+      <Head>
+        <title>Staff Dashboard</title>
+      </Head>
+      <h1 className={styles.heading}>Staff Dashboard</h1>
+
+      <div>
+        <div>
+          <p>{session ? session.user.name : ""} {tutorialId}</p>
+        </div>
+        <div>
+          <Button onClick={() => signOut()}>Sign out.</Button>
+        </div>
+      </div>
+      
+      <div>
+      <Button>
+        <Link href={`/create-topic-preferences?tutorialId=${tutorialId}`}>
+          <p>Create Topics</p>
+        </Link>
+      </Button>
+      </div>
+
+      <StudentOverview />
+
+    </div>
+  );
 }
+
+export default StaffDashboard;

@@ -1,5 +1,4 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import useSWR from 'swr';
 import { signOut, useSession, getSession } from "next-auth/react";
@@ -11,6 +10,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Image from 'react-bootstrap/Image'
 import ListGroup from 'react-bootstrap/ListGroup';
+import styles from "../styles/StudentProfile.module.css";
 
 const TutorialLink = ({tutorial}) => {
     return (
@@ -44,19 +44,19 @@ export default function StudentProfile() {
   return (
     <>
      <div>
-      <h1>
+      <h1 style={{ width: '100%', display: 'flex', margin: '40px'}}>
         My Student Profile
       </h1>
-        <Image src="https://thumbs.dreamstime.com/b/closeup-super-mario-character-nintendo-platform-game-video-red-background-photographed-site-screen-149088103.jpg" thumbnail />  
   </div> 
-  
-<Form>
+  <div>
+  <Image className={styles.photo} style={{ size:'50%', margin: '30px', marginLeft: 50}} src="https://thumbs.dreamstime.com/b/closeup-super-mario-character-nintendo-platform-game-video-red-background-photographed-site-screen-149088103.jpg" thumbnail />  
+<Form className={styles.form} style={{ width: '100%', marginLeft: 1000}}>
         <Form.Group as={Row} className="mb-3" controlId="formPlaintextName">
           <Form.Label column sm="2">
             <span style={{ fontWeight: 'bold' }}> Student Name: </span>
           </Form.Label>
           <Col sm="10">
-          <Form.Control plaintext readOnly defaultValue="Mario" />
+          <Form.Control className="styles.form"  plaintext readOnly defaultValue="Mario" />
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="mb-3" controlId="formPlaintextStudentID">
@@ -92,33 +92,34 @@ export default function StudentProfile() {
           </Col>
         </Form.Group>
       </Form>
-<div>
-          <ListGroup horizontal>
-            <ListGroup.Item>Subject Name</ListGroup.Item>
-            <ListGroup.Item>41201</ListGroup.Item>
-            <ListGroup.Item>
-              <a  href="https://www.google.com/">
-                <p>Admin Details Link</p>
-              </a>
-            </ListGroup.Item>
-          </ListGroup>
-        </div><div>
-            <ListGroup horizontal>
-              <ListGroup.Item>Subject Name</ListGroup.Item>
-              <ListGroup.Item>41202</ListGroup.Item>
-              <ListGroup.Item><a href="https://www.google.com/">
-                
+      </div>
+      <h4 style={{ width: '100%', display: 'flex', marginLeft: 770 }}>
+      Current Enrollments:
+      </h4>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <ListGroup className={styles.listgroup} horizontal>
+            <ListGroup.Item class="col-xs-3 list-group-item" style={{ width: '400px'}}>Subject Name</ListGroup.Item>
+            <ListGroup.Item class="col-xs-3 list-group-item" style={{ width: '200px'}}>41203</ListGroup.Item>
+              <ListGroup.Item style={{ width: '200px'}}><a href="https://www.google.com/">
                   <p>Admin Details Link</p>
-              
               </a></ListGroup.Item>
             </ListGroup>
-          </div><div>
-            <ListGroup horizontal>
-              <ListGroup.Item>Subject Name</ListGroup.Item>
-              <ListGroup.Item>41203</ListGroup.Item>
-              <ListGroup.Item><a href="https://www.google.com/">
+          </div>
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <ListGroup className={styles.listgroup} horizontal>
+            <ListGroup.Item class="col-xs-3 list-group-item" style={{ width: '400px'}}>Subject Name</ListGroup.Item>
+            <ListGroup.Item class="col-xs-3 list-group-item" style={{ width: '200px'}}>41203</ListGroup.Item>
+              <ListGroup.Item style={{ width: '200px'}}><a href="https://www.google.com/">
                   <p>Admin Details Link</p>
-              
+              </a></ListGroup.Item>
+            </ListGroup>
+          </div>
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <ListGroup className={styles.listgroup} horizontal>
+            <ListGroup.Item class="col-xs-3 list-group-item" style={{ width: '400px'}}>Subject Name</ListGroup.Item>
+            <ListGroup.Item class="col-xs-3 list-group-item" style={{ width: '200px'}}>41203</ListGroup.Item>
+              <ListGroup.Item style={{ width: '200px'}}><a href="https://www.google.com/">
+                  <p>Admin Details Link</p>
               </a></ListGroup.Item>
             </ListGroup>
           </div>

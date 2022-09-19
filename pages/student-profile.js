@@ -98,7 +98,7 @@ export default function StudentProfile() {
       </Form>
         </div>
       </div>
-      <h4 style={{ width: '100%', display: 'flex', marginLeft: 770 }}>
+      <h4 style={{ width: '100%', display: 'flex', marginLeft: 410 }}>
       Current Enrollments:
       </h4>
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>

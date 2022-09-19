@@ -23,23 +23,26 @@ const TutorialLink = ({ tutorial }) => {
 };
 
 export default function StudentProfile() {
-  const { data: session } = useSession();
+  const [studentDetails, setStudentDetails] = useState([]);
+  const {data: session} = useSession();
   const router = useRouter();
-  //  useEffect(() => {
-  //   if (!session) {
-  //       router.push('/student-login')
-  //   }
-  // })
-  //   useEffect(() => {
-  //     fetch('url')
-  //       .then(res => {
-  //         return res.json();
-  //       })
-  //       .then(data => {
-  //         console.log(data);
-  //         setSession(data)
-  //     })
-  // }, [])
+
+  const getStudentByEmail = async (email) => {
+    fetch(`/api/get-student/${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setStudentDetails(data["result"][0]);
+      });
+  };
+
+    useEffect(() => {
+    if (session) {
+      getStudentByEmail(session.user.email);
+    }
+    // else{
+    //   router.push('/student-login')
+    // }
+  }, [studentDetails]);
 
   return (
     <>
@@ -49,17 +52,15 @@ export default function StudentProfile() {
         </h1>
       </div>
 
-      <div className="row">
-        <div className="col-3">
+      <div className="d-flex align-items-center">
           <Image
             className={styles.photo}
             style={{ margin: "30px", marginLeft: 50 }}
             src="https://thumbs.dreamstime.com/b/closeup-super-mario-character-nintendo-platform-game-video-red-background-photographed-site-screen-149088103.jpg"
             thumbnail
             width={400}
-            height={500}
+            height={300}
           />
-        </div>
         <div className="col-5">
           <Form
             className="mr-sm"
@@ -74,20 +75,8 @@ export default function StudentProfile() {
                   className="styles.form"
                   plaintext
                   readOnly
-                  defaultValue="Mario"
+                  defaultValue={studentDetails.name}
                 />
-              </Col>
-            </Form.Group>
-            <Form.Group
-              as={Row}
-              className="mb-3"
-              controlId="formPlaintextStudentID"
-            >
-              <Form.Label column sm="2">
-                <span style={{ fontWeight: "bold" }}> Student ID: </span>
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control plaintext readOnly defaultValue="123456789" />
               </Col>
             </Form.Group>
             <Form.Group
@@ -143,13 +132,13 @@ export default function StudentProfile() {
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <ListGroup className={styles.listgroup} horizontal>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "400px" }}
           >
             Subject Name
           </ListGroup.Item>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "200px" }}
           >
             41203
@@ -164,13 +153,13 @@ export default function StudentProfile() {
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <ListGroup className={styles.listgroup} horizontal>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "400px" }}
           >
             Subject Name
           </ListGroup.Item>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "200px" }}
           >
             41203
@@ -185,13 +174,13 @@ export default function StudentProfile() {
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <ListGroup className={styles.listgroup} horizontal>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "400px" }}
           >
             Subject Name
           </ListGroup.Item>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "200px" }}
           >
             41203

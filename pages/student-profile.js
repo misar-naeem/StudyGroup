@@ -10,7 +10,7 @@ import Row from "react-bootstrap/Row";
 import Image from "react-bootstrap/Image";
 import ListGroup from "react-bootstrap/ListGroup";
 import styles from "../styles/StudentProfile.module.css";
-import * as React from "react";
+import { Loading } from "../components/Loading";
 
 const TutorialLink = ({ tutorial }) => {
   return (
@@ -24,8 +24,9 @@ const TutorialLink = ({ tutorial }) => {
 
 export default function StudentProfile() {
   const [studentDetails, setStudentDetails] = useState([]);
+  const [loading, setLoading] = useState(false);
   const {data: session} = useSession();
-  const router = useRouter();
+
 
   const getStudentByEmail = async (email) => {
     fetch(`/api/get-student/${email}`)
@@ -37,15 +38,20 @@ export default function StudentProfile() {
 
     useEffect(() => {
     if (session) {
+      setLoading(true);
       getStudentByEmail(session.user.email);
+      setLoading(false);
     }
     // else{
     //   router.push('/student-login')
     // }
-  }, [studentDetails]);
+  }, []);
 
   return (
     <>
+    {
+      studentDetails !==  0 && !loading ? (
+        <div>
       <div>
         <h1 style={{ width: "100%", display: "flex", margin: "40px" }}>
           My Student Profile
@@ -75,7 +81,7 @@ export default function StudentProfile() {
                   className="styles.form"
                   plaintext
                   readOnly
-                  defaultValue={studentDetails.name}
+                  defaultValue={studentDetails?.name}
                 />
               </Col>
             </Form.Group>
@@ -88,7 +94,7 @@ export default function StudentProfile() {
                 <span style={{ fontWeight: "bold" }}> Study Year: </span>
               </Form.Label>
               <Col sm="10">
-                <Form.Control plaintext readOnly defaultValue="2rd Year" />
+                <Form.Control plaintext readOnly defaultValue={studentDetails?.year} />
               </Col>
             </Form.Group>
             <Form.Group
@@ -103,7 +109,7 @@ export default function StudentProfile() {
                 <Form.Control
                   plaintext
                   readOnly
-                  defaultValue="mario.bros@student.uts.edu.au"
+                  defaultValue={studentDetails?.email}
                 />
               </Col>
             </Form.Group>
@@ -119,7 +125,7 @@ export default function StudentProfile() {
                 <Form.Control
                   plaintext
                   readOnly
-                  defaultValue="Bachelors of fixing pipe (Hons)"
+                  defaultValue={`Bachelors of ${studentDetails?.degree}`}
                 />
               </Col>
             </Form.Group>
@@ -192,6 +198,8 @@ export default function StudentProfile() {
           </ListGroup.Item>
         </ListGroup>
       </div>
+    </div>):(<Loading />)
+    }
     </>
   );
 }

@@ -70,8 +70,6 @@ export default function StudentDashboard() {
       <StudentNavBar />
       <div className={styles.studentLayout}>
         <div className={`d-flex flex-column justify-content-center p-3 ps-5`}>
-          {/* {session ? session.user.name : ""}
-        {content()} */}
           <h1 className="p-3">
             <span className={styles.span}>Subjects</span>
           </h1>

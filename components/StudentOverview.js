@@ -5,17 +5,30 @@ import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
 import styles from "../styles/StudentOverview.module.css";
 import { useState } from "react";
-// import Staff from "models/Staff.js";
-// import connectMongo from "../util/mongodb";
 
-const StudentOverview = () => {
+const StudentOverview = (props) => {
   const [enableEdit, setEnableEdit] = useState(false);
   const [minGroupSize, setMinGroupSize] = useState(1);
   const [maxGroupSize, setMaxGroupSize] = useState(1);
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
-  // const tutorials = ["Tutorial 1", "Tutorial 2", "Tutorial 3"];
-  const [tutorials, setTutorials] = useState([""]);
+  const { groups } = props;
+  console.log(groups);
+
+  // const groupTableCells = groups.map((group) => {
+    
+  //     <tr>
+  //       {console.log(group.students[0].name)}
+  //       <td>{group.students[0]}</td>
+  //       <td>Group 2</td>
+  //       <td>
+  //         <Button className={styles.primInCompbtn}>
+  //           Allocation Incomplete
+  //         </Button>
+  //       </td>
+  //     </tr>
+  
+  // })}
 
   return (
     <Tabs

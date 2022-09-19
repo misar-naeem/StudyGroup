@@ -10,13 +10,19 @@ import { Col } from "react-bootstrap";
 import { useEffect } from "react";
 
 const TutorialLink = ({tutorial, student}) => {
-    return (
-    <Button>
-        <Link href={`/add-student-preferences?tutorial=${tutorial}&student=${student}`}>
-          <p>{tutorial}</p>
-        </Link>
-    </Button>
-  );
+  return (
+  <div>
+  <Link href={`/add-student-preferences?tutorial=${tutorial}&student=${student}`}>
+    <a>
+    <StudentStaticSubjectBox
+        heading={tutorial}
+        subheading="Admin Contact Details"
+        icon="/../public/images/subject-icon.jpg"
+    />
+    </a>
+  </Link>
+  </div>
+);
 };
 
 export default function StudentDashboard() {
@@ -42,15 +48,37 @@ export default function StudentDashboard() {
    
     const content = () => {
 
-        if (data["result"].length == 0) return <div>Not found</div>
-        return (
-            <>
-            <div>{data["result"][0]["tutorials"].map((value, index)=>{return <TutorialLink tutorial={value} student={email}/>})}</div>
-            </>
-        )
+      if (data["result"].length == 0) return <div>Not found</div>
+      return (
+          <>
+          <div>{data["result"][0]["tutorials"].map((value, index)=>{return <TutorialLink tutorial={value} student={email}/>})}</div>
+          </>
+      )
     }
 
   if (!data) return <div><Loading /></div>;
+
+  const hardcodedSubjects = () => {
+    return (
+      <>
+      <StudentStaticSubjectBox
+          heading="Subject Title"
+          subheading="Admin Contact Details"
+          icon="/../public/images/subject-icon.jpg"
+        />
+        <StudentStaticSubjectBox
+          heading="Subject Title"
+          subheading="Admin Contact Details"
+          icon="/../public/images/subject-icon.jpg"
+        />
+        <StudentStaticSubjectBox
+          heading="Subject Title"
+          subheading="Admin Contact Details"
+          icon="/../public/images/subject-icon.jpg"
+        />
+      </>
+    )
+  }
 
   return (
     <>
@@ -61,21 +89,7 @@ export default function StudentDashboard() {
         <span className={styles.span}>Subjects</span>
       </h2>
       <Col className="d-flex justify-content-evenly">
-        <StudentStaticSubjectBox
-          heading="Subject Title"
-          subheading="Admin Contact Details"
-          icon="/../public/images/subject-icon.jpg"
-        />
-        <StudentStaticSubjectBox
-          heading="Subject Title"
-          subheading="Admin Contact Details"
-          icon="/../public/images/subject-icon.jpg"
-        />
-        <StudentStaticSubjectBox
-          heading="Subject Title"
-          subheading="Admin Contact Details"
-          icon="/../public/images/subject-icon.jpg"
-        />
+      {content()}
       </Col>
       <button onClick={() => signOut()}>Sign out.</button>
     </>

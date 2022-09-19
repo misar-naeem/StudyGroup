@@ -4,6 +4,7 @@ import Tutorial from "../models/Tutorial";
 import Preference from "../models/Preference";
 import Button from 'react-bootstrap/Button';
 import Link from "next/link";
+import useSWR from "swr";
 import { useRouter } from 'next/router';
 
 export async function getServerSideProps({ query }) {

@@ -5,30 +5,78 @@ import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
 import styles from "../styles/StudentOverview.module.css";
 import { useState } from "react";
+import sortGroupsBySize from "../util/sortGroupsBySize";
 
 const StudentOverview = (props) => {
   const [enableEdit, setEnableEdit] = useState(false);
   const [minGroupSize, setMinGroupSize] = useState(1);
-  const [maxGroupSize, setMaxGroupSize] = useState(1);
+  const [maxGroupSize, setMaxGroupSize] = useState(2);
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
-  const { groups } = props;
-  console.log(groups);
+  const { groups, tutorial } = props;
 
-  // const groupTableCells = groups.map((group) => {
-    
-  //     <tr>
-  //       {console.log(group.students[0].name)}
-  //       <td>{group.students[0]}</td>
-  //       <td>Group 2</td>
-  //       <td>
-  //         <Button className={styles.primInCompbtn}>
-  //           Allocation Incomplete
-  //         </Button>
-  //       </td>
-  //     </tr>
-  
-  // })}
+  /**
+   * @method updateGroups
+   * @summary Use this function to check the selected settings and call the respective sorting algorithm
+   */
+  function updateGroups() {
+    // At the moment we can only sort by group size
+    if (
+      groupAllocationSetting == "Manual Allocation" &&
+      minGroupSize < maxGroupSize &&
+      minGroupSize > 0 &&
+      maxGroupSize > 0
+    ) {
+      sortGroupsBySize(tutorial, minGroupSize, maxGroupSize);
+      setEnableEdit(false);
+    } else {
+      alert(
+        "This function either has not been built yet or your min size is not greater than your max size"
+      );
+    }
+  }
+
+  const getGroup = (studentEmail) => {
+    let groupData = {
+      groupString: "Group N/A",
+      groupStatus: "Incomplete",
+    };
+
+    groups.find((group) =>
+      group.students.find((student) => {
+        if (student.email == studentEmail) {
+          return (
+            (groupData.groupString = `Group ${group?.groupNumber}`),
+            (groupData.groupStatus = "Complete")
+          );
+        }
+      })
+    );
+
+    return groupData;
+  };
+
+  const studentCell = (student) => {
+    const studentGroup = getGroup(student);
+
+    return (
+      <tr>
+        <td>{student}</td>
+        <td>{studentGroup.groupString}</td>
+        <td>
+          <Button
+            className={
+              studentGroup.groupStatus == "Incomplete"
+                ? styles.primInCompbtn
+                : styles.primCompbtn
+            }
+          >
+            Allocation {studentGroup.groupStatus}
+          </Button>
+        </td>
+      </tr>
+    );
+  };
 
   return (
     <Tabs
@@ -43,41 +91,15 @@ const StudentOverview = (props) => {
       >
         <div className={`${styles.bootstrapTabContent}`}>
           <Table bordered className={`${styles.bootstrapTable}`} striped hover>
-            <thead> 
+            <thead>
               <tr>
-                <th>Student Name</th>
+                <th>Student</th>
                 <th>Group</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Student Name</td>
-                <td>Group 1</td>
-                <td>
-                  <Button className={styles.primCompbtn}>
-                    Allocation Complete
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>Student Name</td>
-                <td>Group 2</td>
-                <td>
-                  <Button className={styles.primInCompbtn}>
-                    Allocation Incomplete
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>Student Name</td>
-                <td>Group 3</td>
-                <td>
-                  <Button className={styles.primCompbtn}>
-                    Allocation Complete
-                  </Button>
-                </td>
-              </tr>
+              {tutorial[0]?.students?.map((student) => studentCell(student))}
             </tbody>
           </Table>
         </div>
@@ -88,13 +110,31 @@ const StudentOverview = (props) => {
         title="Group Overview"
         tabClassName={`${styles.bootstrapSingleTab}`}
       >
+        {enableEdit && (
+          <Button
+            style={{
+              marginRight: "50px",
+              marginBottom: "10px",
+              float: "right",
+            }}
+            onClick={() => setEnableEdit(!enableEdit)}
+          >
+            {"Cancel"}
+          </Button>
+        )}
         <Button
           style={{
             marginRight: "50px",
             marginBottom: "10px",
             float: "right",
           }}
-          onClick={() => setEnableEdit(!enableEdit)}
+          onClick={() => {
+            if (enableEdit) {
+              updateGroups();
+            } else {
+              setEnableEdit(!enableEdit);
+            }
+          }}
         >
           {enableEdit ? "Save Changes" : "Edit"}
         </Button>
@@ -113,94 +153,47 @@ const StudentOverview = (props) => {
                   <td>
                     <Button>Manual Allocation</Button>
                   </td>
-                  <td>03 Students</td>
-                  <td>05 Students</td>
+                  <td>0{minGroupSize} Students</td>
+                  <td>0{maxGroupSize} Students</td>
                 </tr>
               </tbody>
             </Table>
+
             <Accordion className={styles.Accordion}>
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>
-                  <div className="d-flex gap-5 w-100">
-                    <span>Group 1</span>
-                    <span className="ms-5"> 03/05 student</span>
-                  </div>
-                </Accordion.Header>
-                <Accordion.Body>
-                  <Table striped borderless hover>
-                    <thead>
-                      <tr>
-                        <th>Student ID</th>
-                        <th>Student Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1111111</td>
-                        <td>Student Name</td>
-                      </tr>
-                      <tr>
-                        <td>1111111</td>
-                        <td>Student Name</td>
-                      </tr>
-                      <tr>
-                        <td>1111111</td>
-                        <td>Student Name</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="1">
-                <Accordion.Header>
-                  <div className="d-flex gap-5 w-100">
-                    <span>Group 2</span>
-                    <span className="ms-5"> 04/05 student</span>
-                  </div>
-                </Accordion.Header>
-                <Accordion.Body>
-                  <Table striped borderless hover>
-                    <thead>
-                      <tr>
-                        <th>Student ID</th>
-                        <th>Student Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1111111</td>
-                        <td>Student Name</td>
-                      </tr>
-                      <tr>
-                        <td>1111111</td>
-                        <td>Student Name</td>
-                      </tr>
-                      <tr>
-                        <td>1111111</td>
-                        <td>Student Name</td>
-                      </tr>
-                      <tr>
-                        <td>1111111</td>
-                        <td>Student Name</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Accordion.Body>
-              </Accordion.Item>
+              {groups.map((group, index) => (
+                <Accordion.Item eventKey={index}>
+                  <Accordion.Header>
+                    <div className="d-flex gap-5 w-100">
+                      <span>Group {group?.groupNumber}</span>
+                      <span className="ms-5">
+                        0{group?.students?.length}/0{maxGroupSize} students
+                      </span>
+                    </div>
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    <Table striped borderless hover>
+                      <thead>
+                        <tr>
+                          <th>Student Email</th>
+                          <th>Student Name</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {group?.students.map((student) => (
+                          <tr>
+                            <td>{student?.email}</td>
+                            <td>{student?.name}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </Accordion.Body>
+                </Accordion.Item>
+              ))}
             </Accordion>
           </div>
         ) : (
           <div style={{ textAlign: "left", marginLeft: "40%" }}>
-            <p>
-              <>Tutorial: </>
-              <>
-                <select>
-                  {tutorials.map((tutorial) => (
-                    <option>{tutorial}</option>
-                  ))}
-                </select>
-              </>
-            </p>
             <p>
               <>Min Group Size: </>
               <>
@@ -208,7 +201,9 @@ const StudentOverview = (props) => {
                   type="number"
                   min="1"
                   value={minGroupSize}
-                  onChange={(event) => setMinGroupSize(event.target.value)}
+                  onChange={(event) =>
+                    setMinGroupSize(Number(event.target.value))
+                  }
                 ></input>{" "}
                 Students/ Group
               </>
@@ -220,7 +215,9 @@ const StudentOverview = (props) => {
                   type="number"
                   min="1"
                   value={maxGroupSize}
-                  onChange={(event) => setMaxGroupSize(event.target.value)}
+                  onChange={(event) =>
+                    setMaxGroupSize(Number(event.target.value))
+                  }
                 ></input>{" "}
                 Students/ Group
               </>

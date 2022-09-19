@@ -1,12 +1,12 @@
 import { Schema, model, models } from "mongoose";
 
 const groupSchema = new Schema({
-  tutorials: [],
+  tutorial: String,
+  groupNumber: Number,
   students: [
     {
       name: String,
       email: String,
-      id: Number,
     },
   ],
 });

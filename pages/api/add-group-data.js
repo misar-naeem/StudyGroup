@@ -8,12 +8,12 @@ export default async function handler(req, res) {
     console.log("CONNECTED TO MONGO");
 
     const groupData = {
-      tutorials: ["tut1"],
+      tutorial: "tut1",
+      groupNumber: 2,
       students: [
         {
           name: "Stephen Brown",
           email: "stephen.brown-2@student.uts.edu.au",
-          id: 13934551,
         },
       ],
     };

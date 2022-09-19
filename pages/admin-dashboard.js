@@ -9,7 +9,7 @@ function AdminDashboard() {
       <Head>
         <title>Staff Dashboard</title>
       </Head>
-      <h1 className={`${styles.heading} ps-5 p-3`}>Subject Name</h1>
+      <h1 className={`${styles.heading} ps-5 p-3`}>Tutorial Name</h1>
       <AdminOverview />
     </div>
   );

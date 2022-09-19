@@ -53,11 +53,11 @@ export default function StudentProfile() {
         <div className="col-3">
           <Image
             className={styles.photo}
-            style={{ size: "50%", margin: "30px", marginLeft: 50 }}
+            style={{ margin: "30px", marginLeft: 50 }}
             src="https://thumbs.dreamstime.com/b/closeup-super-mario-character-nintendo-platform-game-video-red-background-photographed-site-screen-149088103.jpg"
             thumbnail
-            width={200}
-            height={200}
+            width={400}
+            height={500}
           />
         </div>
         <div className="col-5">

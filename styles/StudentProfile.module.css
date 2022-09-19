@@ -12,3 +12,9 @@
   box-shadow: 2px 3px 4px 1px #00000040 !important;
   transition: none;
 }
+
+.photo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

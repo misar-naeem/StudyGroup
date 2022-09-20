@@ -1,5 +1,6 @@
 import { Schema, model, models } from 'mongoose';
 
+
 const preferenceSchema = new Schema({
   email: {type: String, required: true, unique: true},
   name: String,

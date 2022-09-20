@@ -1,6 +1,5 @@
 import styles from "../styles/StudentStaticBox.module.css";
 import Image from 'next/image'
-// import subjectIcon from "../images/subject-icon.jpg";
 
 
 //Dynamically get student's tutorials

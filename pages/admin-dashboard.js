@@ -1,9 +1,9 @@
 import Head from "next/head";
-import StudentOverview from "/components/StudentOverview";
+import AdminOverview from "/components/AdminOverview";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import useSWR from 'swr';
-import { signOut, useSession, getSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/router'
 import { useEffect } from "react";
 import Button from 'react-bootstrap/Button';
@@ -40,8 +40,7 @@ function AdminDashboard() {
       <Head>
         <title>Staff Dashboard</title>
       </Head>
-      <h1 className={styles.heading}>Staff Dashboard</h1>
-
+      <h1 className={`${styles.heading} ps-5 p-3`}>Tutorial Name</h1>
       <div>
         <div>
           <p>{session ? session.user.name : ""} {tutorialId}</p>
@@ -58,8 +57,7 @@ function AdminDashboard() {
         </Link>
       </Button>
       </div>
-
-      <StudentOverview />
+      <AdminOverview />
     </div>
   );
 }

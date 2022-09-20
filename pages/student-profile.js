@@ -10,7 +10,7 @@ import Row from "react-bootstrap/Row";
 import Image from "react-bootstrap/Image";
 import ListGroup from "react-bootstrap/ListGroup";
 import styles from "../styles/StudentProfile.module.css";
-import * as React from "react";
+import { Loading } from "../components/Loading";
 
 const TutorialLink = ({ tutorial }) => {
   return (
@@ -23,43 +23,50 @@ const TutorialLink = ({ tutorial }) => {
 };
 
 export default function StudentProfile() {
-  const { data: session } = useSession();
-  const router = useRouter();
-  //  useEffect(() => {
-  //   if (!session) {
-  //       router.push('/student-login')
-  //   }
-  // })
-  //   useEffect(() => {
-  //     fetch('url')
-  //       .then(res => {
-  //         return res.json();
-  //       })
-  //       .then(data => {
-  //         console.log(data);
-  //         setSession(data)
-  //     })
-  // }, [])
+  const [studentDetails, setStudentDetails] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const {data: session} = useSession();
+
+
+  const getStudentByEmail = async (email) => {
+    fetch(`/api/get-student/${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setStudentDetails(data["result"][0]);
+      });
+  };
+
+    useEffect(() => {
+    if (session) {
+      setLoading(true);
+      getStudentByEmail(session.user.email);
+      setLoading(false);
+    }
+    // else{
+    //   router.push('/student-login')
+    // }
+  }, []);
 
   return (
     <>
+    {
+      studentDetails !==  0 && !loading ? (
+        <div>
       <div>
         <h1 style={{ width: "100%", display: "flex", margin: "40px" }}>
           My Student Profile
         </h1>
       </div>
 
-      <div className="row">
-        <div className="col-3">
+      <div className="d-flex align-items-center">
           <Image
             className={styles.photo}
             style={{ margin: "30px", marginLeft: 50 }}
             src="https://thumbs.dreamstime.com/b/closeup-super-mario-character-nintendo-platform-game-video-red-background-photographed-site-screen-149088103.jpg"
             thumbnail
             width={400}
-            height={500}
+            height={300}
           />
-        </div>
         <div className="col-5">
           <Form
             className="mr-sm"
@@ -74,20 +81,8 @@ export default function StudentProfile() {
                   className="styles.form"
                   plaintext
                   readOnly
-                  defaultValue="Mario"
+                  defaultValue={studentDetails?.name}
                 />
-              </Col>
-            </Form.Group>
-            <Form.Group
-              as={Row}
-              className="mb-3"
-              controlId="formPlaintextStudentID"
-            >
-              <Form.Label column sm="2">
-                <span style={{ fontWeight: "bold" }}> Student ID: </span>
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control plaintext readOnly defaultValue="123456789" />
               </Col>
             </Form.Group>
             <Form.Group
@@ -99,7 +94,7 @@ export default function StudentProfile() {
                 <span style={{ fontWeight: "bold" }}> Study Year: </span>
               </Form.Label>
               <Col sm="10">
-                <Form.Control plaintext readOnly defaultValue="2rd Year" />
+                <Form.Control plaintext readOnly defaultValue={studentDetails?.year} />
               </Col>
             </Form.Group>
             <Form.Group
@@ -114,7 +109,7 @@ export default function StudentProfile() {
                 <Form.Control
                   plaintext
                   readOnly
-                  defaultValue="mario.bros@student.uts.edu.au"
+                  defaultValue={studentDetails?.email}
                 />
               </Col>
             </Form.Group>
@@ -130,7 +125,7 @@ export default function StudentProfile() {
                 <Form.Control
                   plaintext
                   readOnly
-                  defaultValue="Bachelors of fixing pipe (Hons)"
+                  defaultValue={`Bachelors of ${studentDetails?.degree}`}
                 />
               </Col>
             </Form.Group>
@@ -143,13 +138,13 @@ export default function StudentProfile() {
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <ListGroup className={styles.listgroup} horizontal>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "400px" }}
           >
             Subject Name
           </ListGroup.Item>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "200px" }}
           >
             41203
@@ -164,13 +159,13 @@ export default function StudentProfile() {
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <ListGroup className={styles.listgroup} horizontal>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "400px" }}
           >
             Subject Name
           </ListGroup.Item>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "200px" }}
           >
             41203
@@ -185,13 +180,13 @@ export default function StudentProfile() {
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <ListGroup className={styles.listgroup} horizontal>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "400px" }}
           >
             Subject Name
           </ListGroup.Item>
           <ListGroup.Item
-            class="col-xs-3 list-group-item"
+            className="col-xs-3 list-group-item"
             style={{ width: "200px" }}
           >
             41203
@@ -203,6 +198,8 @@ export default function StudentProfile() {
           </ListGroup.Item>
         </ListGroup>
       </div>
+    </div>):(<Loading />)
+    }
     </>
   );
 }

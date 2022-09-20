@@ -27,7 +27,7 @@ export async function getServerSideProps({ query }) {
         return {
             redirect: {
               permanent: false,
-              destination: "/staff-dashboard"
+              destination: "/admin-dashboard"
             }
           }
     }
@@ -135,7 +135,7 @@ function AddTopics({current_topics, released}) {
     const backButton = () => {
         return (
         <Button>
-            <Link href="/staff-dashboard">
+            <Link href="/admin-dashboard">
               <p>Back to dashboard</p>
             </Link>
         </Button>

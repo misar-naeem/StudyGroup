@@ -8,6 +8,6 @@ export NVM_DIR="$HOME/.nvm"
 cd /home/ec2-user/next-app
 
 #install node modules
-npm ci
+yarn install --frozen-lockfile || true
 npm run build
 npm start -- -p 3000 > app.out.log 2> app.err.log < /dev/null & 

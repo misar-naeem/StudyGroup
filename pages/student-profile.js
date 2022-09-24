@@ -11,22 +11,57 @@ import Image from "react-bootstrap/Image";
 import ListGroup from "react-bootstrap/ListGroup";
 import styles from "../styles/StudentProfile.module.css";
 import { Loading } from "../components/Loading";
+import useSWR from "swr";
 
-const TutorialLink = ({ tutorial }) => {
+const Enrolment = ({tutorial}) => {
+
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const { data, error } = useSWR(`/api/get-staff?tutorial=${tutorial}`, fetcher);
+
+  if (error || data?.error)
   return (
-    <Button>
-      <Link href="/add-student-preferences">
-        <p>{tutorial}</p>
-      </Link>
-    </Button>
+    <div>
+      Tutorial not assigned to staff member.
+    </div>
   );
-};
+  if (!data) return <p>Loading...</p>;
+  if (data["result"].length == 0) return <div>Not found</div>;
+
+  const staffName = data["result"][0]["name"]
+  const staffEmail = data["result"][0]["email"]
+
+  return (  
+  <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+  <ListGroup className={styles.listgroup} horizontal>
+    <ListGroup.Item
+      className="col-xs-3 list-group-item"
+      style={{ width: "400px" }}
+    >
+      {`Subject Name - ${tutorial}`}
+    </ListGroup.Item>
+    <ListGroup.Item
+      className="col-xs-3 list-group-item"
+      style={{ width: "200px" }}
+    >
+      41203
+    </ListGroup.Item>
+    <ListGroup.Item style={{ width: "200px" }}>
+      {`${staffName} - ${staffEmail}`}
+    </ListGroup.Item>
+  </ListGroup>
+  </div>
+)
+
+}
+
 
 export default function StudentProfile() {
   const [studentDetails, setStudentDetails] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const {data: session} = useSession();
+  const { data: session } = useSession();
+  const router = useRouter()
 
+  console.log("a session")
+  console.log(session)
 
   const getStudentByEmail = async (email) => {
     fetch(`/api/get-student/${email}`)
@@ -36,22 +71,20 @@ export default function StudentProfile() {
       });
   };
 
-    useEffect(() => {
-    if (session) {
-      setLoading(true);
-      getStudentByEmail(session.user.email);
-      setLoading(false);
-    }
-    // else{
-    //   router.push('/student-login')
-    // }
-  }, []);
+  // useEffect(() => {
+  //   if (!session) {
+  //     router.push("/student-login");
+  //   }
+  // }, []);
+
+  if (session) {
+    getStudentByEmail(session.user.email);
+  }
+
+  if (studentDetails == 0) { return <Loading />}
 
   return (
-    <>
-    {
-      studentDetails !==  0 && !loading ? (
-        <div>
+    <div>
       <div>
         <h1 style={{ width: "100%", display: "flex", margin: "40px" }}>
           My Student Profile
@@ -135,71 +168,9 @@ export default function StudentProfile() {
       <h4 style={{ width: "100%", display: "flex", marginLeft: 410 }}>
         Current Enrollments:
       </h4>
-      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <ListGroup className={styles.listgroup} horizontal>
-          <ListGroup.Item
-            className="col-xs-3 list-group-item"
-            style={{ width: "400px" }}
-          >
-            Subject Name
-          </ListGroup.Item>
-          <ListGroup.Item
-            className="col-xs-3 list-group-item"
-            style={{ width: "200px" }}
-          >
-            41203
-          </ListGroup.Item>
-          <ListGroup.Item style={{ width: "200px" }}>
-            <a href="https://www.google.com/">
-              <p>Admin Details Link</p>
-            </a>
-          </ListGroup.Item>
-        </ListGroup>
-      </div>
-      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <ListGroup className={styles.listgroup} horizontal>
-          <ListGroup.Item
-            className="col-xs-3 list-group-item"
-            style={{ width: "400px" }}
-          >
-            Subject Name
-          </ListGroup.Item>
-          <ListGroup.Item
-            className="col-xs-3 list-group-item"
-            style={{ width: "200px" }}
-          >
-            41203
-          </ListGroup.Item>
-          <ListGroup.Item style={{ width: "200px" }}>
-            <a href="https://www.google.com/">
-              <p>Admin Details Link</p>
-            </a>
-          </ListGroup.Item>
-        </ListGroup>
-      </div>
-      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <ListGroup className={styles.listgroup} horizontal>
-          <ListGroup.Item
-            className="col-xs-3 list-group-item"
-            style={{ width: "400px" }}
-          >
-            Subject Name
-          </ListGroup.Item>
-          <ListGroup.Item
-            className="col-xs-3 list-group-item"
-            style={{ width: "200px" }}
-          >
-            41203
-          </ListGroup.Item>
-          <ListGroup.Item style={{ width: "200px" }}>
-            <a href="https://www.google.com/">
-              <p>Admin Details Link</p>
-            </a>
-          </ListGroup.Item>
-        </ListGroup>
-      </div>
-    </div>):(<Loading />)
-    }
-    </>
-  );
+      {studentDetails["tutorials"].map((value, index) => {
+        return <Enrolment tutorial={value} />;
+      })}
+    </div>
+  )
 }

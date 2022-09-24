@@ -3,21 +3,43 @@ import Link from "next/link";
 import useSWR from "swr";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Button from "react-bootstrap/Button";
 import StudentStaticSubjectBox from "../components/StudentStaticSubjectBox";
 import { Loading } from "../components/Loading";
 import { Row } from "react-bootstrap";
 import { useEffect } from "react";
 import StudentNavBar from "../components/StudentNavBar";
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
 const TutorialLink = ({ tutorial, student }) => {
+
+  const { data, error } = useSWR(`/api/get-staff?tutorial=${tutorial}`, fetcher);
+
+  if (error || data?.error)
   return (
-    <Button>
+    <div>
+      Tutorial not assigned to staff member.
+    </div>
+  );
+  if (!data) return <p>Loading...</p>;
+  if (data["result"].length == 0) return <div>Not found</div>;
+
+  const staffName = data["result"][0]["name"]
+  const staffEmail = data["result"][0]["email"]
+
+  return (
+    
       <Link
         href={`/add-student-preferences?tutorial=${tutorial}&student=${student}`}
       >
-        <p>{tutorial}</p>
+        <a>
+        <StudentStaticSubjectBox
+            heading={`Subject Title - ${tutorial}`}
+            subheading={`${staffName} - ${staffEmail}`}
+            icon="/../public/images/subject-icon.jpg"
+        />  
+        </a>
       </Link>
-    </Button>
   );
 };
 
@@ -32,8 +54,7 @@ export default function StudentDashboard() {
     }
   }, []);
 
-  const fetcher = (url) => fetch(url).then((res) => res.json());
-
+  
   // Get student info from database
   var email = "";
   if (session) {
@@ -52,6 +73,7 @@ export default function StudentDashboard() {
 
   const content = () => {
     if (data["result"].length == 0) return <div>Not found</div>;
+
     return (
       <>
         <div>
@@ -62,8 +84,6 @@ export default function StudentDashboard() {
       </>
     );
   };
-
-
 
   return (
     <> 
@@ -76,28 +96,7 @@ export default function StudentDashboard() {
           <hr />
         </div>
         <Row className="d-flex gap-5 ps-5 my-2">
-          <StudentStaticSubjectBox
-            heading="Subject Title"
-            subheading="Admin Contact Details"
-            icon="/../public/images/subject-icon.jpg"
-          />
-          <StudentStaticSubjectBox
-            heading="Subject Title"
-            subheading="Admin Contact Details"
-            icon="/../public/images/subject-icon.jpg"
-          />
-        </Row>
-        <Row className="d-flex gap-5 ps-5 my-3">
-          <StudentStaticSubjectBox
-            heading="Subject Title"
-            subheading="Admin Contact Details"
-            icon="/../public/images/subject-icon.jpg"
-          />
-          <StudentStaticSubjectBox
-            heading="Subject Title"
-            subheading="Admin Contact Details"
-            icon="/../public/images/subject-icon.jpg"
-          />
+          {content()}
         </Row>
       </div>
       <button onClick={() => signOut()}>Sign out.</button>

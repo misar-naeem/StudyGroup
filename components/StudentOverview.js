@@ -52,11 +52,13 @@ const StudentOverview = (props) => {
    * @method updateGroups
    * @summary Use this function to check the selected settings and call the respective sorting algorithm
    */
-  function updateGroups() {
+  async function updateGroups() {
     // At the moment we can only sort by group size
     if (groupAllocationSetting == "Manual Allocation" && groupSize > 0) {
-      sortGroupsBySize({ tutorial, groupSize });
+      await sortGroupsBySize({ tutorial, groupSize });
       setEnableEdit(false);
+      getTutorial();
+      getGroups();
     } else {
       alert(
         "This function has not been built yet or your group size is invalid."

@@ -1,7 +1,7 @@
 import connectMongo from "../../util/mongodb";
 import Group from "../../models/Group";
 
-// Adds groups
+// Takes the tutorial ID and deletes all related groups
 export default async function handler(req, res) {
   try {
     console.log("CONNECTING TO MONGO");
@@ -9,13 +9,11 @@ export default async function handler(req, res) {
     console.log("CONNECTED TO MONGO");
 
     const {
-      body: { tutorialId, groupNumber, students },
+      body: { tutorialId },
     } = req;
 
-    const groupData = await Group.create({
+    const groupData = await Group.deleteMany({
       tutorialId: tutorialId,
-      groupNumber: groupNumber,
-      students: students,
     });
 
     res.json({ groupData });

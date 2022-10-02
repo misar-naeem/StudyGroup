@@ -8,12 +8,13 @@ import { useState } from "react";
 import sortGroupsBySize from "../util/sortGroupsBySize";
 
 const StudentOverview = (props) => {
+  const { groups, tutorial } = props;
   const [enableEdit, setEnableEdit] = useState(false);
-  const [minGroupSize, setMinGroupSize] = useState(1);
-  const [maxGroupSize, setMaxGroupSize] = useState(2);
+  const [groupSize, setGroupSize] = useState(
+    tutorial[0]?.groupConfiguration?.groupSize || 1
+  );
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
-  const { groups, tutorial } = props;
 
   /**
    * @method updateGroups
@@ -21,17 +22,12 @@ const StudentOverview = (props) => {
    */
   function updateGroups() {
     // At the moment we can only sort by group size
-    if (
-      groupAllocationSetting == "Manual Allocation" &&
-      minGroupSize < maxGroupSize &&
-      minGroupSize > 0 &&
-      maxGroupSize > 0
-    ) {
-      sortGroupsBySize(tutorial, minGroupSize, maxGroupSize);
+    if (groupAllocationSetting == "Manual Allocation" && groupSize > 0) {
+      sortGroupsBySize({ tutorial, groupSize });
       setEnableEdit(false);
     } else {
       alert(
-        "This function either has not been built yet or your min size is not greater than your max size"
+        "This function has not been built yet or your group size is invalid."
       );
     }
   }
@@ -144,8 +140,7 @@ const StudentOverview = (props) => {
               <thead>
                 <tr>
                   <th>Group Allocation Setting</th>
-                  <th>Min Group Size</th>
-                  <th>Max Group Size</th>
+                  <th>Group Size</th>
                 </tr>
               </thead>
               <tbody>
@@ -153,8 +148,7 @@ const StudentOverview = (props) => {
                   <td>
                     <Button>Manual Allocation</Button>
                   </td>
-                  <td>0{minGroupSize} Students</td>
-                  <td>0{maxGroupSize} Students</td>
+                  <td>0{groupSize}</td>
                 </tr>
               </tbody>
             </Table>
@@ -166,7 +160,7 @@ const StudentOverview = (props) => {
                     <div className="d-flex gap-5 w-100">
                       <span>Group {group?.groupNumber}</span>
                       <span className="ms-5">
-                        0{group?.students?.length}/0{maxGroupSize} students
+                        0{group?.students?.length} students
                       </span>
                     </div>
                   </Accordion.Header>
@@ -195,29 +189,17 @@ const StudentOverview = (props) => {
         ) : (
           <div style={{ textAlign: "left", marginLeft: "40%" }}>
             <p>
-              <>Min Group Size: </>
+              <>Group Size: </>
               <>
                 <input
                   type="number"
                   min="1"
-                  value={minGroupSize}
-                  onChange={(event) =>
-                    setMinGroupSize(Number(event.target.value))
-                  }
-                ></input>{" "}
-                Students/ Group
-              </>
-            </p>
-            <p>
-              <>Max Group Size: </>
-              <>
-                <input
-                  type="number"
-                  min="1"
-                  value={maxGroupSize}
-                  onChange={(event) =>
-                    setMaxGroupSize(Number(event.target.value))
-                  }
+                  value={groupSize}
+                  onChange={(event) => {
+                    if (groupSize > 0) {
+                      setGroupSize(Number(event.target.value));
+                    }
+                  }}
                 ></input>{" "}
                 Students/ Group
               </>

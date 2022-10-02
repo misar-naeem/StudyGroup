@@ -10,13 +10,14 @@ export async function getStaticProps() {
   await connectMongo();
   console.log("CONNECTED TO MONGO");
 
-  // const result = await Tutorial.find({ tutorialId: "tut1" });
-  // For now we will test by using Groups from Tutorial 1 ("tut1")
+  // For now we will test by using Groups from Tutorial 1
 
-  const tutorialData = await Tutorial.find({ tutorialId: "tut1" });
+  const tutorialData = await Tutorial.find({ _id: "6309ff67206f5d4fa8e8bdd1" });
   const tutorial = JSON.parse(JSON.stringify(tutorialData));
 
-  const groupData = await Group.find({ tutorial: "tut1" });
+  const groupData = await Group.find({
+    tutorialId: "6309ff67206f5d4fa8e8bdd1",
+  });
   const groups = JSON.parse(JSON.stringify(groupData));
 
   return {

@@ -60,11 +60,11 @@ function AdminDashboard() {
         <Button onClick={() => signOut()}>
           <>Sign out</>
         </Button>{" "}
-        <Button>
-          <Link href={`/create-topic-preferences?tutorialId=${tutorialId}`}>
+        <Link href={`/create-topic-preferences?tutorialId=${tutorialId}`}>
+          <Button>
             <>Create Topics</>
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </div>
 
       <StudentOverview tutorialId={tutorialId} />

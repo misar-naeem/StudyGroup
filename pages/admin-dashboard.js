@@ -1,5 +1,5 @@
 import Head from "next/head";
-import StudentOverview from "/components/StudentOverview";
+import AdminOverview from "/components/AdminOverview";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import useSWR from "swr";
@@ -67,7 +67,7 @@ function AdminDashboard() {
         </Link>
       </div>
 
-      <StudentOverview tutorialId={tutorialId} />
+      <AdminOverview tutorialId={tutorialId} />
     </div>
   );
 }

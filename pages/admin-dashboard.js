@@ -1,39 +1,73 @@
 import Head from "next/head";
-import StudentOverview from "../components/StudentOverview";
-import styles from "../styles/AdminDashboard.module.css";
-import connectMongo from "../util/mongodb";
-import Tutorial from "../models/Tutorial";
-import Group from "../models/Group";
+import StudentOverview from "/components/StudentOverview";
+import styles from "../styles/Home.module.css";
+import Link from "next/link";
+import useSWR from "swr";
+import { signOut, useSession, getSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import Button from "react-bootstrap/Button";
+import { Loading } from "../components/Loading";
 
-export async function getStaticProps() {
-  console.log("CONNECTING TO MONGO");
-  await connectMongo();
-  console.log("CONNECTED TO MONGO");
+function AdminDashboard() {
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  // For now we will test by using Groups from Tutorial 1
+  useEffect(() => {
+    if (!session) {
+      router.push("/staff-login");
+    }
+  }, []);
 
-  const tutorialData = await Tutorial.find({ _id: "6309ff67206f5d4fa8e8bdd1" });
-  const tutorial = JSON.parse(JSON.stringify(tutorialData));
+  const fetcher = (url) => fetch(url).then((res) => res.json());
 
-  const groupData = await Group.find({
-    tutorialId: "6309ff67206f5d4fa8e8bdd1",
-  });
-  const groups = JSON.parse(JSON.stringify(groupData));
+  // Get staff info from database
+  var email = "";
+  if (session) {
+    email = session.user.email;
+  }
+  const { data, error } = useSWR(`/api/get-staff/${email}`, fetcher);
 
-  return {
-    props: { groups: groups, tutorial: tutorial },
-  };
-}
+  if (error) return <div>failed to load</div>;
+  if (!data)
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
 
-function AdminDashboard({ groups, tutorial }) {
+  if (data["result"].length == 0) return <div>Not found</div>;
+  console.log("data");
+  console.log(data);
+  const tutorialId = data["result"][0]["tutorial"];
+
   return (
     <div>
       <Head>
-        <title>Admin Dashboard</title>
+        <title>Staff Dashboard</title>
       </Head>
-      <h1 className={styles.heading}>Admin Dashboard</h1>
+      <h1 className={styles.heading}>Staff Dashboard</h1>
 
-      <StudentOverview groups={groups} tutorial={tutorial} />
+      <div
+        style={{
+          float: "right",
+          marginRight: "20px",
+          marginBottom: "40px",
+          marginTop: "-50px",
+        }}
+      >
+        {session ? session.user.name : ""} {tutorialId}{" "}
+        <Button onClick={() => signOut()}>
+          <>Sign out</>
+        </Button>{" "}
+        <Button>
+          <Link href={`/create-topic-preferences?tutorialId=${tutorialId}`}>
+            <>Create Topics</>
+          </Link>
+        </Button>
+      </div>
+
+      <StudentOverview tutorialId={tutorialId} />
     </div>
   );
 }

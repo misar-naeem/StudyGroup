@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { emailSchema, passwordSchema } from "../models/ValidationSchemas.js";
+import { emailSchema, passwordSchema } from "/common/ValidationSchemas";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
-import styles from "../styles/AdminLogin.module.css";
+import styles from "/styles/BootstrapInput.module.css";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
-import { BootstrapInput } from "../components/BootstrapInput";
+import { BootstrapInput } from "/components/BootstrapInput";
 import * as Yup from "yup";
 
 const initialValues = {
@@ -81,15 +81,5 @@ const adminLogin = ({ data }) => {
     </div>
   );
 };
-
-// export async function getServerSideProps(context) {
-//   const res = await fetch("http://localhost:5000/staff");
-//   const data = await res.json();
-//   return {
-//     props: {
-//       data,
-//     },
-//   };
-// }
 
 export default adminLogin;

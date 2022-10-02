@@ -5,6 +5,7 @@ const tutorialSchema = new Schema({
   groupConfiguration: {
     groupSize: Number,
   },
+  topicsReleased: Boolean,
   topics: [],
   students: [],
 });

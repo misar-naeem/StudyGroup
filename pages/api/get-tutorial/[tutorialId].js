@@ -1,18 +1,18 @@
 import connectMongo from "../../../util/mongodb";
-import Student from "../../../models/Student";
+import Tutorial from "../../../models/Tutorial";
 
+// Get a tutorial by it's ID
 export default async function handler(req, res) {
   try {
-    const { student } = req.query;
+    const { tutorialId } = req.query;
 
     await connectMongo();
     console.log(`${req.url} accessed`);
-    
-    const result = await Student.find({ email: student });
+
+    const result = await Tutorial.find({ tutorialId: tutorialId });
 
     res.json({ result });
   } catch (error) {
     console.log(error);
-    res.json({ error });
   }
 }

@@ -4,17 +4,49 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
 import styles from "../styles/StudentOverview.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import sortGroupsBySize from "../util/sortGroupsBySize";
 
 const StudentOverview = (props) => {
-  const { groups, tutorial } = props;
+  const { tutorialId } = props;
+  const [students, setStudents] = useState([]);
+  const [tutorial, setTutorial] = useState([]);
+  const [groups, setGroups] = useState([]);
   const [enableEdit, setEnableEdit] = useState(false);
-  const [groupSize, setGroupSize] = useState(
-    tutorial[0]?.groupConfiguration?.groupSize || 1
-  );
+  const [groupSize, setGroupSize] = useState(1);
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
+
+  const getStudents = async () => {
+    fetch("/api/get-all-student")
+      .then((res) => res.json())
+      .then((data) => {
+        setStudents(data["result"]);
+      });
+  };
+
+  const getTutorial = async () => {
+    fetch(`/api/get-tutorial/${tutorialId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setGroupSize(data["result"][0]?.groupConfiguration?.groupSize);
+        setTutorial(data["result"][0]);
+      });
+  };
+
+  const getGroups = async () => {
+    fetch(`/api/get-groups/${tutorialId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setGroups(data["result"]);
+      });
+  };
+
+  useEffect(() => {
+    getStudents();
+    getTutorial();
+    getGroups();
+  }, []);
 
   /**
    * @method updateGroups
@@ -34,7 +66,7 @@ const StudentOverview = (props) => {
 
   const getGroup = (studentEmail) => {
     let groupData = {
-      groupString: "Group N/A",
+      groupString: "Group not yet assigned",
       groupStatus: "Incomplete",
     };
 
@@ -42,7 +74,7 @@ const StudentOverview = (props) => {
       group.students.find((student) => {
         if (student.email == studentEmail) {
           return (
-            (groupData.groupString = `Group ${group?.groupNumber}`),
+            (groupData.groupString = `Group ${group.groupNumber}`),
             (groupData.groupStatus = "Complete")
           );
         }
@@ -53,11 +85,11 @@ const StudentOverview = (props) => {
   };
 
   const studentCell = (student) => {
-    const studentGroup = getGroup(student);
+    const studentGroup = getGroup(student?.email);
 
     return (
       <tr>
-        <td>{student}</td>
+        <td>{student.name}</td>
         <td>{studentGroup.groupString}</td>
         <td>
           <Button
@@ -76,9 +108,11 @@ const StudentOverview = (props) => {
 
   return (
     <Tabs
+      style={{ marginTop: "70px" }}
       defaultActiveKey="StudentsOverview"
       transition={false}
       className={`${styles.bootstrapTabContainer} mb-3`}
+      id="student-tabs"
     >
       <Tab
         eventKey="StudentsOverview"
@@ -94,9 +128,7 @@ const StudentOverview = (props) => {
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              {tutorial[0]?.students?.map((student) => studentCell(student))}
-            </tbody>
+            <tbody>{students?.map((student) => studentCell(student))}</tbody>
           </Table>
         </div>
       </Tab>

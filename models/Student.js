@@ -5,6 +5,8 @@ const preferenceSchema = new Schema({
   name: String,
   degree: String,
   year: Number,
+  allocation: Boolean,
+  group: String,
   tutorials: []
 });
 

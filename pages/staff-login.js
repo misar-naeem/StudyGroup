@@ -10,7 +10,7 @@ export default function StaffLogin() {
 
   if (session) {
     console.log(session);
-    router.push('/staff-dashboard')
+    router.push('/admin-dashboard')
 
     return (
       <>

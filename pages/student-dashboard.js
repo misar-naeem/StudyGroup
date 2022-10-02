@@ -1,22 +1,29 @@
-import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import useSWR from 'swr';
-import { signOut, useSession, getSession } from "next-auth/react";
-import { useRouter } from 'next/router'
+import useSWR from "swr";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import Button from "react-bootstrap/Button";
+import StudentStaticSubjectBox from "../components/StudentStaticSubjectBox";
+import { Loading } from "../components/Loading";
+import { Col } from "react-bootstrap";
 import { useEffect } from "react";
-import Button from 'react-bootstrap/Button';
 
-const TutorialLink = ({tutorial}) => {
-    return (
-    <Button>
-        <Link href="/add-student-preferences">
-          <p>{tutorial}</p>
-        </Link>
-    </Button>
-    )
-}
+const TutorialLink = ({tutorial, student}) => {
+  return (
+  <div>
+  <Link href={`/add-student-preferences?tutorial=${tutorial}&student=${student}`}>
+    <a>
+    <StudentStaticSubjectBox
+        heading={tutorial}
+        subheading="Admin Contact Details"
+        icon="/../public/images/subject-icon.jpg"
+    />
+    </a>
+  </Link>
+  </div>
+);
+};
 
 export default function StudentDashboard() {
     const { data: session } = useSession();
@@ -27,7 +34,7 @@ export default function StudentDashboard() {
         if (!session) {
             router.push('/student-login')
         }
-    })
+    }, [])
 
     const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -41,21 +48,50 @@ export default function StudentDashboard() {
    
     const content = () => {
 
-        if (data["result"].length == 0) return <div>Not found</div>
-        return (
-            <>
-            <div>{data["result"][0]["tutorials"].map((value, index)=>{return <TutorialLink tutorial={value}/>})}</div>
-            </>
-            
-        )
+      if (data["result"].length == 0) return <div>Not found</div>
+      return (
+          <>
+          <div>{data["result"][0]["tutorials"].map((value, index)=>{return <TutorialLink tutorial={value} student={email}/>})}</div>
+          </>
+      )
     }
 
+  if (!data) return <div><Loading /></div>;
+
+  const hardcodedSubjects = () => {
     return (
-        <>
-        <h1>Student Dashboard</h1>
-        {session ? session.user.name : ""}
-        {content()}
-        <button onClick={() => signOut()}>Sign out.</button>
-        </>
-    )    
+      <>
+      <StudentStaticSubjectBox
+          heading="Subject Title"
+          subheading="Admin Contact Details"
+          icon="/../public/images/subject-icon.jpg"
+        />
+        <StudentStaticSubjectBox
+          heading="Subject Title"
+          subheading="Admin Contact Details"
+          icon="/../public/images/subject-icon.jpg"
+        />
+        <StudentStaticSubjectBox
+          heading="Subject Title"
+          subheading="Admin Contact Details"
+          icon="/../public/images/subject-icon.jpg"
+        />
+      </>
+    )
+  }
+
+  return (
+    <>
+      <h1>Student Dashboard</h1>
+      {/* {session ? session.user.name : ""}
+        {content()} */}
+      <h2 className={styles.h2}>
+        <span className={styles.span}>Subjects</span>
+      </h2>
+      <Col className="d-flex justify-content-evenly">
+      {content()}
+      </Col>
+      <button onClick={() => signOut()}>Sign out.</button>
+    </>
+  );
 }

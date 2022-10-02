@@ -184,6 +184,7 @@ const AdminOverview = (props) => {
                 <Table className={`${styles.bootstrapTable}`} striped hover>
                   <thead>
                     <tr>
+                      <th></th>
                       <th>Student</th>
                       <th>Group</th>
                       <th></th>

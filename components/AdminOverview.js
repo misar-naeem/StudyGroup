@@ -3,11 +3,11 @@ import Tabs from "react-bootstrap/Tabs";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
-import styles from "../styles/StudentOverview.module.css";
+import styles from "../styles/AdminOverview.module.css";
 import { useEffect, useState } from "react";
 import sortGroupsBySize from "../util/sortGroupsBySize";
 
-const StudentOverview = (props) => {
+const AdminOverview = (props) => {
   const { tutorialId } = props;
   const [students, setStudents] = useState([]);
   const [tutorial, setTutorial] = useState([]);
@@ -269,4 +269,4 @@ const StudentOverview = (props) => {
   );
 };
 
-export default StudentOverview;
+export default AdminOverview;

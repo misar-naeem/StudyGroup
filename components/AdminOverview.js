@@ -6,6 +6,11 @@ import Accordion from "react-bootstrap/Accordion";
 import styles from "../styles/AdminOverview.module.css";
 import { useEffect, useState } from "react";
 import sortGroupsBySize from "../util/sortGroupsBySize";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faClose, faEdit } from "@fortawesome/free-solid-svg-icons";
+import BootstrapPopup from "./BootStrapPopUp";
+import { Loading } from "./Loading";
+import StudentPopup from "./StudentPopup";
 
 const AdminOverview = (props) => {
   const { tutorialId } = props;
@@ -14,6 +19,11 @@ const AdminOverview = (props) => {
   const [groups, setGroups] = useState([]);
   const [enableEdit, setEnableEdit] = useState(false);
   const [groupSize, setGroupSize] = useState(1);
+  const [showDeleteIcon, setshowDeleteIcon] = useState(false);
+  const [showDeletePopup, setshowDeletePopup] = useState(false);
+  const [studentName, setStudentName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showStudentPopup, setShowStudentPopup] = useState(false);
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
 
@@ -43,9 +53,11 @@ const AdminOverview = (props) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     getStudents();
     getTutorial();
     getGroups();
+    setLoading(false);
   }, []);
 
   /**
@@ -90,7 +102,23 @@ const AdminOverview = (props) => {
     const studentGroup = getGroup(student?.email);
 
     return (
-      <tr>
+      <tr key={student._id}>
+        {showDeleteIcon ? (
+          <td>
+            <Button
+              variant="danger"
+              className={styles.deleteIcon}
+              onClick={() => {
+                setshowDeletePopup(true);
+                setStudentName(student.name);
+              }}
+            >
+              <FontAwesomeIcon icon={faMinus} className="fa-1x" />
+            </Button>
+          </td>
+        ) : (
+          <td></td>
+        )}
         <td>{student.name}</td>
         <td>{studentGroup.groupString}</td>
         <td>
@@ -109,163 +137,213 @@ const AdminOverview = (props) => {
   };
 
   return (
-    <Tabs
-      style={{ marginTop: "70px" }}
-      defaultActiveKey="StudentsOverview"
-      transition={false}
-      className={`${styles.bootstrapTabContainer} mb-3`}
-      id="student-tabs"
-    >
-      <Tab
-        eventKey="StudentsOverview"
-        title="Students Overview"
-        tabClassName={`${styles.bootstrapSingleTab}`}
-      >
-        <div className={`${styles.bootstrapTabContent}`}>
-          <Table bordered className={`${styles.bootstrapTable}`} striped hover>
-            <thead>
-              <tr>
-                <th>Student</th>
-                <th>Group</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>{students?.map((student) => studentCell(student))}</tbody>
-          </Table>
-        </div>
-      </Tab>
-
-      <Tab
-        eventKey="GroupOverview"
-        title="Group Overview"
-        tabClassName={`${styles.bootstrapSingleTab}`}
-      >
-        {enableEdit && (
-          <Button
-            style={{
-              marginRight: "50px",
-              marginBottom: "10px",
-              float: "right",
-            }}
-            onClick={() => setEnableEdit(!enableEdit)}
+    <>
+      {!loading ? (
+        <div>
+          <span
+            className={`${styles.editIcon} d-flex gap-2 align-items-center`}
           >
-            {"Cancel"}
-          </Button>
-        )}
-        <Button
-          style={{
-            marginRight: "50px",
-            marginBottom: "10px",
-            float: "right",
-          }}
-          onClick={() => {
-            if (enableEdit) {
-              updateGroups();
-            } else {
-              setEnableEdit(!enableEdit);
-            }
-          }}
-        >
-          {enableEdit ? "Save Changes" : "Edit"}
-        </Button>
-        {!enableEdit ? (
-          <div className={`${styles.bootstrapTabContent}`}>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Group Allocation Setting</th>
-                  <th>Group Size</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <Button>Manual Allocation</Button>
-                  </td>
-                  <td>0{groupSize}</td>
-                </tr>
-              </tbody>
-            </Table>
-
-            <Accordion className={styles.Accordion}>
-              {groups.map((group, index) => (
-                <Accordion.Item eventKey={index}>
-                  <Accordion.Header>
-                    <div className="d-flex gap-5 w-100">
-                      <span>Group {group?.groupNumber}</span>
-                      <span className="ms-5">
-                        0{group?.students?.length} students
-                      </span>
-                    </div>
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    <Table striped borderless hover>
-                      <thead>
-                        <tr>
-                          <th>Student Email</th>
-                          <th>Student Name</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {group?.students.map((student) => (
-                          <tr>
-                            <td>{student?.email}</td>
-                            <td>{student?.name}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </Accordion.Body>
-                </Accordion.Item>
-              ))}
-            </Accordion>
-          </div>
-        ) : (
-          <div style={{ textAlign: "left", marginLeft: "40%" }}>
-            <p>
-              <>Group Size: </>
+            {!showDeleteIcon ? (
+              <FontAwesomeIcon
+                icon={faEdit}
+                className="fa-2x"
+                onClick={() => setshowDeleteIcon(!showDeleteIcon)}
+              />
+            ) : (
               <>
-                <input
-                  type="number"
-                  min="1"
-                  value={groupSize}
-                  onChange={(event) => {
-                    if (groupSize > 0) {
-                      setGroupSize(Number(event.target.value));
-                    }
-                  }}
-                ></input>{" "}
-                Students/ Group
-              </>
-            </p>
-            <p>
-              <>Group Allocation Setting: </>
-              <>
-                <select
-                  value={groupAllocationSetting}
-                  onChange={(event) =>
-                    setGroupAllocationSetting(event.target.value)
-                  }
+                <Button
+                  className={styles.addStudentBtn}
+                  onClick={() => setShowStudentPopup(!showStudentPopup)}
                 >
-                  <option>Automatic</option>
-                  <option>Manual Allocation</option>
-                </select>
-                {groupAllocationSetting == "Automatic" && (
-                  <p style={{ marginTop: "20px" }}>
-                    Sort By:{"  "}
-                    <select>
-                      <option>Student Topic Preferences</option>
-                      <option>Diverse Year Groups</option>
-                      <option>Divserse Skill Set</option>
-                    </select>
-                  </p>
-                )}
+                  Add Student
+                </Button>
+                <FontAwesomeIcon
+                  icon={faClose}
+                  className="fa-2x"
+                  onClick={() => setshowDeleteIcon(!showDeleteIcon)}
+                />
               </>
-            </p>
-          </div>
-        )}
-      </Tab>
-    </Tabs>
+            )}
+          </span>
+          <Tabs
+            style={{ marginTop: "70px" }}
+            defaultActiveKey="StudentsOverview"
+            transition={false}
+            className={`${styles.bootstrapTabContainer} mb-3`}
+            id="student-tabs"
+          >
+            <Tab
+              eventKey="StudentsOverview"
+              title="Students Overview"
+              tabClassName={`${styles.bootstrapSingleTab}`}
+            >
+              <div className={`${styles.bootstrapTabContent}`}>
+                <Table className={`${styles.bootstrapTable}`} striped hover>
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Group</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {students?.map((student) => studentCell(student))}
+                  </tbody>
+                </Table>
+              </div>
+            </Tab>
+
+            <Tab
+              eventKey="GroupOverview"
+              title="Group Overview"
+              tabClassName={`${styles.bootstrapSingleTab}`}
+            >
+              {enableEdit && (
+                <Button
+                  style={{
+                    marginRight: "50px",
+                    marginBottom: "10px",
+                    float: "right",
+                  }}
+                  onClick={() => setEnableEdit(!enableEdit)}
+                >
+                  {"Cancel"}
+                </Button>
+              )}
+              <Button
+                style={{
+                  marginRight: "50px",
+                  marginBottom: "10px",
+                  float: "right",
+                }}
+                onClick={() => {
+                  if (enableEdit) {
+                    updateGroups();
+                  } else {
+                    setEnableEdit(!enableEdit);
+                  }
+                }}
+              >
+                {enableEdit ? "Save Changes" : "Edit"}
+              </Button>
+              {!enableEdit ? (
+                <div className={`${styles.bootstrapTabContent}`}>
+                  <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        <th>Group Allocation Setting</th>
+                        <th>Group Size</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Button>Manual Allocation</Button>
+                        </td>
+                        <td>0{groupSize}</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+
+                  <Accordion className={styles.Accordion}>
+                    {groups.map((group, index) => (
+                      <Accordion.Item eventKey={index}>
+                        <Accordion.Header>
+                          <div className="d-flex gap-5 w-100">
+                            <span>Group {group?.groupNumber}</span>
+                            <span className="ms-5">
+                              0{group?.students?.length} students
+                            </span>
+                          </div>
+                        </Accordion.Header>
+                        <Accordion.Body>
+                          <Table striped borderless hover>
+                            <thead>
+                              <tr>
+                                <th>Student Email</th>
+                                <th>Student Name</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {group?.students.map((student) => (
+                                <tr>
+                                  <td>{student?.email}</td>
+                                  <td>{student?.name}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    ))}
+                  </Accordion>
+                </div>
+              ) : (
+                <div style={{ textAlign: "left", marginLeft: "40%" }}>
+                  <p>
+                    <>Group Size: </>
+                    <>
+                      <input
+                        type="number"
+                        min="1"
+                        value={groupSize}
+                        onChange={(event) => {
+                          if (groupSize > 0) {
+                            setGroupSize(Number(event.target.value));
+                          }
+                        }}
+                      ></input>{" "}
+                      Students/ Group
+                    </>
+                  </p>
+                  <p>
+                    <>Group Allocation Setting: </>
+                    <>
+                      <select
+                        value={groupAllocationSetting}
+                        onChange={(event) =>
+                          setGroupAllocationSetting(event.target.value)
+                        }
+                      >
+                        <option>Automatic</option>
+                        <option>Manual Allocation</option>
+                      </select>
+                      {groupAllocationSetting == "Automatic" && (
+                        <p style={{ marginTop: "20px" }}>
+                          Sort By:{"  "}
+                          <select>
+                            <option>Student Topic Preferences</option>
+                            <option>Diverse Year Groups</option>
+                            <option>Divserse Skill Set</option>
+                          </select>
+                        </p>
+                      )}
+                    </>
+                  </p>
+                </div>
+              )}
+            </Tab>
+          </Tabs>
+          <BootstrapPopup
+            showPopup={showDeletePopup}
+            setShowPopup={setshowDeletePopup}
+            title="Delete Student"
+            body={`Are you sure you want to remove "${studentName}" ?`}
+            size={"md"}
+            proceedBtnRequired={true}
+            proceedBtnName="Confirm"
+            closeBtnName="Cancel"
+          />
+          <StudentPopup
+            showPopup={showStudentPopup}
+            setShowPopup={setShowStudentPopup}
+            size={"md"}
+          />
+        </div>
+      ) : (
+        <Loading />
+      )}
+    </>
   );
 };
 

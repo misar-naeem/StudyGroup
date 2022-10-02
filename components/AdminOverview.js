@@ -148,12 +148,14 @@ const AdminOverview = (props) => {
                 icon={faEdit}
                 className="fa-2x"
                 onClick={() => setshowDeleteIcon(!showDeleteIcon)}
+                style={{ marginTop: "20px", marginRight: "20px" }}
               />
             ) : (
               <>
                 <Button
                   className={styles.addStudentBtn}
                   onClick={() => setShowStudentPopup(!showStudentPopup)}
+                  style={{ marginTop: "20px", marginRight: "20px" }}
                 >
                   Add Student
                 </Button>
@@ -161,6 +163,7 @@ const AdminOverview = (props) => {
                   icon={faClose}
                   className="fa-2x"
                   onClick={() => setshowDeleteIcon(!showDeleteIcon)}
+                  style={{ marginTop: "20px", marginRight: "20px" }}
                 />
               </>
             )}

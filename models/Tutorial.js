@@ -1,7 +1,8 @@
 import { Schema, model, models } from 'mongoose';
 
 const tutorialSchema = new Schema({
-  tutorialId: String,
+  tutorial: String,
+  subject: String,
   topicsReleased: Boolean,
   topics: [],
   students: [],

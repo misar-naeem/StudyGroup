@@ -34,7 +34,7 @@ const TutorialLink = ({ tutorial, student }) => {
       >
         <a>
         <StudentStaticSubjectBox
-            heading={`Subject Title - ${tutorial}`}
+            heading={`${tutorial}`}
             subheading={`${staffName} - ${staffEmail}`}
             icon="/../public/images/subject-icon.jpg"
         />  

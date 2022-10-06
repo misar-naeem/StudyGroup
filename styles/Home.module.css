@@ -1,17 +1,18 @@
 .body {
-   background-image: url("../public/images/loginBackground.jpg"); 
-   width: 100vw;
-   height: 100vh;
-   background-position: center;
-   background-size: cover;
-   display: flex;
-   justify-content: center;
-   align-items: center;
+  background-image: url("../public/images/loginBackground.jpg"); 
+  width: 100vw;
+  height: 100vh;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .studentLayout{
-  position: relative;
-  left: 150px;
+ position: relative;
+ left: 150px;
 }
+
 /* .container {
   padding: 0 2rem;
 } */
@@ -25,7 +26,7 @@
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.9);
   box-sizing: border-box;
-  box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   text-align: center;
 }
@@ -40,6 +41,11 @@
   line-height: 1.15;
   font-size: 4rem;
   margin-top: -70px;
+}
+
+.heading {
+  margin-top: 30px;
+  margin-left: 30px;
 }
 
 .grid {
@@ -89,7 +95,6 @@
 }
 
 @media (prefers-color-scheme: dark) {
-
   .card,
   .footer {
     border-color: #222;

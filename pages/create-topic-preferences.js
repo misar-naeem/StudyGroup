@@ -15,25 +15,25 @@ export async function getServerSideProps({ query }) {
         console.log('CONNECTING TO MONGO');
         await connectMongo();
         console.log('CONNECTED TO MONGO');
-    
-        const result = await Tutorial.find({tutorialId: tutorialId}).select('topics topicsReleased');
+
+        const result = await Tutorial.find({ tutorialId: tutorialId }).select('topics topicsReleased');
         console.log(result)
         const topics = Array.from(JSON.parse(JSON.stringify(result))[0]["topics"])
         const topicsReleased = JSON.parse(JSON.stringify(result))[0]["topicsReleased"]
         return {
-            props: {current_topics: topics, released: topicsReleased}
+            props: { current_topics: topics, released: topicsReleased }
         }
     } else {
         return {
             redirect: {
-              permanent: false,
-              destination: "/admin-dashboard"
+                permanent: false,
+                destination: "/admin-dashboard"
             }
-          }
+        }
     }
 }
 
-function AddTopics({current_topics, released}) {
+function AddTopics({ current_topics, released }) {
     const [topics, setTopics] = React.useState(new Set(current_topics))
     const storedTopics = new Set(current_topics)
     const [potentialTopic, setTopic] = React.useState("")
@@ -44,13 +44,13 @@ function AddTopics({current_topics, released}) {
 
 
         const JSONdata = JSON.stringify(
-            {"tutorialId": "tut1", "topics": Array.from(topics)}
+            { "tutorialId": "tut1", "topics": Array.from(topics) }
         )
 
         const endpoint = 'api/create-topics'
         const options = {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSONdata
         }
 
@@ -63,13 +63,13 @@ function AddTopics({current_topics, released}) {
     const handleRelease = async () => {
 
         const JSONdata = JSON.stringify(
-            {"tutorialId": "tut1"}
+            { "tutorialId": "tut1" }
         )
 
         const endpoint = 'api/release-topics'
         const options = {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSONdata
         }
 
@@ -102,7 +102,7 @@ function AddTopics({current_topics, released}) {
                 setErrorMessage("");
             }
         }
-        
+
     }
 
     const topicDisplay = (topic) => {
@@ -111,11 +111,11 @@ function AddTopics({current_topics, released}) {
                 <button disabled={released} onClick={event => removeTopic(event, topic)}> x </button>
                 <span>{topic}</span>
             </div>
-            )
+        )
     }
 
     const removeTopic = (event, topic) => {
-        
+
         var temp = new Set(topics);
         temp.delete(topic);
 
@@ -125,55 +125,55 @@ function AddTopics({current_topics, released}) {
     const compareTopics = () => {
         if (storedTopics.size !== topics.size) {
             return false;
-          }
-        
-          return Array.from(storedTopics).every(element => {
+        }
+
+        return Array.from(storedTopics).every(element => {
             return topics.has(element);
-          });
+        });
     }
 
     const backButton = () => {
         return (
-        <Button>
-            <Link href="/admin-dashboard">
-              <p>Back to dashboard</p>
-            </Link>
-        </Button>
+            <Button>
+                <Link href="/admin-dashboard">
+                    <p>Back to dashboard</p>
+                </Link>
+            </Button>
         )
     }
 
     return (
-    <div>
-
-        <h2>Add Topic Preferences</h2>
-        <div>Add Topic Preferences here</div>
-
-        <input 
-            type="text" 
-            onChange={onChange} 
-            onKeyDown={handleOnKeyDown}
-        />
-        <button disabled={released} onClick={handleClick}>Add Topic</button>
-
-        <form onSubmit={handleSave}>
-            <button disabled={topics.size == 0 || released} type="submit"> Save Topics </button>
-        </form>
-
-        <form onSubmit={handleRelease}>
-            <button disabled={topics.size == 0 || released || !compareTopics()} type="submit"> Release Topics </button>
-        </form>
-
-        <p>{errorMessage}</p>
-
         <div>
-            {
-                Array.from(topics).map((topic,index)=>{
-                    return topicDisplay(topic)
-                })
-            }
+
+            <h2>Add Topic Preferences</h2>
+            <div>Add Topic Preferences here</div>
+
+            <input
+                type="text"
+                onChange={onChange}
+                onKeyDown={handleOnKeyDown}
+            />
+            <button disabled={released} onClick={handleClick}>Add Topic</button>
+
+            <form onSubmit={handleSave}>
+                <button disabled={topics.size == 0 || released} type="submit"> Save Topics </button>
+            </form>
+
+            <form onSubmit={handleRelease}>
+                <button disabled={topics.size == 0 || released || !compareTopics()} type="submit"> Release Topics </button>
+            </form>
+
+            <p>{errorMessage}</p>
+
+            <div>
+                {
+                    Array.from(topics).map((topic, index) => {
+                        return <span key={index}>{topicDisplay(topic)}</span>
+                    })
+                }
+            </div>
+            {backButton()}
         </div>
-        {backButton()}
-    </div>
     )
 }
 

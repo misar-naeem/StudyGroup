@@ -6,11 +6,8 @@ import Accordion from "react-bootstrap/Accordion";
 import styles from "../styles/AdminOverview.module.css";
 import { useEffect, useState } from "react";
 import sortGroupsBySize from "../util/sortGroupsBySize";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faClose, faEdit } from "@fortawesome/free-solid-svg-icons";
-import BootstrapPopup from "./BootStrapPopUp";
 import { Loading } from "./Loading";
-import StudentPopup from "./StudentPopup";
+import StudentOverviewTable from "./StudentOverviewTable";
 
 const AdminOverview = (props) => {
   const { tutorialId } = props;
@@ -19,11 +16,8 @@ const AdminOverview = (props) => {
   const [groups, setGroups] = useState([]);
   const [enableEdit, setEnableEdit] = useState(false);
   const [groupSize, setGroupSize] = useState(1);
-  const [showDeleteIcon, setshowDeleteIcon] = useState(false);
-  const [showDeletePopup, setshowDeletePopup] = useState(false);
-  const [studentName, setStudentName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showStudentPopup, setShowStudentPopup] = useState(false);
+
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
 
@@ -78,96 +72,48 @@ const AdminOverview = (props) => {
     }
   }
 
-  const getGroup = (studentEmail) => {
-    let groupData = {
-      groupString: "Group not yet assigned",
-      groupStatus: "Incomplete",
-    };
 
-    groups.find((group) =>
-      group.students.find((student) => {
-        if (student.email == studentEmail) {
-          return (
-            (groupData.groupString = `Group ${group.groupNumber}`),
-            (groupData.groupStatus = "Complete")
-          );
-        }
-      })
-    );
+  // const studentCell = (student) => {
 
-    return groupData;
-  };
-
-  const studentCell = (student) => {
-    const studentGroup = getGroup(student?.email);
-
-    return (
-      <tr key={student._id}>
-        {showDeleteIcon ? (
-          <td>
-            <Button
-              variant="danger"
-              className={styles.deleteIcon}
-              onClick={() => {
-                setshowDeletePopup(true);
-                setStudentName(student.name);
-              }}
-            >
-              <FontAwesomeIcon icon={faMinus} className="fa-1x" />
-            </Button>
-          </td>
-        ) : (
-          <td></td>
-        )}
-        <td>{student.name}</td>
-        <td>{studentGroup.groupString}</td>
-        <td>
-          <Button
-            className={
-              studentGroup.groupStatus == "Incomplete"
-                ? styles.primInCompbtn
-                : styles.primCompbtn
-            }
-          >
-            Allocation {studentGroup.groupStatus}
-          </Button>
-        </td>
-      </tr>
-    );
-  };
+  //   return (
+  //     <tr key={student._id}>
+  //       {showDeleteIcon ? (
+  //         <td>
+  //           <Button
+  //             variant="danger"
+  //             className={styles.deleteIcon}
+  //             onClick={() => {
+  //               setshowDeletePopup(true);
+  //               setStudentName(student.name);
+  //             }}
+  //           >
+  //             <FontAwesomeIcon icon={faMinus} className="fa-1x" />
+  //           </Button>
+  //         </td>
+  //       ) : (
+  //         <td></td>
+  //       )}
+  //       <td>{student.name}</td>
+  //       <td>{studentGroup.groupString}</td>
+  //       <td>
+  //         <Button
+  //           className={
+  //             studentGroup.groupStatus == "Incomplete"
+  //               ? styles.primInCompbtn
+  //               : styles.primCompbtn
+  //           }
+  //         >
+  //           Allocation {studentGroup.groupStatus}
+  //         </Button>
+  //       </td>
+  //     </tr>
+  //   );
+  // };
 
   return (
     <>
       {!loading ? (
         <div>
-          <span
-            className={`${styles.editIcon} d-flex gap-2 align-items-center`}
-          >
-            {!showDeleteIcon ? (
-              <FontAwesomeIcon
-                icon={faEdit}
-                className="fa-2x"
-                onClick={() => setshowDeleteIcon(!showDeleteIcon)}
-                style={{ marginTop: "20px", marginRight: "20px" }}
-              />
-            ) : (
-              <>
-                <Button
-                  className={styles.addStudentBtn}
-                  onClick={() => setShowStudentPopup(!showStudentPopup)}
-                  style={{ marginTop: "20px", marginRight: "20px" }}
-                >
-                  Add Student
-                </Button>
-                <FontAwesomeIcon
-                  icon={faClose}
-                  className="fa-2x"
-                  onClick={() => setshowDeleteIcon(!showDeleteIcon)}
-                  style={{ marginTop: "20px", marginRight: "20px" }}
-                />
-              </>
-            )}
-          </span>
           <Tabs
             style={{ marginTop: "70px" }}
             defaultActiveKey="StudentsOverview"
@@ -181,19 +127,7 @@ const AdminOverview = (props) => {
               tabClassName={`${styles.bootstrapSingleTab}`}
             >
               <div className={`${styles.bootstrapTabContent}`}>
-                <Table className={`${styles.bootstrapTable}`} striped hover>
-                  <thead>
-                    <tr>
-                      <th></th>
-                      <th>Student</th>
-                      <th>Group</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {students?.map((student) => studentCell(student))}
-                  </tbody>
-                </Table>
+                <StudentOverviewTable students={students} studentGroups={groups} />
               </div>
             </Tab>
 
@@ -284,24 +218,23 @@ const AdminOverview = (props) => {
                 </div>
               ) : (
                 <div style={{ textAlign: "left", marginLeft: "40%" }}>
-                  <p>
-                    <>Group Size: </>
-                    <>
-                      <input
-                        type="number"
-                        min="1"
-                        value={groupSize}
-                        onChange={(event) => {
-                          if (groupSize > 0) {
-                            setGroupSize(Number(event.target.value));
-                          }
-                        }}
-                      ></input>{" "}
-                      Students/ Group
-                    </>
-                  </p>
-                  <p>
-                    <>Group Allocation Setting: </>
+                  <div>
+                    <label>Group Size: </label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={groupSize}
+                      onChange={(event) => {
+                        if (groupSize > 0) {
+                          setGroupSize(Number(event.target.value));
+                        }
+                      }}
+                    ></input>{" "}
+                    <label> Students/ Group</label>
+                  </div>
+                  <br />
+                  <div>
+                    <label>Group Allocation Setting: </label>
                     <>
                       <select
                         value={groupAllocationSetting}
@@ -323,26 +256,18 @@ const AdminOverview = (props) => {
                         </p>
                       )}
                     </>
-                  </p>
+                  </div>
                 </div>
               )}
             </Tab>
+            <Tab
+              eventKey="TopicsOverview"
+              title="Topic List Overview"
+              tabClassName={`${styles.bootstrapSingleTab}`}
+            >
+              <span>topics</span>
+            </Tab>
           </Tabs>
-          <BootstrapPopup
-            showPopup={showDeletePopup}
-            setShowPopup={setshowDeletePopup}
-            title="Delete Student"
-            body={`Are you sure you want to remove "${studentName}" ?`}
-            size={"md"}
-            proceedBtnRequired={true}
-            proceedBtnName="Confirm"
-            closeBtnName="Cancel"
-          />
-          <StudentPopup
-            showPopup={showStudentPopup}
-            setShowPopup={setShowStudentPopup}
-            size={"md"}
-          />
         </div>
       ) : (
         <Loading />

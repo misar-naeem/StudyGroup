@@ -8,7 +8,8 @@ import { useEffect, useState } from "react";
 import sortGroupsBySize from "../util/sortGroupsBySize";
 import { Loading } from "./Loading";
 import StudentOverviewTable from "./StudentOverviewTable";
-
+import WarningPopup from "./WarningPopup";
+import Link from "next/link";
 const AdminOverview = (props) => {
   const { tutorialId } = props;
   const [students, setStudents] = useState([]);
@@ -17,24 +18,32 @@ const AdminOverview = (props) => {
   const [enableEdit, setEnableEdit] = useState(false);
   const [groupSize, setGroupSize] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [topics, setTopics] = useState({
+    topicsReleased: false,
+    topicsData: []
+  });
 
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
 
   const getStudents = async () => {
-    fetch("/api/get-all-student")
+    fetch(`/api/get-students-tutorialId/${tutorialId}`)
       .then((res) => res.json())
       .then((data) => {
         setStudents(data["result"]);
       });
   };
-
   const getTutorial = async () => {
     fetch(`/api/get-tutorial/${tutorialId}`)
       .then((res) => res.json())
       .then((data) => {
-        setGroupSize(data["result"][0]?.groupConfiguration?.groupSize);
-        setTutorial(data["result"][0]);
+        if (data) {
+          if (data["result"][0]?.topicsReleased) {
+            setTopics({ ...topics, topicsReleased: data["result"][0].topicsReleased, topicsData: data["result"][0].topics })
+          }
+          setGroupSize(data["result"][0]?.groupConfiguration?.groupSize);
+          setTutorial(data["result"][0]);
+        }
       });
   };
 
@@ -53,7 +62,6 @@ const AdminOverview = (props) => {
     getGroups();
     setLoading(false);
   }, []);
-
   /**
    * @method updateGroups
    * @summary Use this function to check the selected settings and call the respective sorting algorithm
@@ -72,46 +80,9 @@ const AdminOverview = (props) => {
     }
   }
 
-
-  // const studentCell = (student) => {
-
-  //   return (
-  //     <tr key={student._id}>
-  //       {showDeleteIcon ? (
-  //         <td>
-  //           <Button
-  //             variant="danger"
-  //             className={styles.deleteIcon}
-  //             onClick={() => {
-  //               setshowDeletePopup(true);
-  //               setStudentName(student.name);
-  //             }}
-  //           >
-  //             <FontAwesomeIcon icon={faMinus} className="fa-1x" />
-  //           </Button>
-  //         </td>
-  //       ) : (
-  //         <td></td>
-  //       )}
-  //       <td>{student.name}</td>
-  //       <td>{studentGroup.groupString}</td>
-  //       <td>
-  //         <Button
-  //           className={
-  //             studentGroup.groupStatus == "Incomplete"
-  //               ? styles.primInCompbtn
-  //               : styles.primCompbtn
-  //           }
-  //         >
-  //           Allocation {studentGroup.groupStatus}
-  //         </Button>
-  //       </td>
-  //     </tr>
-  //   );
-  // };
-
   return (
     <>
+      {topics.topicsReleased ? null : <WarningPopup tutorialId={tutorialId} />}
       {!loading ? (
         <div>
           <Tabs
@@ -150,7 +121,7 @@ const AdminOverview = (props) => {
               )}
               <Button
                 style={{
-                  marginRight: "50px",
+                  marginRight: "30px",
                   marginBottom: "10px",
                   float: "right",
                 }}
@@ -204,7 +175,7 @@ const AdminOverview = (props) => {
                             </thead>
                             <tbody>
                               {group?.students.map((student) => (
-                                <tr>
+                                <tr key={student.email}>
                                   <td>{student?.email}</td>
                                   <td>{student?.name}</td>
                                 </tr>
@@ -229,6 +200,7 @@ const AdminOverview = (props) => {
                           setGroupSize(Number(event.target.value));
                         }
                       }}
+                      max="6"
                     ></input>{" "}
                     <label> Students/ Group</label>
                   </div>
@@ -265,7 +237,39 @@ const AdminOverview = (props) => {
               title="Topic List Overview"
               tabClassName={`${styles.bootstrapSingleTab}`}
             >
-              <span>topics</span>
+              <>
+                {
+                  topics?.topicsReleased && topics.topicsData?.length > 0 ? (
+                    <Table striped borderless hover>
+                      <thead>
+                        <tr>
+                          <th>Topic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          topics.topicsData.map((topic, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>
+                                  {topic}
+                                </td>
+                              </tr>
+                            )
+                          })
+                        }
+                      </tbody>
+                    </Table>
+                  ) : <div className="bg-light p-5 d-flex flex-column align-items-center gap-3">
+                    <h2 className="d-flex align-items-center justify-content-center">You have not published a topic list yet.</h2>
+                    <Link href={`/create-topic-preferences?tutorialId=${tutorialId}`}>
+                      <Button style={{ color: "#0D41D", width: "250px" }}>
+                        Create Topic List
+                      </Button>
+                    </Link>
+                  </div>
+                }
+              </>
             </Tab>
           </Tabs>
         </div>

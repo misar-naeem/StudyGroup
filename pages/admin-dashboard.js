@@ -54,13 +54,11 @@ function AdminDashboard() {
           marginTop: "-50px",
         }}
       >
-        {session ? session.user.name : ""}
         <Button onClick={() => signOut()} variant="danger" style={{ backgroundColor: "#FF595E", width: "250px" }}>
-          <>Sign out</>
+          Log out
         </Button>{" "}
       </div>
-      <WarningPopup tutorialId={tutorialId} />
-
+      <h2 className="mt-3" style={{ marginLeft: "35px" }}>Welcome {session ? session.user.name : ""}</h2>
       <AdminOverview tutorialId={tutorialId} />
     </div>
   );

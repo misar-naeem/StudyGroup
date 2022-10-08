@@ -63,7 +63,7 @@ const StudentOverviewTable = ({ students, studentGroups }) => {
               )}
             </span>
 
-            <Table striped bordered hover>
+            <Table striped borderless hover>
               <thead>
                 <tr>
                   <th>Student Name</th>

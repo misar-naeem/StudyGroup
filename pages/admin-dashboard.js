@@ -1,14 +1,12 @@
 import Head from "next/head";
 import AdminOverview from "/components/AdminOverview";
 import styles from "../styles/Home.module.css";
-import Link from "next/link";
 import useSWR from "swr";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import { Loading } from "../components/Loading";
-import WarningPopup from "../components/WarningPopup";
 
 function AdminDashboard() {
   const { data: session } = useSession();

@@ -3,7 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 const WarningPopup = ({ tutorialId }) => {
   return (
-    <Row className="d-flex align-items-center mx-5 p-3 gap-5" style={{ border: "1px solid black", borderRadius: "5px", width: "max-content" }}>
+    <Row className="d-flex align-items-center mx-5 p-3 gap-5 mt-5" style={{ border: "1px solid black", borderRadius: "5px", width: "max-content" }}>
       <Col>
         <h2 style={{ fontWeight: "500" }}>Warning! You have not published a topic list yet.</h2>
         <br />

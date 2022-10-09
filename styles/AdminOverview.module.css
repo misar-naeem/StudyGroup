@@ -5,12 +5,10 @@
 }
 
 .bootstrapSingleTab {
-  background: linear-gradient(
-    0deg,
-    #dbdbdb 0%,
-    #f5f3f5 0.01%,
-    #f1e9f8 100%
-  ) !important;
+  background: linear-gradient(0deg,
+      #dbdbdb 0%,
+      #f5f3f5 0.01%,
+      #f1e9f8 100%) !important;
   font-weight: bold !important;
   color: black !important;
   width: 255px !important;
@@ -96,11 +94,10 @@
   box-shadow: 0 0px 7px 0px #c5c5c5 !important;
   border-radius: 3px !important;
 }
+
 .editIcon {
-  display: flex;
-  position: absolute;
-  top: 75px;
-  right: 10px;
+  float: right;
+  margin-bottom: 20px;
   cursor: pointer;
 }
 
@@ -126,10 +123,12 @@
   height: 36px;
   border: none;
 }
+
 .deleteIcon:focus {
   outline: none;
   box-shadow: none;
 }
+
 /* 
 .AccordionItem{
   box-shadow: none !important;

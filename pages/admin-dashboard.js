@@ -1,9 +1,8 @@
 import Head from "next/head";
 import AdminOverview from "/components/AdminOverview";
 import styles from "../styles/Home.module.css";
-import Link from "next/link";
 import useSWR from "swr";
-import { signOut, useSession, getSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Button from "react-bootstrap/Button";
@@ -35,10 +34,7 @@ function AdminDashboard() {
         <Loading />
       </div>
     );
-
   if (data["result"].length == 0) return <div>Not found</div>;
-  console.log("data");
-  console.log(data);
   const tutorialId = data["result"][0]["tutorial"];
 
   return (
@@ -46,7 +42,7 @@ function AdminDashboard() {
       <Head>
         <title>Staff Dashboard</title>
       </Head>
-      <h1 className={styles.heading}>Staff Dashboard</h1>
+      <h1 className={styles.heading}>Tutorial {tutorialId ? tutorialId[tutorialId?.length - 1] : null}</h1>
 
       <div
         style={{
@@ -56,17 +52,11 @@ function AdminDashboard() {
           marginTop: "-50px",
         }}
       >
-        {session ? session.user.name : ""} {tutorialId}{" "}
-        <Button onClick={() => signOut()}>
-          <>Sign out</>
+        <Button onClick={() => signOut()} variant="danger" style={{ backgroundColor: "#FF595E", width: "250px" }}>
+          Log out
         </Button>{" "}
-        <Link href={`/create-topic-preferences?tutorialId=${tutorialId}`}>
-          <Button>
-            <>Create Topics</>
-          </Button>
-        </Link>
       </div>
-
+      <h2 className="mt-3" style={{ marginLeft: "35px" }}>Welcome {session ? session.user.name : ""}</h2>
       <AdminOverview tutorialId={tutorialId} />
     </div>
   );

@@ -3,13 +3,13 @@ import styles from "../styles/Loading.module.css";
 export const Loading = () => {
   return (
     <div className={styles.body}>
-      <div class={styles.wrapper}>
-        <div class={styles.circle}></div>
-        <div class={styles.circle}></div>
-        <div class={styles.circle}></div>
-        <div class={styles.shadow}></div>
-        <div class={styles.shadow}></div>
-        <div class={styles.shadow}></div>
+      <div className={styles.wrapper}>
+        <div className={styles.circle}></div>
+        <div className={styles.circle}></div>
+        <div className={styles.circle}></div>
+        <div className={styles.shadow}></div>
+        <div className={styles.shadow}></div>
+        <div className={styles.shadow}></div>
         <span>Loading</span>
     </div>
     </div>

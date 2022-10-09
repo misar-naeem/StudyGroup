@@ -39,10 +39,8 @@ const StudentPopup = ({ showPopup, setShowPopup, size }) => {
     if (email !== "") {
       getStudentByEmail(email);
       setRefresh(!refresh);
-      console.log(studentDetails);
     }
-    else{
-      console.log(studentDetails);
+    else {
       setStudentDetails([]);
       setRefresh(!refresh);
     }

@@ -66,7 +66,7 @@ export default function StudentDashboard() {
 
 
   return (
-    <> 
+    <>
       <StudentNavBar />
       <div className={styles.studentLayout}>
         <div className={`d-flex flex-column justify-content-center p-3 ps-5`}>

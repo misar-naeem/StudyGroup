@@ -5,7 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import StudentStaticSubjectBox from "../components/StudentStaticSubjectBox";
 import { Loading } from "../components/Loading";
-import { Row } from "react-bootstrap";
+import { Row, Modal } from "react-bootstrap";
 import { useEffect } from "react";
 import StudentNavBar from "../components/StudentNavBar";
 
@@ -13,33 +13,44 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const TutorialLink = ({ tutorial, student }) => {
 
-  const { data, error } = useSWR(`/api/get-staff?tutorial=${tutorial}`, fetcher);
+  const getStaff = useSWR(`/api/get-staff?tutorial=${tutorial}`, fetcher);
+  const staffData = getStaff['data']
+  const staffError = getStaff['error']
 
-  if (error || data?.error)
+  const getTutorial = useSWR(`/api/get-tutorial/${tutorial}`, fetcher);
+  const tutData = getTutorial['data']
+  const tutError = getTutorial['error']
+
+  if (staffError || staffData?.error)
   return (
     <div>
       Tutorial not assigned to staff member.
     </div>
   );
-  if (!data) return <p>Loading...</p>;
-  if (data["result"].length == 0) return <div>Not found</div>;
+  if (!staffData) return <p>Loading...</p>;
+  if (staffData["result"].length == 0) return <div>Not found</div>;
 
-  const staffName = data["result"][0]["name"]
-  const staffEmail = data["result"][0]["email"]
+  const staffName = staffData["result"][0]["name"]
+  const staffEmail = staffData["result"][0]["email"]
+
+  if (tutError || tutData?.error)
+  return (
+    <div>
+      Tutorial not assigned to staff member.
+    </div>
+  );
+  if (!tutData) return <p>Loading...</p>;
+  if (tutData["result"].length == 0) return <div>Not found</div>;
+
+  const subject = tutData["result"][0]["subject"]
 
   return (
-    
-      <Link
-        href={`/add-student-preferences?tutorial=${tutorial}&student=${student}`}
-      >
-        <a>
-        <StudentStaticSubjectBox
-            heading={`${tutorial}`}
-            subheading={`${staffName} - ${staffEmail}`}
-            icon="/../public/images/subject-icon.jpg"
-        />  
-        </a>
-      </Link>
+    <StudentStaticSubjectBox
+        heading={`${subject} - ${tutorial}`}
+        subheading={<p>Staff - {staffName}<br/>{staffEmail}</p>}
+        icon="/../public/images/subject-icon.jpg"
+        link={`/add-student-preferences?subject=${subject}&tutorial=${tutorial}&student=${student}`}
+    />  
   );
 };
 

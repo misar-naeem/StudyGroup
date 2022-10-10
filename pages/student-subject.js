@@ -19,7 +19,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //   return (
 //     <Button>
 //       <Link href="/add-student-preferences">
-//         <p>{tutorial}</p>
+//         <p>{tutorial}</p> 
 //       </Link>
 //     </Button>
 //   );

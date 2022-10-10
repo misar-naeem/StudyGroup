@@ -20,7 +20,7 @@ const AdminOverview = (props) => {
   const [loading, setLoading] = useState(false);
   const [topics, setTopics] = useState({
     topicsReleased: false,
-    topicsData: []
+    topicsData: [],
   });
 
   const [groupAllocationSetting, setGroupAllocationSetting] =
@@ -33,13 +33,18 @@ const AdminOverview = (props) => {
         setStudents(data["result"]);
       });
   };
+
   const getTutorial = async () => {
     fetch(`/api/get-tutorial/${tutorialId}`)
       .then((res) => res.json())
       .then((data) => {
         if (data) {
           if (data["result"][0]?.topicsReleased) {
-            setTopics({ ...topics, topicsReleased: data["result"][0].topicsReleased, topicsData: data["result"][0].topics })
+            setTopics({
+              ...topics,
+              topicsReleased: data["result"][0].topicsReleased,
+              topicsData: data["result"][0].topics,
+            });
           }
           setGroupSize(data["result"][0]?.groupConfiguration?.groupSize);
           setTutorial(data["result"][0]);
@@ -62,6 +67,7 @@ const AdminOverview = (props) => {
     getGroups();
     setLoading(false);
   }, []);
+
   /**
    * @method updateGroups
    * @summary Use this function to check the selected settings and call the respective sorting algorithm
@@ -78,6 +84,27 @@ const AdminOverview = (props) => {
         "This function has not been built yet or your group size is invalid."
       );
     }
+  }
+
+  /**
+   * @method handleSelectDeleteAllGroups
+   * @summary Use this function to confirm that the user wants to delete all groups, and then call the delete groups function
+   */
+  async function handleSelectDeleteAllGroups() {
+    const JSONdata = JSON.stringify({ tutorialId: tutorialId });
+    const endpoint = "/api/delete-group-data";
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSONdata,
+    };
+
+    await fetch(endpoint, options);
+
+    setEnableEdit(false);
+    getTutorial();
+    getGroups();
   }
 
   return (
@@ -98,7 +125,10 @@ const AdminOverview = (props) => {
               tabClassName={`${styles.bootstrapSingleTab}`}
             >
               <div className={`${styles.bootstrapTabContent}`}>
-                <StudentOverviewTable students={students} studentGroups={groups} />
+                <StudentOverviewTable
+                  students={students}
+                  studentGroups={groups}
+                />
               </div>
             </Tab>
 
@@ -135,6 +165,17 @@ const AdminOverview = (props) => {
               >
                 {enableEdit ? "Save Changes" : "Edit"}
               </Button>
+              {enableEdit && (
+                <Button
+                  style={{
+                    marginRight: "30px",
+                    float: "right",
+                  }}
+                  onClick={() => handleSelectDeleteAllGroups()}
+                >
+                  {"Clear all groups"}
+                </Button>
+              )}
               {!enableEdit ? (
                 <div className={`${styles.bootstrapTabContent}`}>
                   <Table striped bordered hover>
@@ -190,7 +231,7 @@ const AdminOverview = (props) => {
               ) : (
                 <div style={{ textAlign: "left", marginLeft: "40%" }}>
                   <div>
-                    <label>Group Size: </label>
+                    <label>Group Size: </label>{" "}
                     <input
                       type="number"
                       min="1"
@@ -200,13 +241,12 @@ const AdminOverview = (props) => {
                           setGroupSize(Number(event.target.value));
                         }
                       }}
-                      max="6"
                     ></input>{" "}
                     <label> Students/ Group</label>
                   </div>
                   <br />
                   <div>
-                    <label>Group Allocation Setting: </label>
+                    <label>Group Allocation Setting: </label>{" "}
                     <>
                       <select
                         value={groupAllocationSetting}
@@ -238,37 +278,37 @@ const AdminOverview = (props) => {
               tabClassName={`${styles.bootstrapSingleTab}`}
             >
               <>
-                {
-                  topics?.topicsReleased && topics.topicsData?.length > 0 ? (
-                    <Table striped borderless hover>
-                      <thead>
-                        <tr>
-                          <th>Topic</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          topics.topicsData.map((topic, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>
-                                  {topic}
-                                </td>
-                              </tr>
-                            )
-                          })
-                        }
-                      </tbody>
-                    </Table>
-                  ) : <div className="bg-light p-5 d-flex flex-column align-items-center gap-3">
-                    <h2 className="d-flex align-items-center justify-content-center">You have not published a topic list yet.</h2>
-                    <Link href={`/create-topic-preferences?tutorialId=${tutorialId}`}>
+                {topics?.topicsReleased && topics.topicsData?.length > 0 ? (
+                  <Table striped borderless hover>
+                    <thead>
+                      <tr>
+                        <th>Topic</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {topics.topicsData.map((topic, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>{topic}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </Table>
+                ) : (
+                  <div className="bg-light p-5 d-flex flex-column align-items-center gap-3">
+                    <h2 className="d-flex align-items-center justify-content-center">
+                      You have not published a topic list yet.
+                    </h2>
+                    <Link
+                      href={`/create-topic-preferences?tutorialId=${tutorialId}`}
+                    >
                       <Button style={{ color: "#0D41D", width: "250px" }}>
                         Create Topic List
                       </Button>
                     </Link>
                   </div>
-                }
+                )}
               </>
             </Tab>
           </Tabs>

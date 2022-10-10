@@ -66,6 +66,7 @@ const StudentOverviewTable = ({ students, studentGroups }) => {
             <Table striped borderless hover>
               <thead>
                 <tr>
+                  {showDeleteIcon && <th/>}
                   <th>Student Name</th>
                   <th>Group</th>
                   <th></th>

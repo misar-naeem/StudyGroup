@@ -1,0 +1,37 @@
+.form {
+  margin: 40px;
+}
+
+.allocationButton {
+  background: linear-gradient() !important;
+  justify-content: right;
+  color: black !important;
+  width: 700px;
+  margin: 10px !important;
+  box-shadow: 2px 3px 4px 1px #00000040 !important;
+  transition: none;
+}
+
+.listgroup {
+  background: linear-gradient() !important;
+  justify-content: center;
+  color: black !important;
+  width: 1050px;
+  margin-top: 10px !important;
+  margin: 3px;
+  box-shadow: 2px 3px 4px 1px #00000040 !important;
+  transition: none;
+}
+
+.groupstudentlist {
+  background: linear-gradient() !important;
+  justify-content: center;
+  color: black !important;
+  width: 1050px;
+  transition: none;
+}
+
+.contained-modal-title-vcenter {
+  justify-content: center;
+   
+}

@@ -15,8 +15,8 @@ export default async function sortGroupsBySize({ tutorial, groupSize }) {
     return;
   }
 
-  const tutorialId = tutorial._id;
-  const students = tutorial.students;
+  const tutorialId = tutorial?.tutorialId;
+  const students = tutorial?.students;
   const numberOfGroups = Math.floor(tutorialSize / groupSize);
 
   // For the number of groups calculated, allocate a number (groupSize) of students to each group

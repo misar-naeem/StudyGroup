@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     await connectMongo();
     console.log("CONNECTED TO MONGO");
 
-    const query = { _id: req.body.tutorialId };
+    const query = { tutorialId: req.body.tutorialId };
     const update = { groupConfiguration: req.body.groupConfiguration };
 
     console.log("UPDATING DOCUMENT");

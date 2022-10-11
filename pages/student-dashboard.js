@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import Button from "react-bootstrap/Button";
 import StudentStaticSubjectBox from "../components/StudentStaticSubjectBox";
 import { Loading } from "../components/Loading";
-import { Row } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useEffect } from "react";
 import StudentNavBar from "../components/StudentNavBar";
 const TutorialLink = ({ tutorial, student }) => {
@@ -63,8 +63,6 @@ export default function StudentDashboard() {
     );
   };
 
-
-
   return (
     <>
       <StudentNavBar />
@@ -75,29 +73,23 @@ export default function StudentDashboard() {
           </h1>
           <hr />
         </div>
-        <Row className="d-flex gap-5 ps-5 my-2">
-          <StudentStaticSubjectBox
-            heading="Subject Title"
-            subheading="Admin Contact Details"
-            icon="/../public/images/subject-icon.jpg"
-          />
-          <StudentStaticSubjectBox
-            heading="Subject Title"
-            subheading="Admin Contact Details"
-            icon="/../public/images/subject-icon.jpg"
-          />
-        </Row>
-        <Row className="d-flex gap-5 ps-5 my-3">
-          <StudentStaticSubjectBox
-            heading="Subject Title"
-            subheading="Admin Contact Details"
-            icon="/../public/images/subject-icon.jpg"
-          />
-          <StudentStaticSubjectBox
-            heading="Subject Title"
-            subheading="Admin Contact Details"
-            icon="/../public/images/subject-icon.jpg"
-          />
+        <Row className="ps-5 my-2 gap-5" xs={10}>
+          {
+            data["result"][0]["tutorials"].map((value, index) => {
+              return (
+                <Col key={index}>
+                  <a href={`/tutorial?tutorialId=${value}`} style={{ color: "black", textDecoration: "none" }}>
+                    <StudentStaticSubjectBox
+                      heading={"tutorial " + value[value.length - 1]}
+                      subheading="Admin Contact Details"
+                      icon="/../public/images/subject-icon.jpg"
+                      tutorialId={value}
+                    />
+                  </a>
+                </Col>
+              )
+            })
+          }
         </Row>
       </div>
       <button onClick={() => signOut()}>Sign out.</button>

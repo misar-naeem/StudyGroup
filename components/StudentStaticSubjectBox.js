@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 //Dynamically get student's tutorials
 
-const StudentStaticSubjectBox = ({ icon, heading, subheading }) => {
+const StudentStaticSubjectBox = ({ icon, heading, subheading, tutorialId }) => {
   return (
     <div className={styles.staticBox}>
       <Image src={icon} alt="subject-icon" width={360} height={170} />

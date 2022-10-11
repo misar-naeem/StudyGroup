@@ -1,0 +1,87 @@
+.tutorial {
+    margin-left: 200px;
+    margin-right: 40px;
+}
+
+.subjectPreference {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 72px;
+    letter-spacing: -0.015em;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.preferenceName {
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 72px;
+    letter-spacing: -0.015em;
+    color: #000000;
+}
+
+.noGroup {
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 72px;
+    letter-spacing: -0.015em;
+    color: rgba(0, 0, 0, 0.4);
+      position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -50%);
+}
+
+.noGroupContainer {
+    width: 500;
+    height: 600px;
+    background: rgba(229, 229, 229, 0.2);
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}
+
+
+.primCompbtn {
+    color: white !important;
+    background-color: #8ac926 !important;
+    font-weight: 500 !important;
+    padding: 7px !important;
+    padding-left: 19px !important;
+    padding-right: 19px !important;
+    box-shadow: 0 4px 4px 0px #c5c5c5 !important;
+    font-size: 15px !important;
+    width: 300px !important;
+    height: 41px !important;
+    white-space: nowrap;
+    border-style: none !important;
+}
+
+.primCompbtn:hover {
+    background-color: #5f910f !important;
+}
+
+.primCompbtn:active {
+    background-color: #5f910f !important;
+}
+
+.primInCompbtn {
+    color: white !important;
+    background-color: #ffca3a !important;
+    font-weight: 500 !important;
+    padding: 7px !important;
+    padding-left: 19px !important;
+    padding-right: 19px !important;
+    box-shadow: 0 4px 4px 0px #c5c5c5 !important;
+    font-size: 15px !important;
+    width: 300px !important;
+    height: 41px !important;
+    white-space: nowrap;
+    border-style: none !important;
+}
+
+.primInCompbtn:hover {
+    background-color: #b48810 !important;
+}
+
+.primInCompbtn:active {
+    background-color: #ffca3a !important;
+}

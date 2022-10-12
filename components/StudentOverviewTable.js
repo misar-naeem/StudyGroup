@@ -121,7 +121,7 @@ const StudentOverviewTable = ({ students, studentGroups, tutorialId }) => {
                                 : styles.primCompbtn
                             }
                           >
-                            {getGroup(student.email).groupStatus} Allocation
+                            {getGroup(student.email).groupStatus == "Incomplete" ? "Incomplete Allocation" : "Allocation Complete"}
                           </Button>
                         </td>
                       </tr>

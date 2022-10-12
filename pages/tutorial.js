@@ -1,25 +1,42 @@
 import StudentNavBar from "../components/StudentNavBar"
 import { Button, Accordion, Col } from "react-bootstrap"
+import Preference from "../models/Preference";
+import Tutorial from "../models/Tutorial";
 import styles from "../styles/Tutorial.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import connectMongo from "../util/mongodb";
+import PreferencePopup from "../components/PreferencePopup";
 
 export async function getServerSideProps({ query }) {
 
-    console.log("QUERY")
-    console.log(query.tutorialId == undefined)
-
     if (query.tutorialId != undefined) {
         const tutorialId = query.tutorialId
-        // console.log('CONNECTING TO MONGO');
-        // await connectMongo();
-        // console.log('CONNECTED TO MONGO');
+        const studentId = query.student;
+        console.log('CONNECTING TO MONGO');
+        await connectMongo();
+        console.log('CONNECTED TO MONGO');
 
-        // const result = await Tutorial.find({ tutorialId: tutorialId }).select('topics topicsReleased');
-        // console.log(result)
-        // const topics = Array.from(JSON.parse(JSON.stringify(result))[0]["topics"])
-        // const topicsReleased = JSON.parse(JSON.stringify(result))[0]["topicsReleased"]
+
+        var topics, topicsReleased = []
+        var currentChoice = ""
+
+        // Check if student already added in preference
+        const res = await Preference.find({ tutorialId: tutorialId, studentId: studentId }).select("topic");
+
+        currentChoice = JSON.parse(JSON.stringify(res))
+
+        if (currentChoice.length == 0) {
+            const result = await Tutorial.find({ tutorialId: tutorialId }).select('topics topicsReleased');
+            topics = Array.from(JSON.parse(JSON.stringify(result))[0]["topics"])
+            topicsReleased = JSON.parse(JSON.stringify(result))[0]["topicsReleased"]
+            currentChoice = ""
+        } else {
+            currentChoice = JSON.parse(JSON.stringify(res))[0]["topic"]
+            topics = []
+            topicsReleased = []
+        }
         return {
-            props: { tutorialId: tutorialId }
+            props: { tutorialId: tutorialId, topics: topics, currentChoice: currentChoice }
         }
     } else {
         return {
@@ -32,19 +49,28 @@ export async function getServerSideProps({ query }) {
 }
 
 
-const tutorial = ({ tutorialId }) => {
+const tutorial = ({ tutorialId, topics, currentChoice }) => {
     const [groups, setGroups] = useState([])
+    const [showPopup, setShowPopup] = useState(false);
+    useEffect(() => {
+        if (currentChoice.length === 0) {
+            setShowPopup(true);
+        }
+        else {
+            setShowPopup(false);
+        }
+    }, [])
     return (
         <>
             <StudentNavBar />
             <div className={`${styles.tutorial} p-3`}>
                 <div className="d-flex align-items-center justify-content-between">
                     <h1 className="p-3">
-                        Tutorial
+                        Tutorial {tutorialId[tutorialId.length - 1]}
                     </h1>
                     <Button
                         className={
-                            true
+                            false
                                 ? styles.primInCompbtn
                                 : styles.primCompbtn
                         }
@@ -98,7 +124,14 @@ const tutorial = ({ tutorialId }) => {
                     }
                 </div>
             </div>
+            <PreferencePopup
+                showPopup={showPopup}
+                topics={topics}
+                size="lg"
+                tutorialId={tutorialId}
+            />
         </>
+
     )
 }
 

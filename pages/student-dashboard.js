@@ -1,25 +1,13 @@
 import styles from "../styles/Home.module.css";
-import Link from "next/link";
 import useSWR from "swr";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Button from "react-bootstrap/Button";
 import StudentStaticSubjectBox from "../components/StudentStaticSubjectBox";
 import { Loading } from "../components/Loading";
 import { Row, Col } from "react-bootstrap";
 import { useEffect } from "react";
 import StudentNavBar from "../components/StudentNavBar";
-const TutorialLink = ({ tutorial, student }) => {
-  return (
-    <Button>
-      <Link
-        href={`/add-student-preferences?tutorial=${tutorial}&student=${student}`}
-      >
-        <p>{tutorial}</p>
-      </Link>
-    </Button>
-  );
-};
+
 
 export default function StudentDashboard() {
   const { data: session } = useSession();
@@ -30,6 +18,7 @@ export default function StudentDashboard() {
     if (!session) {
       router.push("/student-login");
     }
+
   }, []);
 
   const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -39,8 +28,7 @@ export default function StudentDashboard() {
   if (session) {
     email = session.user.email;
   }
-  const { data, error } = useSWR(`/api/get-student/${email}`, fetcher);
-
+  const { data, error } = useSWR(`/api/get-tutorial-student/${email}`, fetcher);
   if (error || data?.error)
     return (
       <div>
@@ -49,19 +37,6 @@ export default function StudentDashboard() {
       </div>
     );
   if (!data) return <Loading />;
-
-  const content = () => {
-    if (data["result"].length == 0) return <div>Not found</div>;
-    return (
-      <>
-        <div>
-          {data["result"][0]["tutorials"].map((value, index) => {
-            return <TutorialLink tutorial={value} student={email} />;
-          })}
-        </div>
-      </>
-    );
-  };
 
   return (
     <>
@@ -73,19 +48,26 @@ export default function StudentDashboard() {
           </h1>
           <hr />
         </div>
-        <Row className="ps-5 my-2 gap-5" xs={10}>
+        <Row className="ps-5 my-2 gap-5" xs={7}>
           {
-            data["result"][0]["tutorials"].map((value, index) => {
+            data["result"].map((value, index) => {
               return (
                 <Col key={index}>
-                  <a href={`/tutorial?tutorialId=${value}`} style={{ color: "black", textDecoration: "none" }}>
+                  <button style={{ backgroundColor: !value.topicsReleased ? "#eee" : "white", color: "black", border: "none", borderRadius: "10px", width: "400px" }}
+                    onClick={() => {
+                      return (
+                        router.push(`/tutorial?tutorialId=${value.tutorialId}&student=${email}`)
+                      )
+                    }}
+                    disabled={!value.topicsReleased}
+                  >
                     <StudentStaticSubjectBox
-                      heading={"tutorial " + value[value.length - 1]}
-                      subheading="Admin Contact Details"
+                      heading={"Tutorial " + value.tutorialId[value.tutorialId?.length - 1]}
+                      subheading={!value.topicsReleased ? "This subject is not accessabile yet" : null}
                       icon="/../public/images/subject-icon.jpg"
-                      tutorialId={value}
+                      tutorialId={value.tutorialId}
                     />
-                  </a>
+                  </button>
                 </Col>
               )
             })

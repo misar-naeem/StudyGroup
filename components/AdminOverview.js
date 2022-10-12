@@ -128,6 +128,7 @@ const AdminOverview = (props) => {
                 <StudentOverviewTable
                   students={students}
                   studentGroups={groups}
+                  tutorialId = {tutorialId}
                 />
               </div>
             </Tab>

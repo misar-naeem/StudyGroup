@@ -7,7 +7,9 @@ export default async function handler(req, res) {
     await connectMongo();
     console.log(`${req.url} accessed`);
     
-    const result = await Student.find({});
+    const result = await Student.find({
+      tutorials: {$nin: ["tut2"]}
+    });
 
     res.json({ result });
   } catch (error) {

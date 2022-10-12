@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import styles from "../styles/BootstrapPopup.module.css";
@@ -12,6 +13,7 @@ function BootstrapPopup({
   closeBtnName,
   handleProceed,
 }) {
+  const router = useRouter();
   return (
     <Modal
       show={showPopup}
@@ -32,7 +34,9 @@ function BootstrapPopup({
               {closeBtnName}
             </Button>
             {proceedBtnRequired && (
-              <Button onClick={handleProceed} className={`${styles.mainBtn}`}>
+              <Button onClick={() => {
+                 router.reload(window.location.pathname)
+                handleProceed}} className={`${styles.mainBtn}`}>
                 {proceedBtnName}
               </Button>
             )}

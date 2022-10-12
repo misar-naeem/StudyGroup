@@ -2,10 +2,27 @@ import { Button, Col, Modal, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import styles from "../styles/StudentPopup.module.css";
 import { Loading } from "./Loading";
+import { useRouter } from "next/router";
+const StudentPopup = ({ showPopup, setShowPopup, size, tutorialId }) => {
+  const router = useRouter();
 
-const StudentPopup = ({ showPopup, setShowPopup, size }) => {
-  const handleProceed = () => {
+  const handleProceed = async (studentEmail) => {
     console.log("Student Added");
+    const JSONdata = JSON.stringify(
+      { "tutorialId": tutorialId, studentEmail: studentEmail }
+    )
+
+    const endpoint = 'api/add-student'
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const result = await response.json()
+    console.log(result);
+    router.reload(window.location.pathname)
   };
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([]);
@@ -89,7 +106,7 @@ const StudentPopup = ({ showPopup, setShowPopup, size }) => {
                 >
                   Cancel
                 </Button>
-                <Button onClick={handleProceed} className={`${styles.mainBtn}`}>
+                <Button onClick={() => handleProceed(studentDetails.email)} className={`${styles.mainBtn}`}>
                   Confirm
                 </Button>
               </div>

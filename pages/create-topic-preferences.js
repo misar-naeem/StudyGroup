@@ -142,23 +142,25 @@ function AddTopics({ current_topics, released, tutorialId }) {
                 <Table striped borderless>
                     <tbody>
                         {
-                            Array.from(topics).map((topic, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>
-                                            <Button
-                                                variant="danger"
-                                                className={styles.deleteIcon}
-                                                disabled={released}
-                                                onClick={event => removeTopic(event, topic)}
-                                            >
-                                                <FontAwesomeIcon icon={faMinus} className="fa-1x" />
-                                            </Button>
-                                            <span className="ms-3">{topic}</span>
-                                        </td>
-                                    </tr>
-                                )
-                            })
+                            topics.size > 0 ? (
+                                Array.from(topics).map((topic, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>
+                                                <Button
+                                                    variant="danger"
+                                                    className={styles.deleteIcon}
+                                                    disabled={released}
+                                                    onClick={event => removeTopic(event, topic)}
+                                                >
+                                                    <FontAwesomeIcon icon={faMinus} className="fa-1x" />
+                                                </Button>
+                                                <span className="ms-3">{topic}</span>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            ) : <tr><td>No Topics have been added yet!</td></tr>
                         }
                     </tbody>
                 </Table>

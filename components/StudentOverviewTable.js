@@ -6,10 +6,11 @@ import BootstrapPopup from './BootStrapPopUp';
 import StudentPopup from "../components/StudentPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faClose, faEdit } from "@fortawesome/free-solid-svg-icons";
-const StudentOverviewTable = ({ students, studentGroups }) => {
+const StudentOverviewTable = ({ students, studentGroups, tutorialId }) => {
+
   const [showDeleteIcon, setshowDeleteIcon] = useState(false);
   const [showDeletePopup, setshowDeletePopup] = useState(false);
-  const [studentName, setStudentName] = useState("");
+  const [student, setStudent] = useState("");
   const [showStudentPopup, setShowStudentPopup] = useState(false);
   const getGroup = (studentEmail) => {
     let groupData = {
@@ -29,10 +30,28 @@ const StudentOverviewTable = ({ students, studentGroups }) => {
     );
     return groupData;
   };
+
+
+  const handleDeleteStudent = async (studentDetails) => {
+
+    const JSONdata = JSON.stringify(
+      { "tutorialId": tutorialId, studentEmail: student.email }
+    )
+
+    const endpoint = 'api/delete-student'
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const result = await response.json()
+  }
   return (
     <>
       {
-        students ? (
+        students && (
           <div>
             <span
               className={`${styles.editIcon} d-flex gap-2 align-items-center`}
@@ -62,11 +81,10 @@ const StudentOverviewTable = ({ students, studentGroups }) => {
                 </>
               )}
             </span>
-
-            <Table striped borderless hover>
+            {students.length > 0 ? (<Table striped borderless hover>
               <thead>
                 <tr>
-                  {showDeleteIcon && <th/>}
+                  {showDeleteIcon && <th />}
                   <th>Student Name</th>
                   <th>Group</th>
                   <th></th>
@@ -84,7 +102,7 @@ const StudentOverviewTable = ({ students, studentGroups }) => {
                               className={styles.deleteIcon}
                               onClick={() => {
                                 setshowDeletePopup(true);
-                                setStudentName(student.name);
+                                setStudent(student);
                               }}
                             >
                               <FontAwesomeIcon icon={faMinus} className="fa-1x" />
@@ -111,23 +129,25 @@ const StudentOverviewTable = ({ students, studentGroups }) => {
                   })
                 }
               </tbody>
-            </Table>
-          </div>) : <span className='d-flex align-items-center justify-content-center'>No students have been registered to this tutorial :(</span>
+            </Table>) : ( (<span className='d-flex align-items-center justify-content-center'>No students have been registered to this tutorial :(</span>))}
+          </div>) 
       }
       <BootstrapPopup
         showPopup={showDeletePopup}
         setShowPopup={setshowDeletePopup}
         title="Delete Student"
-        body={`Are you sure you want to remove "${studentName}" ?`}
+        body={`Are you sure you want to remove "${student.name}" ?`}
         size={"md"}
         proceedBtnRequired={true}
         proceedBtnName="Confirm"
         closeBtnName="Cancel"
+        handleProceed={handleDeleteStudent(student)}
       />
       <StudentPopup
         showPopup={showStudentPopup}
         setShowPopup={setShowStudentPopup}
         size={"md"}
+        tutorialId={tutorialId}
       />
     </>
   )

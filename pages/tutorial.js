@@ -36,7 +36,7 @@ export async function getServerSideProps({ query }) {
             topicsReleased = []
         }
         return {
-            props: { tutorialId: tutorialId, topics: topics, currentChoice: currentChoice }
+            props: { tutorialId: tutorialId, topics: topics, currentChoice: currentChoice, studentId: studentId}
         }
     } else {
         return {
@@ -49,7 +49,7 @@ export async function getServerSideProps({ query }) {
 }
 
 
-const tutorial = ({ tutorialId, topics, currentChoice }) => {
+const tutorial = ({ tutorialId, topics, currentChoice, studentId }) => {
     const [groups, setGroups] = useState([])
     const [showPopup, setShowPopup] = useState(false);
     useEffect(() => {
@@ -129,6 +129,7 @@ const tutorial = ({ tutorialId, topics, currentChoice }) => {
                 topics={topics}
                 size="lg"
                 tutorialId={tutorialId}
+                studentId = {studentId}
             />
         </>
 

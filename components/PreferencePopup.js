@@ -1,10 +1,11 @@
 import { Button, Col, Modal } from "react-bootstrap"
 import { useState } from "react"
 import styles from "../styles/StudentPopup.module.css";
-const PreferencePopup = ({ showPopup, topics, size, tutorialId }) => {
+import { useRouter } from "next/router";
+const PreferencePopup = ({ showPopup, topics, size, tutorialId, studentId }) => {
 
     const [preference, setPreference] = useState("")
-
+    const router = useRouter();
     const handleSubmit = async () => {
         if (preference.length > 0) {
             const data = { tutorialId: tutorialId, studentId: studentId, topic: preference }

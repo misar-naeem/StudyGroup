@@ -9,9 +9,9 @@
   width: 700px;
   margin: 10px !important;
   box-shadow: 2px 3px 4px 1px #00000040 !important;
-  transition: none;
+  transition: none; 
 }
-
+ 
 .listgroup {
   background: linear-gradient() !important;
   justify-content: center;

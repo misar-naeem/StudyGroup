@@ -7,10 +7,68 @@ import Image from "react-bootstrap/Image";
 import styles from "../styles/StudentProfile.module.css";
 import { Loading } from "../components/Loading";
 import StudentNavBar from "../components/StudentNavBar";
+import useSWR from "swr";
+import ListGroup from "react-bootstrap/ListGroup";
+
+// get server props
+
+
+
+
+const Enrolment = ({tutorial, subject}) => {
+  const [tutorialInfo, setTutorialInfo] = useState();
+
+  const [loading, setLoading] = useState(false);
+
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const { data, error } = useSWR(`/api/get-staff?tutorial=${tutorial}`, fetcher);
+
+  if (error || data?.error)
+  return (
+    <div>
+      Tutorial not assigned to staff member.
+    </div>
+  );
+  if (!data) return <p>Loading...</p>;
+  if (data["result"].length == 0) return <div>Not found</div>;
+
+  const staffName = data["result"][0]["name"]
+  const staffEmail = data["result"][0]["email"]
+
+  return (  
+  <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+    <div className={`${styles.listgroup} p-3 w-100 d-flex justify-content-between ms-3 gap-5`}>
+      <h3>Subject Name - {tutorial}</h3>
+      <h4>{staffName} - {staffEmail}</h4>
+    </div>
+  
+  {/* <ListGroup className={styles.listgroup} horizontal>
+    <ListGroup.Item
+      className="col-xs-3 list-group-item"
+      style={{ width: "400px" }}
+    >
+      {`Subject Name - ${tutorial}`}
+    </ListGroup.Item>
+    <ListGroup.Item
+      className="col-xs-3 list-group-item"
+      style={{ width: "200px" }}
+    >
+      41203
+    </ListGroup.Item>
+    <ListGroup.Item style={{ width: "200px" }}>
+      {`${staffName} - ${staffEmail}`}
+    </ListGroup.Item>
+  </ListGroup> */}
+  </div>
+)
+
+}
+
 
 export default function StudentProfile() {
   const [studentDetails, setStudentDetails] = useState({});
   const [loading, setLoading] = useState(false);
+  const [tutorials, setTutorials] = useState([]);
   // const [enrollments, setEnrollments] = useState([]);
   const { data: session } = useSession();
 
@@ -21,6 +79,7 @@ export default function StudentProfile() {
       .then((data) => {
         console.log(data["result"][0])
         setStudentDetails(data["result"][0]);
+        setTutorials(data["result"][0]["tutorials"])
       });
   };
   // const getTutorial = async (tutorialId) => {
@@ -141,7 +200,11 @@ export default function StudentProfile() {
                 <h3>Subject Name</h3>
                 <h3>41023</h3>
               </div>
+              {tutorials.map((value, index) => {
+                return <Enrolment tutorial={value} />;
+              })}
             </div>
+            
           </div>) : (<Loading />)
       }
     </>

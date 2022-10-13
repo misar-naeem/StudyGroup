@@ -121,7 +121,7 @@ const StudentOverviewTable = ({ students, studentGroups, tutorialId }) => {
                                 : styles.primCompbtn
                             }
                           >
-                            Allocation {getGroup(student.email).groupStatus}
+                            {getGroup(student.email).groupStatus == "Incomplete" ? "Incomplete Allocation" : "Allocation Complete"}
                           </Button>
                         </td>
                       </tr>
@@ -129,8 +129,8 @@ const StudentOverviewTable = ({ students, studentGroups, tutorialId }) => {
                   })
                 }
               </tbody>
-            </Table>) : ( (<span className='d-flex align-items-center justify-content-center'>No students have been registered to this tutorial :(</span>))}
-          </div>) 
+            </Table>) : ((<span className='d-flex align-items-center justify-content-center'>No students have been registered to this tutorial :(</span>))}
+          </div>)
       }
       <BootstrapPopup
         showPopup={showDeletePopup}

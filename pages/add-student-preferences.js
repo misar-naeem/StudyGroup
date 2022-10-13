@@ -9,8 +9,6 @@ import { useRouter } from 'next/router';
 
 export async function getServerSideProps({ query }) {
 
-    const degrees = ["Computer Science", "Software Engineering", "Bachelor of Science and IT", "Bachelor of IT"]
-    const years = [1, 2, 3]
     const tutorialId = query.tutorial;
     const studentId = query.student;
 
@@ -37,7 +35,7 @@ export async function getServerSideProps({ query }) {
     }
 
     return {
-        props: {currentChoice: currentChoice, topics: topics, degrees: degrees, years: years, tutorialId: tutorialId, studentId: studentId, topicsReleased: topicsReleased}
+        props: {currentChoice: currentChoice, topics: topics, tutorialId: tutorialId, studentId: studentId, topicsReleased: topicsReleased}
     }
 }
 
@@ -69,7 +67,7 @@ export default function AddStudentInformation({topics, currentChoice, tutorialId
             <div>
                 {getOptions.map((value,index)=>{
                         return (
-                            <div>
+                            <div key={index}>
                                 <input 
                                     type="radio" 
                                     value={value} 

@@ -30,7 +30,7 @@ const StudentPopup = ({ showPopup, setShowPopup, size, tutorialId }) => {
   const [refresh, setRefresh] = useState(false);
 
   const getStudents = async () => {
-    fetch("/api/get-all-student")
+    fetch(`/api/get-all-student/${tutorialId}`)
       .then((res) => res.json())
       .then((data) => {
         setStudents(data["result"]);

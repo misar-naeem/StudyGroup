@@ -25,7 +25,7 @@ function AdminDashboard() {
   if (session) {
     email = session.user.email;
   }
-  const { data, error } = useSWR(`/api/get-staff/${email}`, fetcher);
+  const { data, error } = useSWR(`/api/get-staff?staff=${email}`, fetcher);
 
   if (error) return <div>failed to load</div>;
   if (!data)

@@ -80,8 +80,8 @@ const tutorial = ({ tutorialId, topics, currentChoice, studentId }) => {
                     </Button>
                 </div>
                 <div className="d-flex align-items-center justify-content-between mt-5">
-                    <span className={`${styles.subjectPreference}`}>Your Subject Topic Preference:</span>
-                    <span className={`${styles.preferenceName}`}>Student’s subject preference here</span>
+                    <span className={`${styles.subjectPreference}`}>Your Topic Preference: </span>
+                    <span className={`${styles.preferenceName}`}>{currentChoice}</span>
                 </div>
                 <div className="groups">
                     {

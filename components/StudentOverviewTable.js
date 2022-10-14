@@ -32,7 +32,7 @@ const StudentOverviewTable = ({ students, studentGroups, tutorialId }) => {
   };
 
 
-  const handleDeleteStudent = async (studentDetails) => {
+  const handleDeleteStudent = async () => {
 
     const JSONdata = JSON.stringify(
       { "tutorialId": tutorialId, studentEmail: student.email }

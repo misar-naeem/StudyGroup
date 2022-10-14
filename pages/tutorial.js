@@ -68,16 +68,16 @@ const tutorial = ({ tutorialId, topics, currentChoice, studentId }) => {
                     <h1 className="p-3">
                         Tutorial {tutorialId[tutorialId.length - 1]}
                     </h1>
-                    <Button
+                    <label
                         className={
-                            false
+                            `${false
                                 ? styles.primInCompbtn
-                                : styles.primCompbtn
+                                : styles.primCompbtn} text-center`
                         }
                     >
                         {/* Allocation {getGroup(student.email).groupStatus} */}
                         Allocation
-                    </Button>
+                    </label>
                 </div>
                 <div className="d-flex align-items-center justify-content-between mt-5">
                     <span className={`${styles.subjectPreference}`}>Your Topic Preference: </span>

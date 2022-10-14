@@ -13,7 +13,7 @@ import Student from "../models/Student";
 import { getSession } from "next-auth/react"
 import connectMongo from "../util/mongodb";
 
-export async function getServerSideProps({req}) {
+export async function getServerSideProps({ req }) {
 
   const session = await getSession({ req })
 
@@ -21,55 +21,50 @@ export async function getServerSideProps({req}) {
     console.log('CONNECTING TO MONGO');
     await connectMongo();
     console.log('CONNECTED TO MONGO');
-  
+
     var result = await Student.find({ email: session.user.email })
     const studentInfo = JSON.parse(JSON.stringify(result))[0]
-  
+
     const tutorials = []
-    const tutorialNames = Array.from(studentInfo["tutorials"]) 
-  
+    const tutorialNames = Array.from(studentInfo["tutorials"])
     for (var i = 0; i < tutorialNames.length; i++) {
-      result = await Tutorial.find({tutorialId: tutorialNames[i]}).select("subject tutorialId")
-      var staffResult = await Staff.find({tutorial: tutorialNames[i]})
-      var tutorialInfo = JSON.parse(JSON.stringify(result))[0]
-      var staffInfo = JSON.parse(JSON.stringify(staffResult))[0]
-  
+      var newResult = await Tutorial.find({ tutorialId: tutorialNames[i] }).select("subject tutorialId")
+      var staffResult = await Staff.find({ tutorial: tutorialNames[i] })
+      var tutorialInfo = JSON.parse(JSON.stringify(newResult))[0];
+      var staffInfo = JSON.parse(JSON.stringify(staffResult))[0];
       tutorialInfo["staffName"] = staffInfo["name"]
       tutorialInfo["staffEmail"] = staffInfo["email"]
-  
       tutorials.push(tutorialInfo)
     }
-  
-    console.log(studentInfo)
-    console.log(tutorials)
-  
+
+
     return {
       props: { studentDetails: studentInfo, tutorials: tutorials }
     }
   } else {
     return {
       redirect: {
-          permanent: false,
-          destination: "/student-dashboard"
+        permanent: false,
+        destination: "/student-dashboard"
       }
-  }
+    }
   }
 }
 
 
-const Enrolment = ({tutorial}) => {
+const Enrolment = ({ tutorial }) => {
   return (
-  <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-    <div className={`${styles.listgroup} p-3 w-100 d-flex justify-content-between ms-3 gap-5`}>
-      <h3>{tutorial["subject"]} - {tutorial["tutorialId"]}</h3>
-      <h4>{tutorial["staffName"]} - {tutorial["staffEmail"]}</h4>
+    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+      {tutorial && (<div className={`${styles.listgroup} p-3 w-100 d-flex justify-content-between ms-3 gap-5`}>
+        <h3>{tutorial["subject"]} - {tutorial["tutorialId"]}</h3>
+        <h4>{tutorial["staffName"]} - {tutorial["staffEmail"]}</h4>
+      </div>)}
     </div>
-  </div>
   )
 }
 
 
-export default function StudentProfile({studentDetails, tutorials}) {
+export default function StudentProfile({ studentDetails, tutorials }) {
 
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
@@ -86,7 +81,6 @@ export default function StudentProfile({studentDetails, tutorials}) {
   if (!session) {
     return <Loading />
   }
-
   return (
     <>
       <StudentNavBar />
@@ -165,11 +159,11 @@ export default function StudentProfile({studentDetails, tutorials}) {
               </div>
             </div>
             <div className={`${styles.enrollments} mx-5 p-5`}>
-              {tutorials.map((value, index) => {
+              {tutorials.length > 0 ? (tutorials.map((value, index) => {
                 return <Enrolment tutorial={value} />;
-              })}
+              })) : <span className="d-flex align-items-center justify-content-center">You have not been enrolled in any of the tutorial yet</span>}
             </div>
-            
+
           </div>) : (<Loading />)
       }
     </>

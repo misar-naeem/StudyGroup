@@ -34,8 +34,7 @@
   margin-right: 2% !important;
 }
 
-/* Button CSS */
-
+/* Label CSS */
 .primCompbtn {
   color: white !important;
   background-color: #8ac926 !important;
@@ -44,19 +43,11 @@
   padding-left: 19px !important;
   padding-right: 19px !important;
   box-shadow: 0 4px 4px 0px #c5c5c5 !important;
-  font-size: 15px !important;
+  font-size: 18px !important;
   width: 300px !important;
   height: 41px !important;
   white-space: nowrap;
   border-style: none !important;
-}
-
-.primCompbtn:hover {
-  background-color: #5f910f !important;
-}
-
-.primCompbtn:active {
-  background-color: #5f910f !important;
 }
 
 .primInCompbtn {
@@ -67,19 +58,11 @@
   padding-left: 19px !important;
   padding-right: 19px !important;
   box-shadow: 0 4px 4px 0px #c5c5c5 !important;
-  font-size: 15px !important;
+  font-size: 18px !important;
   width: 300px !important;
   height: 41px !important;
   white-space: nowrap;
   border-style: none !important;
-}
-
-.primInCompbtn:hover {
-  background-color: #b48810 !important;
-}
-
-.primInCompbtn:active {
-  background-color: #ffca3a !important;
 }
 
 /* Table */

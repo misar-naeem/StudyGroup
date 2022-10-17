@@ -1,25 +1,25 @@
-import React, { useEffect } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { useState } from 'react';
+import { useRouter } from "next/router";
 import styles from "../styles/StudentPopup.module.css";
 const GroupEditPopup = ({ student, group, tutorialId, showPopup, setShowPopup, groups }) => {
 
     const [newGroup, setNewGroup] = useState(0);
+    const router = useRouter();
     const handleSubmit = async () => {
         const data = { tutorialId: tutorialId, studentId: student, newGroup: newGroup, oldGroup: group }
         const JSONdata = JSON.stringify(data)
         const endpoint = '/api/edit-group'
-
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSONdata
         }
 
-        const response = await fetch(endpoint, options)
-        const result = await response.json()
-        console.log(result);
+        const response = await fetch(endpoint, options);
+        const result = await response.json();
         setShowPopup(false);
+        router.reload(window.location.pathname);
     }
     return (
         <Modal show={showPopup} centered size="lg">

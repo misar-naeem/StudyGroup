@@ -10,14 +10,15 @@ export default async function handler(req, res) {
 
         const studentId = req.body.studentId;
         const oldGroup = req.body.oldGroup;
-        const query = { tutorialId: req.body.tutorialId };
-        const update = { newGroup: req.body.newGroup };
+        const tutorialId = req.body.tutorialId;
+        const newGroup = req.body.newGroup;
 
+        console.log(studentId, oldGroup, tutorialId);
         console.log("UPDATING DOCUMENT");
-        const ActualGroup = await Group.find({ tutorialId: tutorialId, groupNumber: oldGroup, students: { $elemMatch: { email: "tamsin.low@student.uts.edu.au" } } });
+        const ActualGroup = await Group.updateOne({ tutorialId: tutorialId, groupNumber: oldGroup }, { $pull: { students: { email: studentId } } });
+        const result = await Group.updateOne({ tutorialId: tutorialId, groupNumber: newGroup }, { $push: { students: { email: studentId } } });
         console.log("UPDATED DOCUMENT");
-
-        res.json({ ActualGroup });
+        res.json({ result });
     } catch (error) {
         console.log(error);
         res.json({ error });

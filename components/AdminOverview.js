@@ -18,6 +18,7 @@ const AdminOverview = (props) => {
   const [enableEdit, setEnableEdit] = useState(false);
   const [groupSize, setGroupSize] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [tutorialStudents, setTutorialStudents] = useState([]);
   const [topics, setTopics] = useState({
     topicsReleased: false,
     topicsData: [],
@@ -58,6 +59,14 @@ const AdminOverview = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setGroups(data["result"]);
+      });
+  };
+
+  const getTutorialStudents = async () => {
+    fetch(`/api/get-students-in-tutorial?tutorial=${tutorialId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTutorialStudents(data["result"]);
       });
   };
 

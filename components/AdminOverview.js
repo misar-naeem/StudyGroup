@@ -46,7 +46,8 @@ const AdminOverview = (props) => {
               topicsData: data["result"][0].topics,
             });
           }
-          setGroupSize(data["result"][0]?.groupConfiguration?.groupSize);
+          data["result"][0]?.groupConfiguration?.groupSize &&
+            setGroupSize(data["result"][0]?.groupConfiguration?.groupSize);
           setTutorial(data["result"][0]);
         }
       });
@@ -128,7 +129,7 @@ const AdminOverview = (props) => {
                 <StudentOverviewTable
                   students={students}
                   studentGroups={groups}
-                  tutorialId = {tutorialId}
+                  tutorialId={tutorialId}
                 />
               </div>
             </Tab>

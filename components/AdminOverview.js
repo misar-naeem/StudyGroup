@@ -6,6 +6,7 @@ import Accordion from "react-bootstrap/Accordion";
 import styles from "../styles/AdminOverview.module.css";
 import { useEffect, useState } from "react";
 import sortGroupsBySize from "../util/sortGroupsBySize";
+import sortGroupsByTopic from "../util/sortByTopic";
 import { Loading } from "./Loading";
 import StudentOverviewTable from "./StudentOverviewTable";
 import WarningPopup from "./WarningPopup";
@@ -26,6 +27,7 @@ const AdminOverview = (props) => {
 
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
+  const [automaticAllocationSetting, setAutomaticAllocationSetting] = useState("Student Topic Preferences")
 
   const getStudents = async () => {
     fetch(`/api/get-students-tutorialId/${tutorialId}`)
@@ -75,6 +77,7 @@ const AdminOverview = (props) => {
     getStudents();
     getTutorial();
     getGroups();
+    getTutorialStudents();
     setLoading(false);
   }, []);
 
@@ -90,9 +93,17 @@ const AdminOverview = (props) => {
       getTutorial();
       getGroups();
     } else {
-      alert(
-        "This function has not been built yet or your group size is invalid."
-      );
+      if (automaticAllocationSetting == "Student Topic Preferences") {
+        await sortGroupsByTopic({tutorial, groupSize, students: tutorialStudents});
+        setEnableEdit(false);
+        getTutorial();
+        getGroups();
+
+      } else {
+        alert(
+          "This function has not been built yet or your group size is invalid."
+        );
+      }
     }
   }
 
@@ -223,6 +234,7 @@ const AdminOverview = (props) => {
                               <tr>
                                 <th>Student Email</th>
                                 <th>Student Name</th>
+                                {group?.students[0]?.preference ? <th>Preference</th> : <th/>}
                               </tr>
                             </thead>
                             <tbody>
@@ -230,6 +242,7 @@ const AdminOverview = (props) => {
                                 <tr key={student.email}>
                                   <td>{student?.email}</td>
                                   <td>{student?.name}</td>
+                                  {student?.preference ? <td>{student?.preference}</td> : <td/>}
                                 </tr>
                               ))}
                             </tbody>
@@ -271,7 +284,12 @@ const AdminOverview = (props) => {
                       {groupAllocationSetting == "Automatic" && (
                         <p style={{ marginTop: "20px" }}>
                           Sort By:{"  "}
-                          <select>
+                          <select
+                            value={automaticAllocationSetting}
+                            onChange={(event) =>
+                              setAutomaticAllocationSetting(event.target.value)
+                            }
+                          >
                             <option>Student Topic Preferences</option>
                             <option>Diverse Year Groups</option>
                             <option>Divserse Skill Set</option>

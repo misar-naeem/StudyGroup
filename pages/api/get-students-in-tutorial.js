@@ -10,16 +10,20 @@ export default async function handler(req, res) {
     console.log(`${req.url} accessed`);
     
     var result = await Student.find({tutorials: {"$in": tutorial}});
-    
-    var students = []
 
     for (var i = 0; i < result.length; i++) {
-        //const preference = await Preference.find({tutorialId: tutorial, studentId: result[i]["email"]})
+        const preference = await Preference.find({tutorialId: tutorial, studentId: result[i]["email"]})
+
         result[i] = result[i].toObject()
-        result[i]["preference"] = "some preference"
+
+        if (preference.length > 0) {
+          result[i]["preference"] = preference[0]["topic"]
+        } else {
+          result[i]["preference"] = "No Topic"
+          console.log("NOT PREFERENCE")
+        }
 
         console.log(result)
-        console.log(typeof(result[i]))
     }
 
     res.json({ result });

@@ -21,28 +21,33 @@ export default async function sortGroupsBySize({ tutorial, groupSize }) {
 
   // For the number of groups calculated, allocate a number (groupSize) of students to each group
   // Add remaining students to the last group
-  const groups = [];
-  let count = 0;
-  for (let i = 1; i < numberOfGroups + 1; i++) {
-    const group = {
-      tutorialId: tutorialId,
-      groupNumber: i,
-      students: [],
-    };
 
-    if (i != numberOfGroups) {
-      for (let j = 0; j < groupSize; j++) {
-        group.students.push({ email: students[count] });
-        count++;
+  const divideBucketInGroups = () => {
+    const groups = [];
+    let count = 0;
+    for (let i = 1; i < numberOfGroups + 1; i++) {
+      const group = {
+        tutorialId: tutorialId,
+        groupNumber: i,
+        students: [],
+      };
+  
+      if (i != numberOfGroups) {
+        for (let j = 0; j < groupSize; j++) {
+          group.students.push({ email: students[count] });
+          count++;
+        }
+      } else {
+        const remainingStudents = tutorialSize - count;
+        for (let k = 0; k < remainingStudents; k++) {
+          group.students.push({ email: students[count] });
+          count++;
+        }
       }
-    } else {
-      const remainingStudents = tutorialSize - count;
-      for (let k = 0; k < remainingStudents; k++) {
-        group.students.push({ email: students[count] });
-        count++;
-      }
+      groups.push(group);
     }
-    groups.push(group);
+
+    return groups;
   }
 
   // Find and delete all groups for the current tutorial

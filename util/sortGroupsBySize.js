@@ -5,7 +5,7 @@
  * @param {Number} groupSize - a number containing the minimum group size
  */
 
-export default async function sortGroupsBySize({ tutorial, groupSize }) {
+ export default async function sortGroupsBySize({ tutorial, groupSize, students }) {
   const tutorialSize = tutorial.students?.length;
 
   if (!tutorialSize || tutorialSize < groupSize) {
@@ -16,38 +16,35 @@ export default async function sortGroupsBySize({ tutorial, groupSize }) {
   }
 
   const tutorialId = tutorial?.tutorialId;
-  const students = tutorial?.students;
   const numberOfGroups = Math.floor(tutorialSize / groupSize);
+
+  console.log("TUTORIAL")
+  console.log(tutorial)
 
   // For the number of groups calculated, allocate a number (groupSize) of students to each group
   // Add remaining students to the last group
+  const groups = [];
+  let count = 0;
+  for (let i = 1; i < numberOfGroups + 1; i++) {
+    const group = {
+      tutorialId: tutorialId,
+      groupNumber: i,
+      students: [],
+    };
 
-  const divideBucketInGroups = () => {
-    const groups = [];
-    let count = 0;
-    for (let i = 1; i < numberOfGroups + 1; i++) {
-      const group = {
-        tutorialId: tutorialId,
-        groupNumber: i,
-        students: [],
-      };
-  
-      if (i != numberOfGroups) {
-        for (let j = 0; j < groupSize; j++) {
-          group.students.push({ email: students[count] });
-          count++;
-        }
-      } else {
-        const remainingStudents = tutorialSize - count;
-        for (let k = 0; k < remainingStudents; k++) {
-          group.students.push({ email: students[count] });
-          count++;
-        }
+    if (i != numberOfGroups) {
+      for (let j = 0; j < groupSize; j++) {
+        group.students.push(students[count]);
+        count++;
       }
-      groups.push(group);
+    } else {
+      const remainingStudents = tutorialSize - count;
+      for (let k = 0; k < remainingStudents; k++) {
+        group.students.push(students[count]);
+        count++;
+      }
     }
-
-    return groups;
+    groups.push(group);
   }
 
   // Find and delete all groups for the current tutorial

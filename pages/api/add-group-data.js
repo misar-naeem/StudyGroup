@@ -12,9 +12,6 @@ export default async function handler(req, res) {
       body: { tutorialId, groupNumber, students },
     } = req;
 
-    console.log("STUDENTS")
-    console.log(students)
-
     const groupData = await Group.create({
       tutorialId: tutorialId,
       groupNumber: groupNumber,

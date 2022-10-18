@@ -36,7 +36,7 @@ const AdminOverview = (props) => {
   const [automaticAllocationSetting, setAutomaticAllocationSetting] = useState("Student Topic Preferences")
 
   const getStudents = async () => {
-    fetch(`/api/get-students-tutorialId/${tutorialId}`)
+    fetch(`/api/get-students-in-tutorial?tutorial=${tutorialId}`)
       .then((res) => res.json())
       .then((data) => {
         setStudents(data["result"]);
@@ -74,7 +74,7 @@ const AdminOverview = (props) => {
     fetch(`/api/get-students-in-tutorial?tutorial=${tutorialId}`)
       .then((res) => res.json())
       .then((data) => {
-        setTutorialStudents(data["result"]);
+        setStudents(data["result"]);
       });
   };
 
@@ -94,13 +94,14 @@ const AdminOverview = (props) => {
   async function updateGroups() {
     // At the moment we can only sort by group size
     if (groupAllocationSetting == "Manual Allocation" && groupSize > 0) {
-      await sortGroupsBySize({ tutorial, groupSize });
+
+      await sortGroupsBySize({ tutorial, groupSize, students });
       setEnableEdit(false);
       getTutorial();
       getGroups();
     } else {
       if (automaticAllocationSetting == "Student Topic Preferences") {
-        await sortGroupsByTopic({tutorial, groupSize, students: tutorialStudents});
+        await sortGroupsByTopic({tutorial, groupSize, students: students});
         setEnableEdit(false);
         getTutorial();
         getGroups();
@@ -252,7 +253,7 @@ const AdminOverview = (props) => {
                                   {student?.preference ? <td>{student?.preference}</td> : <td/>}
                                   <td><FontAwesomeIcon icon={faPenToSquare} className="fa-1x" onClick={() => {
                                     setGroupDetails(group.groupNumber)
-                                    setStudentDetails(student.email)
+                                    setStudentDetails(student?.email)
                                     setShowEditPopup(true)
                                   }} />
                                   </td>

@@ -11,12 +11,17 @@ import { Loading } from "./Loading";
 import StudentOverviewTable from "./StudentOverviewTable";
 import WarningPopup from "./WarningPopup";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import GroupEditPopup from "./GroupEditPopup";
 const AdminOverview = (props) => {
   const { tutorialId } = props;
   const [students, setStudents] = useState([]);
   const [tutorial, setTutorial] = useState([]);
   const [groups, setGroups] = useState([]);
   const [enableEdit, setEnableEdit] = useState(false);
+  const [groupDetails, setGroupDetails] = useState(0);
+  const [studentDetails, setStudentDetails] = useState();
   const [groupSize, setGroupSize] = useState(1);
   const [loading, setLoading] = useState(false);
   const [tutorialStudents, setTutorialStudents] = useState([]);
@@ -24,6 +29,7 @@ const AdminOverview = (props) => {
     topicsReleased: false,
     topicsData: [],
   });
+  const [showEditPopup, setShowEditPopup] = useState(false);
 
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
@@ -210,7 +216,7 @@ const AdminOverview = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <Button>Manual Allocation</Button>
+                          <label>{groupAllocationSetting}</label>
                         </td>
                         <td>0{groupSize}</td>
                       </tr>
@@ -235,14 +241,21 @@ const AdminOverview = (props) => {
                                 <th>Student Email</th>
                                 <th>Student Name</th>
                                 {group?.students[0]?.preference ? <th>Preference</th> : <th/>}
+                                <th></th>
                               </tr>
                             </thead>
                             <tbody>
-                              {group?.students.map((student) => (
-                                <tr key={student.email}>
+                              {group?.students.map((student, index) => (
+                                <tr key={index}>
                                   <td>{student?.email}</td>
                                   <td>{student?.name}</td>
                                   {student?.preference ? <td>{student?.preference}</td> : <td/>}
+                                  <td><FontAwesomeIcon icon={faPenToSquare} className="fa-1x" onClick={() => {
+                                    setGroupDetails(group.groupNumber)
+                                    setStudentDetails(student.email)
+                                    setShowEditPopup(true)
+                                  }} />
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>
@@ -345,6 +358,14 @@ const AdminOverview = (props) => {
       ) : (
         <Loading />
       )}
+      <GroupEditPopup
+        tutorialId={tutorialId}
+        showPopup={showEditPopup}
+        setShowPopup={setShowEditPopup}
+        groups={groups}
+        group={groupDetails}
+        student={studentDetails}
+      />
     </>
   );
 };

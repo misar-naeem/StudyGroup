@@ -32,7 +32,7 @@ const AdminOverview = (props) => {
   const [showEditPopup, setShowEditPopup] = useState(false);
 
   const [groupAllocationSetting, setGroupAllocationSetting] =
-    useState("Manual Allocation");
+    useState("Random Allocation");
   const [automaticAllocationSetting, setAutomaticAllocationSetting] = useState("Student Topic Preferences")
 
   const getStudents = async () => {
@@ -93,7 +93,7 @@ const AdminOverview = (props) => {
    */
   async function updateGroups() {
     // At the moment we can only sort by group size
-    if (groupAllocationSetting == "Manual Allocation" && groupSize > 0) {
+    if (groupAllocationSetting == "Random Allocation" && groupSize > 0) {
 
       await sortGroupsBySize({ tutorial, groupSize, students });
       setEnableEdit(false);
@@ -293,7 +293,7 @@ const AdminOverview = (props) => {
                         }
                       >
                         <option>Automatic</option>
-                        <option>Manual Allocation</option>
+                        <option>Random Allocation</option>
                       </select>
                       {groupAllocationSetting == "Automatic" && (
                         <p style={{ marginTop: "20px" }}>

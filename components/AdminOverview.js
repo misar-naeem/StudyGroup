@@ -6,6 +6,7 @@ import Accordion from "react-bootstrap/Accordion";
 import styles from "../styles/AdminOverview.module.css";
 import { useEffect, useState } from "react";
 import sortGroupsBySize from "../util/sortGroupsBySize";
+import sortGroupsByTopic from "../util/sortByTopic";
 import { Loading } from "./Loading";
 import StudentOverviewTable from "./StudentOverviewTable";
 import WarningPopup from "./WarningPopup";
@@ -23,6 +24,7 @@ const AdminOverview = (props) => {
   const [studentDetails, setStudentDetails] = useState();
   const [groupSize, setGroupSize] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [tutorialStudents, setTutorialStudents] = useState([]);
   const [topics, setTopics] = useState({
     topicsReleased: false,
     topicsData: [],
@@ -31,9 +33,10 @@ const AdminOverview = (props) => {
 
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Manual Allocation");
+  const [automaticAllocationSetting, setAutomaticAllocationSetting] = useState("Student Topic Preferences")
 
   const getStudents = async () => {
-    fetch(`/api/get-students-tutorialId/${tutorialId}`)
+    fetch(`/api/get-students-in-tutorial?tutorial=${tutorialId}`)
       .then((res) => res.json())
       .then((data) => {
         setStudents(data["result"]);
@@ -52,7 +55,8 @@ const AdminOverview = (props) => {
               topicsData: data["result"][0].topics,
             });
           }
-          setGroupSize(data["result"][0]?.groupConfiguration?.groupSize);
+          data["result"][0]?.groupConfiguration?.groupSize &&
+            setGroupSize(data["result"][0]?.groupConfiguration?.groupSize);
           setTutorial(data["result"][0]);
         }
       });
@@ -66,11 +70,20 @@ const AdminOverview = (props) => {
       });
   };
 
+  const getTutorialStudents = async () => {
+    fetch(`/api/get-students-in-tutorial?tutorial=${tutorialId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setStudents(data["result"]);
+      });
+  };
+
   useEffect(() => {
     setLoading(true);
     getStudents();
     getTutorial();
     getGroups();
+    getTutorialStudents();
     setLoading(false);
   }, []);
 
@@ -81,14 +94,23 @@ const AdminOverview = (props) => {
   async function updateGroups() {
     // At the moment we can only sort by group size
     if (groupAllocationSetting == "Manual Allocation" && groupSize > 0) {
-      await sortGroupsBySize({ tutorial, groupSize });
+
+      await sortGroupsBySize({ tutorial, groupSize, students });
       setEnableEdit(false);
       getTutorial();
       getGroups();
     } else {
-      alert(
-        "This function has not been built yet or your group size is invalid."
-      );
+      if (automaticAllocationSetting == "Student Topic Preferences") {
+        await sortGroupsByTopic({tutorial, groupSize, students: students});
+        setEnableEdit(false);
+        getTutorial();
+        getGroups();
+
+      } else {
+        alert(
+          "This function has not been built yet or your group size is invalid."
+        );
+      }
     }
   }
 
@@ -218,6 +240,8 @@ const AdminOverview = (props) => {
                             <thead>
                               <tr>
                                 <th>Student Email</th>
+                                <th>Student Name</th>
+                                {group?.students[0]?.preference ? <th>Preference</th> : <th/>}
                                 <th></th>
                               </tr>
                             </thead>
@@ -225,11 +249,14 @@ const AdminOverview = (props) => {
                               {group?.students.map((student, index) => (
                                 <tr key={index}>
                                   <td>{student?.email}</td>
+                                  <td>{student?.name}</td>
+                                  {student?.preference ? <td>{student?.preference}</td> : <td/>}
                                   <td><FontAwesomeIcon icon={faPenToSquare} className="fa-1x" onClick={() => {
                                     setGroupDetails(group.groupNumber)
-                                    setStudentDetails(student.email)
+                                    setStudentDetails(student?.email)
                                     setShowEditPopup(true)
-                                  }} /></td>
+                                  }} />
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>
@@ -271,7 +298,12 @@ const AdminOverview = (props) => {
                       {groupAllocationSetting == "Automatic" && (
                         <p style={{ marginTop: "20px" }}>
                           Sort By:{"  "}
-                          <select>
+                          <select
+                            value={automaticAllocationSetting}
+                            onChange={(event) =>
+                              setAutomaticAllocationSetting(event.target.value)
+                            }
+                          >
                             <option>Student Topic Preferences</option>
                             <option>Diverse Year Groups</option>
                             <option>Divserse Skill Set</option>

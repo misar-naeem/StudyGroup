@@ -8,15 +8,15 @@ export default async function handler(req, res) {
         await connectMongo();
         console.log("CONNECTED TO MONGO");
 
-        const studentId = req.body.studentId;
+        const studentId = req.body.student._id;
         const oldGroup = req.body.oldGroup;
         const tutorialId = req.body.tutorialId;
         const newGroup = req.body.newGroup;
 
         console.log(studentId, oldGroup, tutorialId);
         console.log("UPDATING DOCUMENT");
-        const ActualGroup = await Group.updateOne({ tutorialId: tutorialId, groupNumber: oldGroup }, { $pull: { students: { email: studentId } } });
-        const result = await Group.updateOne({ tutorialId: tutorialId, groupNumber: newGroup }, { $push: { students: { email: studentId } } });
+        const ActualGroup = await Group.updateOne({ tutorialId: tutorialId, groupNumber: oldGroup }, { $pull: { students: { _id: studentId } } });
+        const result = await Group.updateOne({ tutorialId: tutorialId, groupNumber: newGroup }, { $push: { students: req.body.student } });
         console.log("UPDATED DOCUMENT");
         res.json({ result });
     } catch (error) {

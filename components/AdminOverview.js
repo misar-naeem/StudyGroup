@@ -271,8 +271,8 @@ const AdminOverview = (props) => {
                                   <td>{student?.year}</td>
                                   {student?.preference ? <td>{student?.preference}</td> : <td/>}
                                   <td><FontAwesomeIcon icon={faPenToSquare} className="fa-1x" onClick={() => {
-                                    setGroupDetails(group.groupNumber)
-                                    setStudentDetails(student?.email)
+                                    setGroupDetails(group)
+                                    setStudentDetails(student)
                                     setShowEditPopup(true)
                                   }} />
                                   </td>
@@ -385,7 +385,7 @@ const AdminOverview = (props) => {
         showPopup={showEditPopup}
         setShowPopup={setShowEditPopup}
         groups={groups}
-        group={groupDetails}
+        groupDetails={groupDetails}
         student={studentDetails}
       />
     </>

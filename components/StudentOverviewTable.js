@@ -31,11 +31,17 @@ const StudentOverviewTable = ({ students, studentGroups, tutorialId }) => {
     return groupData;
   };
 
-
   const handleDeleteStudent = async () => {
 
+    let groupNumber = 0;
+    let g = getGroup(student.email).groupString
+    if( g !== "Group not yet assigned")
+    {
+      groupNumber = g[g.length - 1]
+      console.log(groupNumber)
+    }
     const JSONdata = JSON.stringify(
-      { "tutorialId": tutorialId, studentEmail: student.email }
+      { tutorialId: tutorialId, student: student, groupNumber: groupNumber }
     )
 
     const endpoint = 'api/delete-student'

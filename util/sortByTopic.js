@@ -1,5 +1,5 @@
 /**
- * @method sortGroupsBySize
+ * @method sortByTopic
  * @summary Use this function to sort and save groups by size (based on minimum and maximum group size)
  * @param {Object} tutorial - a tutorial in which the groups will be deleted and recreated
  * @param {Number} groupSize - a number containing the minimum group size

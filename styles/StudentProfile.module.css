@@ -24,5 +24,15 @@
 .enrollments {
   background: rgba(229, 229, 229, 0.2);
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  min-height: 450px;
   border-radius: 5px;
+}
+
+.specialText {
+  margin-top: 150px;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 72px;
+  letter-spacing: -0.015em;
+  color: rgba(0, 0, 0, 0.4);
 }

@@ -48,7 +48,7 @@ export default function StudentDashboard() {
           </h1>
           <hr />
         </div>
-        <Row className="ps-5 my-2 gap-5" xs={7}>
+        <Row className="ps-5 my-2 gap-5" xs={3}>
           {
             data["result"].map((value, index) => {
               return (

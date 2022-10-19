@@ -123,7 +123,7 @@ const tutorial = ({ tutorialId, topics, currentChoice, studentId, groups }) => {
                                 </Accordion.Item>
                             </Accordion>) : (
                             <div className={`${styles.noGroupContainer}`}>
-                                <Col className={`${styles.noGroup}`}>You are not allocated to a group yet!</Col>
+                                <Col className={`${styles.noGroup} d-flex align-items-center jusitfy-content-center`}>You are not allocated to a group yet!</Col>
                             </div>
                         )
                     }

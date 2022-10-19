@@ -28,7 +28,7 @@
     position: relative;
     top: 50%;
     left: 50%;
-    transform: translate(-30%, -50%);
+    transform: translate(-25%, -50%);
 }
 
 .noGroupContainer {
@@ -46,7 +46,7 @@
     padding: 7px !important;
     padding-left: 19px !important;
     padding-right: 19px !important;
-    box-shadow: 0 4px 4px 0px #c5c5c5 !important;
+    /* box-shadow: 0 4px 4px 0px #c5c5c5 !important; */
     font-size: 18px !important;
     width: 300px !important;
     height: 41px !important;
@@ -61,7 +61,7 @@
     padding: 7px !important;
     padding-left: 19px !important;
     padding-right: 19px !important;
-    box-shadow: 0 4px 4px 0px #c5c5c5 !important;
+    /* box-shadow: 0 4px 4px 0px #c5c5c5 !important; */
     font-size: 18px !important;
     width: 300px !important;
     height: 41px !important;

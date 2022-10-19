@@ -86,14 +86,14 @@ export default function StudentProfile({ studentDetails, tutorials }) {
       <StudentNavBar />
       {
         studentDetails && !loading ? (
-          <div className="ms-5 ps-5">
+          <div className="ps-5" style={{marginLeft: "100px"}}>
             <div>
-              <h1 style={{ width: "100%", display: "flex", margin: "50px" }}>
+              <h1 style={{ width: "100%", display: "flex", margin: "50px", marginLeft: "100px"}}>
                 My Student Profile
               </h1>
             </div>
 
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center" style={{marginLeft: "50px"}}>
               <Image
                 className={styles.photo}
                 style={{ margin: "30px", marginLeft: 50 }}
@@ -102,7 +102,7 @@ export default function StudentProfile({ studentDetails, tutorials }) {
                 width={400}
                 height={300}
               />
-              <div className="col-5">
+              <div className="col-5" >
                 <Form
                   className="mr-sm"
                   style={{ width: "100%", marginTop: 50, marginLeft: 100 }}
@@ -158,10 +158,10 @@ export default function StudentProfile({ studentDetails, tutorials }) {
                 </Form>
               </div>
             </div>
-            <div className={`${styles.enrollments} mx-5 p-5`}>
-              {tutorials.length > 0 ? (tutorials.map((value, index) => {
+            <div className={`${styles.enrollments} mx-5 p-5`} >
+              {tutorials.length < 0 ? (tutorials.map((value, index) => {
                 return <Enrolment tutorial={value} />;
-              })) : <span className="d-flex align-items-center justify-content-center">You have not been enrolled in any of the tutorial yet</span>}
+              })) : <span className={`${styles.specialText} d-flex align-items-center justify-content-center`}>You have not been enrolled in any of the tutorial yet!</span>}
             </div>
 
           </div>) : (<Loading />)

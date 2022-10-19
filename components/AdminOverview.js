@@ -222,7 +222,7 @@ const AdminOverview = (props) => {
                   }
                 }}
               >
-                {enableEdit ? "Save Changes" : "Edit"}
+                {enableEdit ? "Save and Apply Changes" : "Edit"}
               </Button>
               {!enableEdit && groups.length > 0 && (
                 <CSVLink

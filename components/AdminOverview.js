@@ -17,6 +17,9 @@ import sortGroupsBySize from "../util/sortGroupsBySize";
 import sortGroupsByTopic from "../util/sortByTopic";
 import sortGroupsBySimilarity from "../util/sortGroupsBySimilarity";
 import sortGroupsByDiversity from "../util/sortGroupsByDiversity";
+import formatCSVData from "../util/formatCSVData";
+
+import { CSVLink } from "react-csv";
 
 
 
@@ -36,6 +39,7 @@ const AdminOverview = (props) => {
     topicsData: [],
   });
   const [showEditPopup, setShowEditPopup] = useState(false);
+  const [csvData, setCSVData] = useState([])
 
   const [groupAllocationSetting, setGroupAllocationSetting] =
     useState("Random Allocation");
@@ -73,6 +77,10 @@ const AdminOverview = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setGroups(data["result"]);
+        const csvd = formatCSVData({groups: data["result"], tutorialId: tutorialId})
+        console.log("MY CSV")
+        console.log(csvd)
+        setCSVData(csvd)
       });
   };
 
@@ -216,6 +224,22 @@ const AdminOverview = (props) => {
               >
                 {enableEdit ? "Save Changes" : "Edit"}
               </Button>
+              {!enableEdit && groups.length > 0 && (
+                <CSVLink
+                  style={{
+                    marginRight: "30px",
+                    float: "right",
+                  }}
+                  data={csvData}
+                  filename={`${tutorialId}-groups.csv`}
+                  onClick={() => {
+                    console.log("You click the link"); // 👍🏻 Your click handling logic
+                  }}
+                >
+                  Export to CSV
+                </CSVLink>
+              )}
+
               {enableEdit && (
                 <Button
                   style={{

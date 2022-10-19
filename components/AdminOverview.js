@@ -5,8 +5,6 @@ import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
 import styles from "../styles/AdminOverview.module.css";
 import { useEffect, useState } from "react";
-import sortGroupsBySize from "../util/sortGroupsBySize";
-import sortGroupsByTopic from "../util/sortByTopic";
 import { Loading } from "./Loading";
 import StudentOverviewTable from "./StudentOverviewTable";
 import WarningPopup from "./WarningPopup";
@@ -14,6 +12,13 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import GroupEditPopup from "./GroupEditPopup";
+
+import sortGroupsBySize from "../util/sortGroupsBySize";
+import sortGroupsByTopic from "../util/sortByTopic";
+import sortGroupsBySimilarity from "../util/sortGroupsBySimilarity";
+
+
+
 const AdminOverview = (props) => {
   const { tutorialId } = props;
   const [students, setStudents] = useState([]);
@@ -106,6 +111,16 @@ const AdminOverview = (props) => {
         getTutorial();
         getGroups();
 
+      } else if (automaticAllocationSetting == "Similar Year Groups") {
+        await sortGroupsBySimilarity({tutorial, groupSize, students, similarityKey: "year"})
+        setEnableEdit(false);
+        getTutorial();
+        getGroups();
+      } else if (automaticAllocationSetting == "Similar Degree Groups") {
+        await sortGroupsBySimilarity({tutorial, groupSize, students, similarityKey: "degree"})
+        setEnableEdit(false);
+        getTutorial();
+        getGroups();
       } else {
         alert(
           "This function has not been built yet or your group size is invalid."
@@ -241,6 +256,8 @@ const AdminOverview = (props) => {
                               <tr>
                                 <th>Student Email</th>
                                 <th>Student Name</th>
+                                <th>Degree</th>
+                                <th>Year</th>
                                 {group?.students[0]?.preference ? <th>Preference</th> : <th/>}
                                 <th></th>
                               </tr>
@@ -250,6 +267,8 @@ const AdminOverview = (props) => {
                                 <tr key={index}>
                                   <td>{student?.email}</td>
                                   <td>{student?.name}</td>
+                                  <td>{student?.degree}</td>
+                                  <td>{student?.year}</td>
                                   {student?.preference ? <td>{student?.preference}</td> : <td/>}
                                   <td><FontAwesomeIcon icon={faPenToSquare} className="fa-1x" onClick={() => {
                                     setGroupDetails(group.groupNumber)
@@ -305,8 +324,10 @@ const AdminOverview = (props) => {
                             }
                           >
                             <option>Student Topic Preferences</option>
+                            <option>Similar Year Groups</option>
+                            <option>Similar Degree Groups</option>
                             <option>Diverse Year Groups</option>
-                            <option>Divserse Skill Set</option>
+                            <option>Diverse Degree</option>
                           </select>
                         </p>
                       )}

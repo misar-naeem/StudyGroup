@@ -86,18 +86,18 @@ export default function StudentProfile({ studentDetails, tutorials }) {
       <StudentNavBar />
       {
         studentDetails && !loading ? (
-          <div className="ps-5" style={{marginLeft: "100px"}}>
+          <div className="ps-5" style={{ marginLeft: "100px" }}>
             <div>
-              <h1 style={{ width: "100%", display: "flex", margin: "50px", marginLeft: "100px"}}>
+              <h1 style={{ width: "100%", display: "flex", margin: "50px", marginLeft: "100px" }}>
                 My Student Profile
               </h1>
             </div>
 
-            <div className="d-flex align-items-center" style={{marginLeft: "50px"}}>
+            <div className="d-flex align-items-center" style={{ marginLeft: "50px" }}>
               <Image
                 className={styles.photo}
-                style={{ margin: "30px", marginLeft: 50 }}
-                src="https://thumbs.dreamstime.com/b/closeup-super-mario-character-nintendo-platform-game-video-red-background-photographed-site-screen-149088103.jpg"
+                style={{ margin: "30px", marginLeft: 50, borderRadius: "50%" }}
+                src="/icons/profileIcon.png"
                 thumbnail
                 width={400}
                 height={300}
@@ -158,8 +158,8 @@ export default function StudentProfile({ studentDetails, tutorials }) {
                 </Form>
               </div>
             </div>
-            <div className={`${styles.enrollments} mx-5 p-5`} >
-              {tutorials.length < 0 ? (tutorials.map((value, index) => {
+            <div className={`${styles.enrollments} mx-5 p-5 mb-5`} >
+              {tutorials.length > 0 ? (tutorials.map((value, index) => {
                 return <Enrolment tutorial={value} />;
               })) : <span className={`${styles.specialText} d-flex align-items-center justify-content-center`}>You have not been enrolled in any of the tutorial yet!</span>}
             </div>

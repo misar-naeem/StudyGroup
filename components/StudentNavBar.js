@@ -16,10 +16,7 @@ const StudentNavBar = () => {
           <Image src="/icons/lightSubjectIcon.png" width={200} height={200} />
         </a>
         <a href="/">
-          <FontAwesomeIcon
-            icon={faArrowRightFromBracket}
-            className="fa-4x  px-4"
-          />
+          <Image src="/icons/lightLogOutIcon.png" width={200} height={200} />
         </a>
       </div>
     </>

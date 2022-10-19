@@ -1,5 +1,5 @@
 /**
- * @method sortGroupsBySize
+ * @method sortGroupsBySimilarity
  * @summary This aims to create groups within each topic preference that have the same years OR degrees.
  * Note: If there is a great variety of years or degrees, this function will may have lots of remainder groups.
  * @param {Object} tutorial - a tutorial in which the groups will be deleted and recreated

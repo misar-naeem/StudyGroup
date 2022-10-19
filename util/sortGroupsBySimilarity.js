@@ -6,63 +6,64 @@
  * @param {Number} groupSize - a number containing the minimum group size
  */
 
- function divideBucketInGroups({studentsBucket, groupSize, tutorialId, startingGroupNumber, topic}) {
+function divideBucketInGroups({ studentsBucket, groupSize, tutorialId, startingGroupNumber, topic }) {
 
     const students = studentsBucket;
     const bucketSize = studentsBucket.length
     let numberOfGroups = Math.floor(bucketSize / groupSize);
     let groupNumber = startingGroupNumber;
-  
+
     console.log("Number of Groups")
     console.log(numberOfGroups);
 
     console.log("Tutorial ID")
     console.log(tutorialId)
-  
+
     const groups = [];
     let count = 0;
-  
+
     for (let i = 1; i < numberOfGroups + 1; i++) {
-      const group = {
-        tutorialId: tutorialId,
-        groupNumber: groupNumber,
-        students: [],
-        topic: topic
-      };
-  
-      console.log("Group Number")
-      console.log(i)
-  
-      console.log("Students")
-      console.log(students)
-  
-      if (i != numberOfGroups) {
-        for (let j = 0; j < groupSize; j++) {
-          group.students.push(students[count]);
-          count++;
+        const group = {
+            tutorialId: tutorialId,
+            groupNumber: groupNumber,
+            students: [],
+            topic: topic
+        };
+
+        console.log("Group Number")
+        console.log(i)
+
+        console.log("Students")
+        console.log(students)
+
+        if (i != numberOfGroups) {
+            for (let j = 0; j < groupSize; j++) {
+                group.students.push(students[count]);
+                count++;
+            }
+        } else {
+            const remainingStudents = bucketSize - count;
+            for (let k = 0; k < remainingStudents; k++) {
+                group.students.push(students[count]);
+                count++;
+            }
         }
-      } else {
-        const remainingStudents = bucketSize - count;
-        for (let k = 0; k < remainingStudents; k++) {
-          group.students.push(students[count]);
-          count++;
-        }
-      }
-      groups.push(group);
-      groupNumber++;
+        groups.push(group);
+        console.log(groupNumber)
+        groupNumber++;
     }
-  
+
     if (numberOfGroups == 0 && studentsBucket.length > 0) {
-      const group = {
-        tutorialId: tutorialId,
-        groupNumber: groupNumber,
-        students: students,
-        topic: topic
-      }
-  
-      groups.push(group);
-    } 
-  
+        const group = {
+            tutorialId: tutorialId,
+            groupNumber: groupNumber,
+            students: students,
+            topic: topic
+        }
+
+        groups.push(group);
+    }
+
     return groups;
 }
 
@@ -72,7 +73,7 @@ export default async function sortGroupsBySimilarity({ tutorial, groupSize, stud
 
     if (!tutorialSize || tutorialSize < groupSize) {
         alert(
-        "No Tutorial Size was Provided or the groupSize is too high. Check if students are in this tutorial."
+            "No Tutorial Size was Provided or the groupSize is too high. Check if students are in this tutorial."
         );
         return;
     }
@@ -103,15 +104,15 @@ export default async function sortGroupsBySimilarity({ tutorial, groupSize, stud
             topic: topic
         })
 
-        groupNumberStart = groupNumberStart + (bucketGroups.length - 1)
+        groupNumberStart = groupNumberStart + (bucketGroups.length)
 
         groups = [...groups, ...bucketGroups]
 
     })
-    await saveGroups({tutorialId, groups, groupSize});
+    await saveGroups({ tutorialId, groups, groupSize });
 };
 
-function sortTopicGroupBySimilarity({studentsToSort, tutorialId, similarityKey, groupNumberStart, groupSize, topic}) {
+function sortTopicGroupBySimilarity({ studentsToSort, tutorialId, similarityKey, groupNumberStart, groupSize, topic }) {
 
     const students = studentsToSort;
 
@@ -120,14 +121,14 @@ function sortTopicGroupBySimilarity({studentsToSort, tutorialId, similarityKey, 
     // Group students into buckets based on year or degree
     if (similarityKey == "year") {
         groupBy = students.reduce((map, e) => ({
-        ...map,
-        [e.year]: [...(map[e.year] ?? []), e]
+            ...map,
+            [e.year]: [...(map[e.year] ?? []), e]
         }), {});
     } else {
         groupBy = students.reduce((map, e) => ({
             ...map,
             [e.degree]: [...(map[e.degree] ?? []), e]
-            }), {});
+        }), {});
     }
 
     // For the number of groups calculated, allocate a number (groupSize) of students to each group
@@ -142,7 +143,7 @@ function sortTopicGroupBySimilarity({studentsToSort, tutorialId, similarityKey, 
     keys.forEach(key => {
         var studentsBucket = groupBy[key]
 
-        groups.push(...divideBucketInGroups({studentsBucket, groupSize, tutorialId, startingGroupNumber, topic}))
+        groups.push(...divideBucketInGroups({ studentsBucket, groupSize, tutorialId, startingGroupNumber, topic }))
         startingGroupNumber++;
     });
 

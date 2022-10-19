@@ -11,7 +11,7 @@ export default async function sortGroupsByDiversity({ tutorial, groupSize, stude
 
     if (!tutorialSize || tutorialSize < groupSize) {
         alert(
-        "No Tutorial Size was Provided or the groupSize is too high. Check if students are in this tutorial."
+            "No Tutorial Size was Provided or the groupSize is too high. Check if students are in this tutorial."
         );
         return;
     }
@@ -43,17 +43,17 @@ export default async function sortGroupsByDiversity({ tutorial, groupSize, stude
             topic: topic
         })
 
-        groupNumberStart = groupNumberStart + (bucketGroups.length - 1)
+        groupNumberStart = groupNumberStart + (bucketGroups.length)
 
         groups = [...groups, ...bucketGroups]
 
     })
     console.log("GROUP UPDATE")
     console.log(groups)
-    await saveGroups({tutorialId, groups, groupSize});
+    await saveGroups({ tutorialId, groups, groupSize });
 };
 
-function sortTopicGroupByDiversity({studentsToSort, tutorialId, diversityKey, groupNumberStart, groupSize, topic}) {
+function sortTopicGroupByDiversity({ studentsToSort, tutorialId, diversityKey, groupNumberStart, groupSize, topic }) {
 
     const students = studentsToSort;
     console.log('STUDENTS TO SORT')
@@ -64,91 +64,91 @@ function sortTopicGroupByDiversity({studentsToSort, tutorialId, diversityKey, gr
     // Group students into buckets based on year or degree
     if (diversityKey == "year") {
         groupBy = students.reduce((map, e) => ({
-        ...map,
-        [e.year]: [...(map[e.year] ?? []), e]
+            ...map,
+            [e.year]: [...(map[e.year] ?? []), e]
         }), {});
     } else {
         groupBy = students.reduce((map, e) => ({
             ...map,
             [e.degree]: [...(map[e.degree] ?? []), e]
-            }), {});
+        }), {});
     }
 
     const keys = Object.keys(groupBy)
     console.log(`KEYS = ${keys}`)
     let keysIndex = 0;
 
-    const numberOfGroups = Math.floor(students.length/ groupSize);
+    const numberOfGroups = Math.floor(students.length / groupSize);
     let groupNumber = groupNumberStart;
-  
+
     console.log("Number of Groups")
     console.log(numberOfGroups);
 
     console.log("Tutorial ID")
     console.log(tutorialId)
-  
+
     const groups = [];
     let count = 0;
 
     let localGroupNumber = 1;
-  
+
     while (localGroupNumber <= numberOfGroups) {
-      const group = {
-        tutorialId: tutorialId,
-        groupNumber: groupNumber,
-        students: [],
-        topic: topic
-      };
-  
-      if (localGroupNumber != numberOfGroups) {
-        let groupStudentsAdded = 0;
+        const group = {
+            tutorialId: tutorialId,
+            groupNumber: groupNumber,
+            students: [],
+            topic: topic
+        };
 
-        while (groupStudentsAdded < groupSize) {
-            console.log(`Key index = ${keysIndex}`)
-            let bucket = groupBy[keys[keysIndex]]
-            if (bucket.length > 0) {
-                group.students.push(bucket[0]);
-                bucket.shift()
-                groupStudentsAdded++;
-                count++;
+        if (localGroupNumber != numberOfGroups) {
+            let groupStudentsAdded = 0;
+
+            while (groupStudentsAdded < groupSize) {
+                console.log(`Key index = ${keysIndex}`)
+                let bucket = groupBy[keys[keysIndex]]
+                if (bucket.length > 0) {
+                    group.students.push(bucket[0]);
+                    bucket.shift()
+                    groupStudentsAdded++;
+                    count++;
+                }
+
+                if (keysIndex == keys.length - 1) {
+                    keysIndex = 0;
+                } else {
+                    keysIndex++;
+                }
             }
+        } else {
+            const remainingStudents = students.length - count;
+            for (let k = 0; k < keys.length; k++) {
+                const bucket = groupBy[keys[k]]
 
-            if (keysIndex == keys.length - 1) {
-                keysIndex = 0;
-            } else {
-                keysIndex++;
+                for (let index = 0; index < bucket.length; index++) {
+                    group.students.push(bucket[index]);
+                    count++;
+                }
             }
         }
-      } else {
-        const remainingStudents = students.length - count;
-        for (let k = 0; k < keys.length; k++) {
-            const bucket = groupBy[keys[k]]
+        console.log("Group")
+        console.log(group)
 
-            for (let index = 0; index < bucket.length; index++) {
-                group.students.push(bucket[index]);
-                count++;
-            }
-        }
-      }
-      console.log("Group")
-      console.log(group)
-
-      groups.push(group);
-      groupNumber++;
-      localGroupNumber++;
+        groups.push(group);
+        groupNumber++;
+        localGroupNumber++;
     }
-  
+
     if (numberOfGroups == 0 && students.length > 0) {
-      const group = {
-        tutorialId: tutorialId,
-        groupNumber: groupNumber,
-        students: students,
-        topic: topic
-      }
-  
-      groups.push(group);
-    } 
-  
+        const group = {
+            tutorialId: tutorialId,
+            groupNumber: groupNumber,
+            students: students,
+            topic: topic
+        }
+
+        groups.push(group);
+    }
+
     return groups;
 }
 

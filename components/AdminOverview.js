@@ -16,6 +16,7 @@ import GroupEditPopup from "./GroupEditPopup";
 import sortGroupsBySize from "../util/sortGroupsBySize";
 import sortGroupsByTopic from "../util/sortByTopic";
 import sortGroupsBySimilarity from "../util/sortGroupsBySimilarity";
+import sortGroupsByDiversity from "../util/sortGroupsByDiversity";
 
 
 
@@ -121,10 +122,16 @@ const AdminOverview = (props) => {
         setEnableEdit(false);
         getTutorial();
         getGroups();
-      } else {
-        alert(
-          "This function has not been built yet or your group size is invalid."
-        );
+      } else if (automaticAllocationSetting == "Diverse Year Groups") {
+        await sortGroupsByDiversity({tutorial, groupSize, students, diversityKey: "year"})
+        setEnableEdit(false);
+        getTutorial();
+        getGroups();
+      } else if (automaticAllocationSetting == "Diverse Degree Groups") {
+        await sortGroupsByDiversity({tutorial, groupSize, students, diversityKey: "degree"})
+        setEnableEdit(false);
+        getTutorial();
+        getGroups();
       }
     }
   }
@@ -327,7 +334,7 @@ const AdminOverview = (props) => {
                             <option>Similar Year Groups</option>
                             <option>Similar Degree Groups</option>
                             <option>Diverse Year Groups</option>
-                            <option>Diverse Degree</option>
+                            <option>Diverse Degree Groups</option>
                           </select>
                         </p>
                       )}

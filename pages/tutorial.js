@@ -1,11 +1,12 @@
 import StudentNavBar from "../components/StudentNavBar"
-import { Button, Accordion, Col } from "react-bootstrap"
+import { Accordion, Col, Table } from "react-bootstrap"
 import Preference from "../models/Preference";
 import Tutorial from "../models/Tutorial";
 import styles from "../styles/Tutorial.module.css";
 import { useEffect, useState } from "react";
 import connectMongo from "../util/mongodb";
 import PreferencePopup from "../components/PreferencePopup";
+import Group from "../models/Group";
 
 export async function getServerSideProps({ query }) {
 
@@ -22,8 +23,9 @@ export async function getServerSideProps({ query }) {
 
         // Check if student already added in preference
         const res = await Preference.find({ tutorialId: tutorialId, studentId: studentId }).select("topic");
-
+        const groupResult = await Group.find({ tutorialId: tutorialId, "students": { $elemMatch: { email: studentId } } })
         currentChoice = JSON.parse(JSON.stringify(res))
+        const groups = JSON.parse(JSON.stringify(groupResult))
 
         if (currentChoice.length == 0) {
             const result = await Tutorial.find({ tutorialId: tutorialId }).select('topics topicsReleased');
@@ -36,7 +38,7 @@ export async function getServerSideProps({ query }) {
             topicsReleased = []
         }
         return {
-            props: { tutorialId: tutorialId, topics: topics, currentChoice: currentChoice, studentId: studentId}
+            props: { tutorialId: tutorialId, topics: topics, currentChoice: currentChoice, studentId: studentId, groups: groups }
         }
     } else {
         return {
@@ -49,8 +51,7 @@ export async function getServerSideProps({ query }) {
 }
 
 
-const tutorial = ({ tutorialId, topics, currentChoice, studentId }) => {
-    const [groups, setGroups] = useState([])
+const tutorial = ({ tutorialId, topics, currentChoice, studentId, groups }) => {
     const [showPopup, setShowPopup] = useState(false);
     useEffect(() => {
         if (currentChoice.length === 0) {
@@ -70,13 +71,12 @@ const tutorial = ({ tutorialId, topics, currentChoice, studentId }) => {
                     </h1>
                     <label
                         className={
-                            `${false
-                                ? styles.primInCompbtn
-                                : styles.primCompbtn} text-center`
+                            `${groups.length > 0
+                                ? styles.primCompbtn
+                                : styles.primInCompbtn} text-center`
                         }
                     >
-                        {/* Allocation {getGroup(student.email).groupStatus} */}
-                        Allocation
+                        {groups.length > 0 ? "Allocation Complete" : "Incomplete Allocation"}
                     </label>
                 </div>
                 <div className="d-flex align-items-center justify-content-between mt-5">
@@ -85,14 +85,14 @@ const tutorial = ({ tutorialId, topics, currentChoice, studentId }) => {
                 </div>
                 <div className="groups">
                     {
-                        groups && groups.length > 0 ? (<Accordion className={styles.Accordion}>
-                            {groups.map((group, index) => (
-                                <Accordion.Item eventKey={index}>
+                        groups && groups.length > 0 ? (
+                            <Accordion className={styles.Accordion} defaultActiveKey={0}>
+                                <Accordion.Item eventKey={0}>
                                     <Accordion.Header>
                                         <div className="d-flex gap-5 w-100">
-                                            <span>Group {group?.groupNumber}</span>
+                                            <span>Group {groups?.groupNumber}</span>
                                             <span className="ms-5">
-                                                0{group?.students?.length} students
+                                                0{groups[0]?.students?.length} students
                                             </span>
                                         </div>
                                     </Accordion.Header>
@@ -102,21 +102,26 @@ const tutorial = ({ tutorialId, topics, currentChoice, studentId }) => {
                                                 <tr>
                                                     <th>Student Email</th>
                                                     <th>Student Name</th>
+                                                    <th>Degree</th>
+                                                    <th>Year</th>
+                                                    <th>Topic Preference</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {group?.students.map((student) => (
-                                                    <tr key={student.email}>
+                                                {groups[0]?.students?.map((student) => (
+                                                    <tr key={student._id}>
                                                         <td>{student?.email}</td>
                                                         <td>{student?.name}</td>
+                                                        <td>{student?.degree}</td>
+                                                        <td>{student?.year}</td>
+                                                        <td>{student?.preference}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </Table>
                                     </Accordion.Body>
                                 </Accordion.Item>
-                            ))}
-                        </Accordion>) : (
+                            </Accordion>) : (
                             <div className={`${styles.noGroupContainer}`}>
                                 <Col className={`${styles.noGroup}`}>You are not allocated to a group yet!</Col>
                             </div>
@@ -129,7 +134,7 @@ const tutorial = ({ tutorialId, topics, currentChoice, studentId }) => {
                 topics={topics}
                 size="lg"
                 tutorialId={tutorialId}
-                studentId = {studentId}
+                studentId={studentId}
             />
         </>
 

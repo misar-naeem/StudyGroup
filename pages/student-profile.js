@@ -56,8 +56,8 @@ const Enrolment = ({ tutorial }) => {
   return (
     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
       {tutorial && (<div className={`${styles.listgroup} p-3 w-100 d-flex justify-content-between ms-3 gap-5`}>
-        <h3>{tutorial["subject"]} - {tutorial["tutorialId"]}</h3>
-        <h4>{tutorial["staffName"]} - {tutorial["staffEmail"]}</h4>
+        <h3>{tutorial["subject"]}</h3>
+        <p>{tutorial["staffName"]} - {tutorial["staffEmail"]}</p>
       </div>)}
     </div>
   )

@@ -53,11 +53,19 @@ export async function getServerSideProps({ req }) {
 
 
 const Enrolment = ({ tutorial }) => {
+  let tut = tutorial["tutorialId"]
+  let tutorialId = tut[tut.length - 1]
   return (
     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-      {tutorial && (<div className={`${styles.listgroup} p-3 w-100 d-flex justify-content-between ms-3 gap-5`}>
-        <h3>{tutorial["subject"]}</h3>
-        <p>{tutorial["staffName"]} - {tutorial["staffEmail"]}</p>
+      {tutorial && (<div className={`${styles.listgroup} p-3 w-100 ms-3 d-flex flex-column align-items-center`}>
+        <div className="d-flex align-items-center justify-content-between w-100">
+          <h3>{tutorial["subject"]}</h3>
+          <h4>{"Tutorial " + tutorialId}</h4>
+        </div>
+        <div className="d-flex align-items-center justify-content-between w-100">
+          <p className="ms-3">{tutorial["staffName"]}</p>
+          <p>{tutorial["staffEmail"]}</p>
+        </div>
       </div>)}
     </div>
   )

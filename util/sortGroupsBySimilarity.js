@@ -102,11 +102,6 @@ export default async function sortGroupsBySimilarity({ tutorial, groupSize, stud
             topic: topic
         })
 
-        console.log("BUCKET GROUPS")
-        console.log(bucketGroups)
-        console.log(`bucket group length ${bucketGroups.length}`)
-        console.log(`group number start ${groupNumberStart}`)
-
         groupNumberStart = groupNumberStart + bucketGroups.length
 
         groups = [...groups, ...bucketGroups]

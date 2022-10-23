@@ -11,17 +11,25 @@ export default async function handler(req, res) {
 
     var result = await Student.find({ tutorials: { $in: tutorial } });
     var preference = await Preference.find({ tutorialId: tutorial });
+    var preferenceFound = false;
 
     /*
     The loop belows matches the student's email with the preference's email, and
     adds "topic" from Preference.find() to "preference" in Student.find()
     */
 
-    for (var i = 0; i < preference.length; i++) {
-      for (var j = 0; j < result.length; j++) {
-        if (preference[i]["studentId"] == result[j]["email"]) {
-          result[j]["preference"] = preference[i]["topic"];
+    for (var i = 0; i < result.length; i++) {
+      result[i] = result[i].toObject();
+      preferenceFound = false;
+      for (var j = 0; j < preference.length; j++) {
+        if (result[i]["email"] == preference[j]["studentId"]) {
+          result[i]["preference"] = preference[j]["topic"];
+          preferenceFound = true;
+          break;
         }
+      }
+      if (!preferenceFound) {
+        result[i]["preference"] = "No preference";
       }
     }
 

@@ -2,19 +2,14 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { data: session } = useSession();
+  const router = useRouter();
 
   if (session) {
-    console.log(session);
-    return (
-      <>
-        Signed in as {session.user.email}
-        <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    );
+    router.push("/login-redirect");
   }
 
   return (

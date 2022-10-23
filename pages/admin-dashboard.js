@@ -54,10 +54,17 @@ function AdminDashboard() {
           marginTop: "-50px",
         }}
       >
+        <Button onClick={() => router.push("/student-dashboard")}>
+          Switch to Student Dashboard
+        </Button>
         <Button
           onClick={() => signOut()}
           variant="danger"
-          style={{ backgroundColor: "#FF595E", width: "250px" }}
+          style={{
+            backgroundColor: "#FF595E",
+            width: "100px",
+            marginLeft: "10px",
+          }}
         >
           Log out
         </Button>{" "}

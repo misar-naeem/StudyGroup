@@ -13,11 +13,9 @@ function divideBucketInGroups({ studentsBucket, groupSize, tutorialId, startingG
     let numberOfGroups = Math.floor(bucketSize / groupSize);
     let groupNumber = startingGroupNumber;
 
-    console.log("Number of Groups")
-    console.log(numberOfGroups);
-
-    console.log("Tutorial ID")
-    console.log(tutorialId)
+    console.log("students bucket")
+    console.log(studentsBucket)
+    console.log(`number of groups ${numberOfGroups}`)
 
     const groups = [];
     let count = 0;
@@ -30,11 +28,11 @@ function divideBucketInGroups({ studentsBucket, groupSize, tutorialId, startingG
             topic: topic
         };
 
-        console.log("Group Number")
-        console.log(i)
+        // console.log("Group Number")
+        // console.log(i)
 
-        console.log("Students")
-        console.log(students)
+        // console.log("Students")
+        // console.log(students)
 
         if (i != numberOfGroups) {
             for (let j = 0; j < groupSize; j++) {
@@ -104,7 +102,7 @@ export default async function sortGroupsBySimilarity({ tutorial, groupSize, stud
             topic: topic
         })
 
-        groupNumberStart = groupNumberStart + (bucketGroups.length)
+        groupNumberStart = groupNumberStart + bucketGroups.length
 
         groups = [...groups, ...bucketGroups]
 
@@ -142,9 +140,10 @@ function sortTopicGroupBySimilarity({ studentsToSort, tutorialId, similarityKey,
 
     keys.forEach(key => {
         var studentsBucket = groupBy[key]
+        var groupsToPush = divideBucketInGroups({ studentsBucket, groupSize, tutorialId, startingGroupNumber, topic })
 
-        groups.push(...divideBucketInGroups({ studentsBucket, groupSize, tutorialId, startingGroupNumber, topic }))
-        startingGroupNumber++;
+        groups.push(...groupsToPush)
+        startingGroupNumber = startingGroupNumber + groupsToPush.length;
     });
 
     return groups;
@@ -166,7 +165,6 @@ async function saveGroups({ tutorialId, groupSize, groups }) {
 
         const response = await fetch(endpoint, options);
         const responseJson = await response.json();
-        console.log(responseJson);
     };
 
     // Delete all existing groups for this tutorial

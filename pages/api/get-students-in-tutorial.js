@@ -8,25 +8,32 @@ export default async function handler(req, res) {
 
     await connectMongo();
     console.log(`${req.url} accessed`);
-    
-    var result = await Student.find({tutorials: {"$in": tutorial}});
+
+    var result = await Student.find({ tutorials: { $in: tutorial } });
+    var preference = await Preference.find({ tutorialId: tutorial });
+    var preferenceFound = false;
+
+    /*
+    The loop belows matches the student's email with the preference's email, and
+    adds "topic" from Preference.find() to "preference" in Student.find()
+    */
 
     for (var i = 0; i < result.length; i++) {
-        const preference = await Preference.find({tutorialId: tutorial, studentId: result[i]["email"]})
-
-        result[i] = result[i].toObject()
-
-        if (preference.length > 0) {
-          result[i]["preference"] = preference[0]["topic"]
-        } else {
-          result[i]["preference"] = "No Topic"
-          console.log("NOT PREFERENCE")
+      result[i] = result[i].toObject();
+      preferenceFound = false;
+      for (var j = 0; j < preference.length; j++) {
+        if (result[i]["email"] == preference[j]["studentId"]) {
+          result[i]["preference"] = preference[j]["topic"];
+          preferenceFound = true;
+          break;
         }
-
-        console.log(result)
+      }
+      if (!preferenceFound) {
+        result[i]["preference"] = "No preference";
+      }
     }
 
-    res.json({ result });
+    res.status(200).json({ result });
   } catch (error) {
     console.log(error);
     res.json({ error });

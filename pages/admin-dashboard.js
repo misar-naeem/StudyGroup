@@ -14,7 +14,7 @@ function AdminDashboard() {
 
   useEffect(() => {
     if (!session) {
-      router.push("/staff-login");
+      router.push("/");
     }
   }, []);
 
@@ -42,7 +42,9 @@ function AdminDashboard() {
       <Head>
         <title>Staff Dashboard</title>
       </Head>
-      <h1 className={styles.heading}>Tutorial {tutorialId ? tutorialId[tutorialId?.length - 1] : null}</h1>
+      <h1 className={styles.heading}>
+        Tutorial {tutorialId ? tutorialId[tutorialId?.length - 1] : null}
+      </h1>
 
       <div
         style={{
@@ -52,11 +54,24 @@ function AdminDashboard() {
           marginTop: "-50px",
         }}
       >
-        <Button onClick={() => signOut()} variant="danger" style={{ backgroundColor: "#FF595E", width: "250px" }}>
+        <Button onClick={() => router.push("/student-dashboard")}>
+          Switch to Student Dashboard
+        </Button>
+        <Button
+          onClick={() => signOut()}
+          variant="danger"
+          style={{
+            backgroundColor: "#FF595E",
+            width: "100px",
+            marginLeft: "10px",
+          }}
+        >
           Log out
         </Button>{" "}
       </div>
-      <h2 className="mt-3" style={{ marginLeft: "35px" }}>Welcome {session ? session.user.name : ""}</h2>
+      <h2 className="mt-3" style={{ marginLeft: "35px" }}>
+        Welcome {session ? session.user.name : ""}
+      </h2>
       <AdminOverview tutorialId={tutorialId} />
     </div>
   );

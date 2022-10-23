@@ -2,19 +2,14 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { data: session } = useSession();
+  const router = useRouter();
 
   if (session) {
-    console.log(session);
-    return (
-      <>
-        Signed in as {session.user.email}
-        <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    );
+    router.push("/login-redirect");
   }
 
   return (
@@ -37,23 +32,15 @@ export default function Home() {
             <a
               href="#"
               onClick={() => {
-                signIn("azure-ad");
+                signIn("azure-ad", {
+                  callbackUrl: "/login-redirect",
+                });
               }}
               className={styles.card}
             >
               <h2>Continue with Microsoft Login &rarr;</h2>
               <p>Sign in with Azure Active Directory to continue.</p>
             </a>
-          <div className={styles.card}>
-            <Link href="/admin-dashboard" className={styles.card}>
-              <p>Admin Dashboard</p>
-            </Link>
-          </div>
-          <div className={styles.card}>
-            <Link href="/student-dashboard" className={styles.card}>
-              <p>Student Dashboard</p>
-            </Link>
-          </div>
           </div>
         </main>
       </div>

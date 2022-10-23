@@ -2,11 +2,13 @@ import styles from "../styles/StudentNavBar.module.css";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { signOut } from "next-auth/react";
+
 const StudentNavBar = () => {
   return (
     <>
       <div className={styles.navbar}>
-      <a href="#">
+        <a href="#">
           <Image src="/icons/lightStudyIcon.png" width={350} height={350} />
         </a>
         <a href="/student-profile">
@@ -15,7 +17,7 @@ const StudentNavBar = () => {
         <a href="student-dashboard">
           <Image src="/icons/lightSubjectIcon.png" width={200} height={200} />
         </a>
-        <a href="/">
+        <a href="#" onClick={() => signOut()}>
           <Image src="/icons/lightLogOutIcon.png" width={200} height={200} />
         </a>
       </div>

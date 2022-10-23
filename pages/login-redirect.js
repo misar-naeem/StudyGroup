@@ -7,7 +7,7 @@ export default function LoginRedirect() {
 
   if (session != null) {
     if (session.user.role === "staff") {
-      router.push("/staff-dashboard");
+      router.push("/admin-dashboard");
     } else {
       router.push("/student-dashboard");
     }

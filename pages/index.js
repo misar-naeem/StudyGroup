@@ -46,16 +46,6 @@ export default function Home() {
               <h2>Continue with Microsoft Login &rarr;</h2>
               <p>Sign in with Azure Active Directory to continue.</p>
             </a>
-            <div className={styles.card}>
-              <Link href="/admin-dashboard" className={styles.card}>
-                <p>Admin Dashboard</p>
-              </Link>
-            </div>
-            <div className={styles.card}>
-              <Link href="/student-dashboard" className={styles.card}>
-                <p>Student Dashboard</p>
-              </Link>
-            </div>
           </div>
         </main>
       </div>

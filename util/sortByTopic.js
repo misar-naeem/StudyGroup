@@ -113,8 +113,13 @@
       console.log("Topic")
       console.log(topic)
 
-      groups.push(...divideBucketInGroups({studentsBucket, groupSize, tutorialId, startingGroupNumber, topic}))
-      startingGroupNumber++;
+      console.log("STARTING GROUP NUMBER")
+      console.log(startingGroupNumber)
+
+      var pushGroups = divideBucketInGroups({studentsBucket, groupSize, tutorialId, startingGroupNumber, topic})
+
+      groups.push(...pushGroups)
+      startingGroupNumber = startingGroupNumber + pushGroups.length;
     });
 
 

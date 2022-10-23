@@ -6,7 +6,10 @@
  */
 
  export default async function sortGroupsBySize({ tutorial, groupSize, students }) {
-  const tutorialSize = tutorial.students?.length;
+  const tutorialSize = students.length;
+
+  console.log("THE STUDENTS")
+  console.log(students)
 
   if (!tutorialSize || tutorialSize < groupSize) {
     alert(
